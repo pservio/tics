@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado ENADE Artes Visuais</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Main Container -->
+    <div id="app-container" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 w-full max-w-2xl transform transition-all duration-300 ease-in-out scale-95 opacity-0">
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-2xl z-50 hidden">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-blue-500 border-opacity-25"></div>
+            <p class="ml-4 text-blue-600 text-lg font-semibold">Carregando...</p>
+        </div>
+
+        <!-- Message Modal (substitute for alert()) -->
+        <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-300 ease-out scale-90">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+                <p id="modal-message" class="text-gray-600 mb-6"></p>
+                <button id="modal-close-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200">OK</button>
+            </div>
+        </div>
+
+        <!-- Welcome/Login Screen -->
+        <div id="welcome-screen" class="text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Simulado ENADE</h1>
+            <p class="text-gray-600 text-lg mb-8">Prepare-se para o ENADE de Artes Visuais!</p>
+            <div class="mb-6">
+                <label for="student-name" class="block text-gray-700 text-sm font-semibold mb-2 text-left">Seu Nome:</label>
+                <input type="text" id="student-name" placeholder="Digite seu nome aqui" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button id="start-quiz-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                Iniciar Simulado
+            </button>
+            <button id="view-ranking-button" class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                Ver Ranking
+            </button>
+            <p id="user-id-display" class="mt-6 text-xs text-gray-500 hidden"></p>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Questões ENADE</h2>
+            <div class="mb-6 bg-blue-50 p-4 rounded-xl shadow-inner">
+                <p class="text-sm text-blue-700 mb-2">Seu ID de Usuário (para ranking):</p>
+                <p id="quiz-user-id" class="text-blue-800 font-mono text-sm break-words"></p>
+            </div>
+
+            <!-- Theme Filter Section -->
+            <div id="theme-filter-section" class="mb-6 p-4 bg-purple-50 rounded-xl shadow-inner">
+                <h3 class="text-lg font-semibold text-purple-800 mb-3">Filtrar por Tema:</h3>
+                <div id="themes-checkbox-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-700">
+                    <!-- Checkboxes will be injected here by JavaScript -->
+                </div>
+                <button id="apply-filter-button" class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-xl shadow-md transition-all duration-200">
+                    Aplicar Filtro e Sortear Questões
+                </button>
+            </div>
+
+            <!-- Question Display Area -->
+            <div id="question-area" class="hidden">
+                <p class="text-sm text-gray-500 mb-2">Questão <span id="current-question-number">1</span> de <span id="total-questions-count">10</span></p>
+                <div class="bg-gray-100 p-4 rounded-xl shadow-md mb-4">
+                    <p id="question-theme" class="text-blue-700 text-sm font-semibold mb-2"></p>
+                    <img id="question-image" class="w-full h-auto rounded-lg mb-4 object-contain max-h-64 mx-auto hidden" alt="Imagem da Questão">
+                    <p id="question-text" class="text-gray-800 text-lg font-medium"></p>
+                </div>
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be injected here by JavaScript -->
+                </div>
+                <button id="submit-answer-button" class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                    Responder
+                </button>
+                <div id="feedback-area" class="mt-4 text-center text-lg font-semibold hidden"></div>
+                <button id="next-question-button" class="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-xl shadow-md transition-all duration-200 hidden">
+                    Próxima Questão
+                </button>
+            </div>
+            
+            <button id="back-to-menu-from-quiz" class="w-full mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                Voltar ao Menu Principal
+            </button>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Resultados do Simulado!</h2>
+            <p class="text-gray-700 text-xl mb-4">
+                <span id="results-student-name" class="font-semibold text-blue-700"></span>, você acertou <span id="results-correct-count" class="font-bold text-green-600"></span> de <span id="results-total-count" class="font-bold"></span> questões.
+            </p>
+            <p class="text-gray-700 text-2xl font-bold mb-8">
+                Sua pontuação total: <span id="results-score" class="text-purple-600"></span> pontos!
+            </p>
+            <button id="view-ranking-from-results-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                Ver Ranking
+            </button>
+            <button id="start-new-quiz-from-results-button" class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                Iniciar Novo Simulado
+            </button>
+        </div>
+
+        <!-- Ranking Screen -->
+        <div id="ranking-screen" class="hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Ranking Global</h2>
+            <div class="mb-6 bg-blue-50 p-4 rounded-xl shadow-inner">
+                <p class="text-sm text-blue-700 mb-2">Seu ID de Usuário (para ranking):</p>
+                <p id="ranking-user-id" class="text-blue-800 font-mono text-sm break-words"></p>
+            </div>
+            <ol id="ranking-list" class="space-y-3">
+                <!-- Ranking items will be injected here by JavaScript -->
+                <li class="bg-gray-50 p-3 rounded-xl shadow-sm text-gray-700 text-center">Nenhum aluno no ranking ainda.</li>
+            </ol>
+            <button id="back-to-menu-from-ranking" class="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                Voltar ao Menu Principal
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importa as funções específicas do Firebase que serão usadas
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, query, where, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Configurações do Firebase (PARA PUBLICAÇÃO FORA DO CANVAS) ---
+        // Se você estiver publicando este HTML em um serviço como Google Sites,
+        // cole suas configurações do Firebase aqui, substituindo os campos vazios.
+        // Você pode encontrar isso no seu projeto Firebase -> Configurações do projeto (ícone de engrenagem)
+        // -> Geral -> Seus apps -> Adicionar app (se ainda não tiver um web app) ou selecione um existente.
+        // Copie o objeto 'firebaseConfig'.
+        const FIREBASE_CONFIG_MANUAL = {
+  apiKey: "AIzaSyBST9y9zpxP_gnbmx8swYfb_k5nyWfgWxo",
+  authDomain: "simulado-enade-artes-visuais.firebaseapp.com",
+  projectId: "simulado-enade-artes-visuais",
+  storageBucket: "simulado-enade-artes-visuais.firebasestorage.app",
+  messagingSenderId: "506173130361",
+  appId: "1:506173130361:web:c2126a5603b6f63d9ff6a8",
+  measurementId: "G-WYXVBQ12MK"
+        };
+
+        // Se você tiver um token de autenticação personalizado (menos comum para apps simples),
+        // pode colá-lo aqui. Caso contrário, deixe como uma string vazia para usar autenticação anônima.
+        const INITIAL_AUTH_TOKEN_MANUAL = "";
+        // --- Fim das Configurações Manuais do Firebase ---
+
+
+        // Global variables for Firebase and app data
+        let app, db, auth;
+        let userId = ''; // Authenticated user ID for Firestore
+        let userName = ''; // User's name from input
+
+        // --- App State Variables ---
+        let allQuestions = []; // All questions loaded from data
+        let questionsForRound = []; // Questions selected for the current quiz round
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswersCount = 0;
+        let selectedAnswer = null;
+        let quizActive = false; // Flag to control quiz state
+        let currentRanking = []; // Stores the fetched ranking data
+
+        // --- Constants for Quiz Logic ---
+        const NUM_QUESTIONS_PER_ROUND = 10;
+        const POINTS_PER_CORRECT_ANSWER = 1;
+        const BONUS_FOR_ALL_CORRECT = 5;
+
+        // --- URL da Planilha Google Sheets (CSV) ---
+        // Certifique-se de que esta URL é o link de "Publicar na web" -> "Valores separados por vírgula (.csv)"
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQb7AcDD6ia4TeDroJ70R_z-ZsqmwIOGV4cIfsVKy9_9RxgNFX_GhPr5mRZz6jBzwqq2de4JH46yaHA/pub?gid=0&single=true&output=csv';
+
+        // --- DOM Elements ---
+        const appContainer = document.getElementById('app-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const messageModal = document.getElementById('message-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // Screens
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const rankingScreen = document.getElementById('ranking-screen');
+
+        // Welcome Screen Elements
+        const studentNameInput = document.getElementById('student-name');
+        const startQuizButton = document.getElementById('start-quiz-button');
+        const viewRankingButton = document.getElementById('view-ranking-button');
+        const userIdDisplay = document.getElementById('user-id-display');
+
+        // Quiz Screen Elements
+        const quizUserIdDisplay = document.getElementById('quiz-user-id');
+        const themeFilterSection = document.getElementById('theme-filter-section');
+        const themesCheckboxContainer = document.getElementById('themes-checkbox-container');
+        const applyFilterButton = document.getElementById('apply-filter-button');
+        const questionArea = document.getElementById('question-area');
+        const currentQuestionNumberSpan = document.getElementById('current-question-number');
+        const totalQuestionsCountSpan = document.getElementById('total-questions-count');
+        const questionThemeSpan = document.getElementById('question-theme');
+        const questionImageElement = document.getElementById('question-image'); // Novo elemento para a imagem
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const submitAnswerButton = document.getElementById('submit-answer-button');
+        const feedbackArea = document.getElementById('feedback-area');
+        const nextQuestionButton = document.getElementById('next-question-button');
+        const backToMenuFromQuizButton = document.getElementById('back-to-menu-from-quiz');
+
+        // Results Screen Elements
+        const resultsStudentName = document.getElementById('results-student-name');
+        const resultsCorrectCount = document.getElementById('results-correct-count');
+        const resultsTotalCount = document.getElementById('results-total-count');
+        const resultsScore = document.getElementById('results-score');
+        const viewRankingFromResultsButton = document.getElementById('view-ranking-from-results-button');
+        const startNewQuizFromResultsButton = document.getElementById('start-new-quiz-from-results-button');
+
+        // Ranking Screen Elements
+        const rankingUserIdDisplay = document.getElementById('ranking-user-id');
+        const rankingList = document.getElementById('ranking-list');
+        const backToMenuFromRankingButton = document.getElementById('back-to-menu-from-ranking');
+
+        // --- Utility Functions ---
+
+        /**
+         * Shows a specific screen and hides all others.
+         * @param {HTMLElement} screenToShow The DOM element of the screen to display.
+         */
+        function showScreen(screenToShow) {
+            // Hide all screens
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            rankingScreen.classList.add('hidden');
+            // Show the desired screen
+            screenToShow.classList.remove('hidden');
+        }
+
+        /**
+         * Displays a custom modal message.
+         * @param {string} title The title of the modal.
+         * @param {string} message The message content.
+         */
+        function showMessageModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+            // Add a temporary animation class for a smoother entrance
+            const modalContent = messageModal.querySelector('div');
+            modalContent.classList.add('scale-110');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-110');
+            }, 300);
+        }
+
+        /**
+         * Hides the message modal.
+         */
+        function hideMessageModal() {
+            messageModal.classList.add('hidden');
+        }
+
+        /**
+         * Shows the loading spinner.
+         */
+        function showLoading() {
+            loadingSpinner.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the loading spinner.
+         */
+        function hideLoading() {
+            loadingSpinner.classList.add('hidden');
+        }
+
+        // --- Quiz Logic Functions ---
+
+        /**
+         * Parses the entire CSV text into an array of rows, correctly handling
+         * newlines within quoted fields.
+         * @param {string} csvText The complete CSV text content.
+         * @returns {Array<string>} An array where each element is a complete CSV row.
+         */
+        const parseCSVTextIntoRows = (csvText) => {
+            const rows = [];
+            let inQuote = false;
+            let currentRow = '';
+
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+
+                if (char === '"') {
+                    // Check for escaped double quote (e.g., "" inside a quoted field)
+                    if (inQuote && nextChar === '"') {
+                        currentRow += '"'; // Add a single double quote to the current field
+                        i++; // Skip the next character as it's part of the escape sequence
+                    } else {
+                        inQuote = !inQuote; // Toggle quote state
+                    }
+                } else if ((char === '\n' || char === '\r') && !inQuote) {
+                    // End of a row (newline not inside quotes)
+                    if (currentRow.trim() !== '') { // Avoid adding empty rows from consecutive newlines
+                        rows.push(currentRow.trim());
+                    }
+                    currentRow = '';
+                    if (char === '\r' && nextChar === '\n') {
+                        i++; // Consume '\n' for Windows-style newlines (\r\n)
+                    }
+                } else {
+                    currentRow += char;
+                }
+            }
+            // Add the last row if it's not empty
+            if (currentRow.trim() !== '') {
+                rows.push(currentRow.trim());
+            }
+            return rows;
+        };
+
+
+        /**
+         * Parses a single CSV line, handling commas within quoted fields and escaped quotes.
+         * @param {string} line The CSV line string to parse.
+         * @returns {Array<string>} An array of parsed field values.
+         */
+        const parseCSVLine = (line) => {
+            const values = [];
+            let inQuote = false;
+            let currentField = '';
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+
+                if (char === '"') {
+                    // Check for escaped double quote (two double quotes together inside a quoted field)
+                    if (inQuote && line[i + 1] === '"') { 
+                        currentField += '"'; // Add a single double quote
+                        i++; // Skip the next character as it's part of the escape sequence
+                    } else {
+                        inQuote = !inQuote; // Toggle quote state
+                    }
+                } else if (char === ',' && !inQuote) {
+                    values.push(currentField);
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            values.push(currentField); // Add the last field
+            return values;
+        };
+
+        /**
+         * Fetches questions from the Google Sheet CSV URL and parses them.
+         * @returns {Promise<Array>} A promise that resolves with an array of question objects.
+         */
+        async function fetchQuestionsFromGoogleSheet() {
+            showLoading();
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const csvText = await response.text();
+                
+                const lines = parseCSVTextIntoRows(csvText); // Agora usa a nova função para pegar as linhas
+                if (lines.length === 0) {
+                    throw new Error("CSV está vazio ou não contém dados.");
+                }
+
+                // Assume first line is header
+                const headers = parseCSVLine(lines[0]).map(header => header.trim());
+                const questions = [];
+
+                // Helper function to safely get a cell value and trim it
+                const getCellValue = (rowValues, headerName) => {
+                    const index = headers.indexOf(headerName.trim());
+                    if (index !== -1 && index < rowValues.length) { 
+                        const value = rowValues[index];
+                        // Ensure value is a string before trimming, handling null/undefined
+                        return String(value || '').trim(); 
+                    }
+                    return ''; // Return empty string if header not found or index out of bounds
+                };
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSVLine(lines[i]); // Use the new parsing logic
+                    const question = {};
+                    
+                    question.id = parseInt(getCellValue(values, 'id'), 10) || (i); 
+                    question.tema = getCellValue(values, 'tema') || 'Geral';
+                    question.enunciado = getCellValue(values, 'enunciado') || 'Questão sem enunciado';
+                    question.imagem_url = getCellValue(values, 'imagem_url') || ''; // Campo para URL da imagem
+                    
+                    question.opcoes = {
+                        A: getCellValue(values, 'opcao_A'),
+                        B: getCellValue(values, 'opcao_B'),
+                        C: getCellValue(values, 'opcao_C'),
+                        D: getCellValue(values, 'opcao_D'),
+                        E: getCellValue(values, 'opcao_E')
+                    };
+                    question.resposta_correta = getCellValue(values, 'resposta_correta').toUpperCase();
+
+                    // Basic validation for enunciado and correct answer.
+                    // Assuming empty options are valid if not all are provided.
+                    if (!question.enunciado || !['A', 'B', 'C', 'D', 'E'].includes(question.resposta_correta)) {
+                        console.warn(`Questão inválida na linha ${i + 1} (ID: ${question.id}). Será ignorada. Dados:`, question);
+                        continue; // Skip invalid questions
+                    }
+
+                    questions.push(question);
+                }
+                console.log("Questões carregadas do Google Sheets:", questions);
+                return questions;
+
+            } catch (error) {
+                console.error("Erro ao carregar questões do Google Sheets:", error);
+                showMessageModal("Erro de Carregamento", `Não foi possível carregar as questões da planilha. Verifique a URL e a publicação: ${error.message}`);
+                return []; // Return empty array on error
+            } finally {
+                hideLoading();
+            }
+        }
+
+
+        /**
+         * Populates the theme filter checkboxes based on available themes in allQuestions.
+         */
+        function populateThemeFilter() {
+            themesCheckboxContainer.innerHTML = ''; // Clear previous checkboxes
+            const themes = [...new Set(allQuestions.map(q => q.tema))].sort(); // Get unique sorted themes
+
+            themes.forEach(theme => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center';
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.id = `theme-${theme.replace(/\s/g, '-')}`;
+                input.value = theme;
+                input.className = 'form-checkbox h-4 w-4 text-purple-600 rounded focus:ring-purple-500 mr-2';
+                const label = document.createElement('label');
+                label.htmlFor = input.id;
+                label.className = 'text-gray-700';
+                label.textContent = theme;
+                div.appendChild(input);
+                div.appendChild(label);
+                themesCheckboxContainer.appendChild(div);
+            });
+        }
+
+        /**
+         * Selects questions for the current round based on chosen themes and number of questions per round.
+         */
+        function selectQuestionsForRound() {
+            const selectedThemes = Array.from(themesCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                                       .map(checkbox => checkbox.value);
+
+            let filteredQuestions = selectedThemes.length > 0
+                ? allQuestions.filter(q => selectedThemes.includes(q.tema))
+                : allQuestions;
+
+            // Shuffle questions and select the desired number
+            random.shuffleArray(filteredQuestions);
+            questionsForRound = filteredQuestions.slice(0, NUM_QUESTIONS_PER_ROUND);
+
+            if (questionsForRound.length === 0) {
+                showMessageModal("Ops!", "Nenhuma questão encontrada com os filtros selecionados. Por favor, escolha outros temas ou verifique o banco de questões.");
+                return false; // Indicate no questions were selected
+            } else if (questionsForRound.length < NUM_QUESTIONS_PER_ROUND) {
+                showMessageModal("Aviso", `Apenas ${questionsForRound.length} questão(ões) encontrada(s) com os filtros selecionados. O simulado será com essa quantidade.`);
+            }
+            return true; // Indicate questions were selected
+        }
+
+        /**
+         * Displays the current question and its options.
+         */
+        function displayQuestion() {
+            const question = questionsForRound[currentQuestionIndex];
+            currentQuestionNumberSpan.textContent = currentQuestionIndex + 1;
+            totalQuestionsCountSpan.textContent = questionsForRound.length;
+            questionThemeSpan.textContent = `Tema: ${question.tema}`;
+            
+            // Exibir imagem se a URL estiver presente
+            if (question.imagem_url) {
+                questionImageElement.src = question.imagem_url;
+                questionImageElement.alt = `Imagem para a questão ${question.id}`;
+                questionImageElement.classList.remove('hidden');
+                // Adiciona um fallback para imagem quebrada
+                questionImageElement.onerror = () => {
+                    questionImageElement.src = `https://placehold.co/600x200/cccccc/333333?text=Imagem+Nao+Disponivel`;
+                    questionImageElement.alt = "Imagem não disponível";
+                };
+            } else {
+                questionImageElement.classList.add('hidden'); // Esconde a imagem se não houver URL
+                questionImageElement.src = ''; // Limpa o src para evitar quebras em próximas questões
+            }
+
+            questionTextElement.textContent = question.enunciado;
+            optionsContainer.innerHTML = ''; // Clear previous options
+            feedbackArea.classList.add('hidden');
+            submitAnswerButton.classList.remove('hidden');
+            nextQuestionButton.classList.add('hidden');
+            selectedAnswer = null; // Reset selected answer
+
+            const optionsLetters = Object.keys(question.opcoes).sort(); // Get sorted option letters (A, B, C...)
+
+            optionsLetters.forEach(letter => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-3 border border-gray-300 rounded-xl hover:bg-blue-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 bg-white shadow-sm';
+                button.textContent = `${letter}) ${question.opcoes[letter]}`;
+                button.dataset.answer = letter;
+                button.addEventListener('click', () => {
+                    // Remove highlight from previous selected option
+                    Array.from(optionsContainer.children).forEach(btn => {
+                        btn.classList.remove('bg-blue-500', 'text-white', 'font-semibold', 'shadow-md');
+                        btn.classList.add('bg-white'); // Ensure default background is restored
+                    });
+                    // Highlight current selected option
+                    button.classList.add('bg-blue-500', 'text-white', 'font-semibold', 'shadow-md');
+                    button.classList.remove('bg-white');
+                    selectedAnswer = letter;
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        /**
+         * Checks the selected answer against the correct answer.
+         */
+        function checkAnswer() {
+            if (selectedAnswer === null) {
+                showMessageModal("Atenção", "Por favor, selecione uma opção antes de responder.");
+                return;
+            }
+
+            const currentQuestion = questionsForRound[currentQuestionIndex];
+            const correct = selectedAnswer === currentQuestion.resposta_correta;
+
+            // Disable all option buttons after answering
+            Array.from(optionsContainer.children).forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.answer === currentQuestion.resposta_correta) {
+                    btn.classList.add('bg-green-200', 'border-green-500'); // Highlight correct answer
+                } else if (btn.dataset.answer === selectedAnswer && !correct) {
+                    btn.classList.add('bg-red-200', 'border-red-500'); // Highlight wrong answer
+                }
+            });
+
+            if (correct) {
+                score += POINTS_PER_CORRECT_ANSWER;
+                correctAnswersCount++;
+                feedbackArea.textContent = "Correto! ✅";
+                feedbackArea.className = 'mt-4 text-center text-lg font-semibold text-green-700';
+            } else {
+                feedbackArea.textContent = `Incorreto. ❌ A resposta correta era: ${currentQuestion.resposta_correta}) ${currentQuestion.opcoes[currentQuestion.resposta_correta]}`;
+                feedbackArea.className = 'mt-4 text-center text-lg font-semibold text-red-700';
+            }
+            feedbackArea.classList.remove('hidden');
+            submitAnswerButton.classList.add('hidden');
+            nextQuestionButton.classList.remove('hidden');
+        }
+
+        /**
+         * Moves to the next question or ends the quiz if all questions are answered.
+         */
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsForRound.length) {
+                displayQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        /**
+         * Resets quiz state and displays results.
+         */
+        async function endQuiz() {
+            quizActive = false; // Set quiz as inactive
+            // Apply bonus if all questions were correct
+            if (correctAnswersCount === questionsForRound.length) {
+                score += BONUS_FOR_ALL_CORRECT;
+            }
+
+            resultsStudentName.textContent = userName;
+            resultsCorrectCount.textContent = correctAnswersCount;
+            resultsTotalCount.textContent = questionsForRound.length;
+            resultsScore.textContent = score;
+
+            showScreen(resultsScreen);
+
+            // Update ranking in Firestore
+            if (userId) { // Ensure user is authenticated before updating ranking
+                await updateRankingInFirestore(userName, score);
+            } else {
+                showMessageModal("Aviso", "Você não está autenticado. O ranking não será salvo.");
+            }
+        }
+
+        // --- Firebase Integration Functions ---
+
+        /**
+         * Initializes Firebase and sets up authentication listener.
+         */
+        async function initializeFirebase() {
+            showLoading();
+            try {
+                // Tenta usar a configuração do ambiente Canvas, se disponível.
+                // Caso contrário, usa a configuração manual fornecida acima.
+                let firebaseConfigToUse;
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    firebaseConfigToUse = JSON.parse(__firebase_config);
+                    console.log("Usando configuração Firebase do ambiente Canvas.");
+                } else if (FIREBASE_CONFIG_MANUAL.apiKey) { // Verifica se a configuração manual foi preenchida
+                    firebaseConfigToUse = FIREBASE_CONFIG_MANUAL;
+                    console.log("Usando configuração Firebase manual.");
+                } else {
+                    console.error("Configuração Firebase não encontrada. Ranking não será persistido.");
+                    showMessageModal("Configuração Firebase Ausente", "A configuração do Firebase não foi encontrada. O ranking não será salvo ou carregado. Verifique o código e o ambiente.");
+                    // Continua sem Firebase, pois as questões ainda podem ser carregadas do Google Sheets
+                    allQuestions = await fetchQuestionsFromGoogleSheet();
+                    if (allQuestions.length === 0) {
+                        showMessageModal("Erro", "Não foi possível carregar nenhuma questão. Verifique a planilha do Google Sheets.");
+                    }
+                    populateThemeFilter();
+                    hideLoading();
+                    appContainer.classList.remove('opacity-0', 'scale-95');
+                    appContainer.classList.add('opacity-100', 'scale-100');
+                    return; // Sai da função, pois o Firebase não será inicializado
+                }
+                
+                // Inicializa Firebase com a configuração determinada
+                app = initializeApp(firebaseConfigToUse);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Configura o ouvinte de estado de autenticação
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Authenticated with Firebase UID:", userId);
+                    } else {
+                        console.log("No user authenticated. Attempting anonymous or custom token sign-in.");
+                        try {
+                            let initialAuthTokenToUse;
+                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                initialAuthTokenToUse = __initial_auth_token;
+                                console.log("Usando token de autenticação do ambiente Canvas.");
+                            } else if (INITIAL_AUTH_TOKEN_MANUAL) {
+                                initialAuthTokenToUse = INITIAL_AUTH_TOKEN_MANUAL;
+                                console.log("Usando token de autenticação manual.");
+                            } else {
+                                initialAuthTokenToUse = null; // Nenhuma opção de token, tenta anônimo
+                            }
+
+                            if (initialAuthTokenToUse) {
+                                await signInWithCustomToken(auth, initialAuthTokenToUse);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                            userId = auth.currentUser?.uid || crypto.randomUUID(); 
+                            console.log("User ID (after auth attempt):", userId);
+                        } catch (error) {
+                            console.error("Firebase Auth Error:", error);
+                            showMessageModal("Erro de Autenticação", `Não foi possível autenticar com o Firebase: ${error.message}. Funcionalidades de ranking podem estar limitadas.`);
+                            userId = crypto.randomUUID(); 
+                        }
+                    }
+                    
+                    // Atualiza os elementos de exibição do ID do usuário apenas se eles existirem
+                    if (userIdDisplay) {
+                        userIdDisplay.textContent = `ID do Usuário: ${userId}`;
+                        userIdDisplay.classList.remove('hidden'); 
+                    }
+                    if (quizUserIdDisplay) {
+                        quizUserIdDisplay.textContent = userId;
+                    }
+                    if (rankingUserIdDisplay) {
+                        rankingUserIdDisplay.textContent = userId;
+                    }
+                    
+                    allQuestions = await fetchQuestionsFromGoogleSheet(); 
+                    if (allQuestions.length === 0) {
+                        showMessageModal("Erro", "Não foi possível carregar nenhuma questão. Verifique a planilha do Google Sheets.");
+                    }
+                    populateThemeFilter();
+                    loadRankingFromFirestore(); 
+
+                    hideLoading();
+                    appContainer.classList.remove('opacity-0', 'scale-95');
+                    appContainer.classList.add('opacity-100', 'scale-100');
+                });
+            }
+            catch (error) {
+                console.error("Failed to initialize Firebase or fetch questions:", error);
+                showMessageModal("Erro de Inicialização", `Não foi possível iniciar o aplicativo: ${error.message}. Algumas funcionalidades podem não funcionar.`);
+                hideLoading();
+                appContainer.classList.remove('opacity-0', 'scale-95');
+                appContainer.classList.add('opacity-100', 'scale-100');
+            }
+        }
+
+        /**
+         * Loads the ranking from Firestore in real-time using onSnapshot.
+         */
+        function loadRankingFromFirestore() {
+            if (!db || !userId) {
+                console.warn("Firestore ou User ID não disponíveis para carregar o ranking.");
+                return;
+            }
+
+            // Get the appId from the global variable (provided by the Canvas environment)
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const rankingCollectionRef = collection(db, `/artifacts/${appId}/public/data/enade_ranking`); // Use imported collection
+
+            onSnapshot(rankingCollectionRef, (snapshot) => { // Use imported onSnapshot
+                const fetchedRanking = [];
+                snapshot.forEach(doc => {
+                    fetchedRanking.push(doc.data());
+                });
+                // Sort the ranking by score descending
+                fetchedRanking.sort((a, b) => b.score - a.score);
+                currentRanking = fetchedRanking;
+                renderRanking(); // Update the UI
+                console.log("Ranking atualizado do Firestore:", currentRanking);
+            }, (error) => {
+                console.error("Erro ao carregar ranking do Firestore:", error);
+                showMessageModal("Erro de Rede", "Não foi possível carregar o ranking. Verifique sua conexão ou tente novamente.");
+            });
+        }
+
+        /**
+         * Updates or adds a student's score in the Firestore ranking.
+         * @param {string} studentName The name of the student.
+         * @param {number} finalScore The student's score.
+         */
+        async function updateRankingInFirestore(studentName, finalScore) {
+            if (!db || !userId) {
+                console.warn("Firestore ou User ID não disponíveis para atualizar o ranking.");
+                return;
+            }
+
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const rankingCollectionRef = collection(db, `/artifacts/${appId}/public/data/enade_ranking`); // Use imported collection
+
+            try {
+                // Check if the student already exists in the ranking by name (Firestore doesn't have an 'upsert' by non-ID field directly)
+                const q = query(rankingCollectionRef, where("name", "==", studentName)); // Use imported query and where
+                const querySnapshot = await getDocs(q); // Use imported getDocs
+
+                if (!querySnapshot.empty) {
+                    // Student exists, update if new score is higher
+                    const docToUpdate = querySnapshot.docs[0];
+                    if (finalScore > docToUpdate.data().score) {
+                        await setDoc(doc(db, `/artifacts/${appId}/public/data/enade_ranking/${docToUpdate.id}`), { // Use imported doc and setDoc
+                            name: studentName,
+                            score: finalScore,
+                            userId: userId // Store userId for traceability
+                        }, { merge: true }); // Use merge to avoid overwriting other fields if they existed
+                        console.log("Ranking atualizado para", studentName);
+                    } else {
+                        console.log("Pontuação existente é maior ou igual. Ranking não atualizado para", studentName);
+                    }
+                } else {
+                    // Student does not exist, add new entry
+                    await addDoc(rankingCollectionRef, { // Use imported addDoc
+                        name: studentName,
+                        score: finalScore,
+                        userId: userId
+                    });
+                    console.log("Novo registro de ranking adicionado para", studentName);
+                }
+            } catch (error) {
+                console.error("Erro ao atualizar ranking no Firestore:", error);
+                showMessageModal("Erro ao Salvar Ranking", `Não foi possível salvar sua pontuação no ranking: ${error.message}.`);
+            }
+        }
+
+        /**
+         * Renders the current ranking list in the UI.
+         */
+        function renderRanking() {
+            rankingList.innerHTML = ''; // Clear existing list
+            if (currentRanking.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'bg-gray-50 p-3 rounded-xl shadow-sm text-gray-700 text-center';
+                li.textContent = 'Nenhum aluno no ranking ainda. Participe de um simulado para aparecer aqui!';
+                rankingList.appendChild(li);
+                return;
+            }
+
+            currentRanking.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.className = `p-3 rounded-xl shadow-md flex justify-between items-center ${index < 3 ? 'bg-yellow-100 font-bold' : 'bg-white'}`;
+                li.innerHTML = `
+                    <span class="text-gray-800">${index + 1}º Lugar: <span class="text-blue-700">${entry.name}</span></span>
+                    <span class="text-gray-800">${entry.score} pontos</span>
+                `;
+                rankingList.appendChild(li);
+            });
+        }
+        
+        // --- Event Listeners ---
+        window.addEventListener('load', () => {
+            initializeFirebase(); // Initialize Firebase on page load
+            // The initial screen visibility is handled by Firebase initialization
+        });
+
+        modalCloseBtn.addEventListener('click', hideMessageModal);
+
+        startQuizButton.addEventListener('click', () => {
+            userName = studentNameInput.value.trim();
+            if (!userName) {
+                showMessageModal("Atenção", "Por favor, digite seu nome para iniciar o simulado.");
+                return;
+            }
+            // Reset quiz state for a new round
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswersCount = 0;
+            quizActive = true;
+            questionArea.classList.add('hidden'); // Hide question area until filter is applied
+            populateThemeFilter(); // Populate themes for the new quiz
+            showScreen(quizScreen);
+        });
+
+        applyFilterButton.addEventListener('click', () => {
+            if (allQuestions.length === 0) {
+                showMessageModal("Erro", "Nenhuma questão disponível para iniciar o simulado. Por favor, verifique o banco de questões.");
+                return;
+            }
+            if (selectQuestionsForRound()) { // Only proceed if questions were successfully selected
+                themeFilterSection.classList.add('hidden'); // Hide filter section
+                questionArea.classList.remove('hidden'); // Show question area
+                displayQuestion(); // Start displaying questions
+            }
+        });
+
+        submitAnswerButton.addEventListener('click', checkAnswer);
+        nextQuestionButton.addEventListener('click', nextQuestion);
+
+        viewRankingButton.addEventListener('click', () => {
+            showScreen(rankingScreen);
+            renderRanking(); // Ensure ranking is fresh
+        });
+        viewRankingFromResultsButton.addEventListener('click', () => {
+            showScreen(rankingScreen);
+            renderRanking(); // Ensure ranking is fresh
+        });
+
+        startNewQuizFromResultsButton.addEventListener('click', () => {
+            // Reset quiz state for a new round
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswersCount = 0;
+            quizActive = true;
+            themeFilterSection.classList.remove('hidden'); // Show filter section again
+            questionArea.classList.add('hidden'); // Hide question area
+            populateThemeFilter(); // Repopulate themes for the new quiz
+            showScreen(quizScreen);
+        });
+
+        backToMenuFromQuizButton.addEventListener('click', () => {
+            showScreen(welcomeScreen);
+            quizActive = false; // Ensure quiz is marked inactive if user goes back
+        });
+
+        backToMenuFromRankingButton.addEventListener('click', () => {
+            showScreen(welcomeScreen);
+        });
+
+        // Simple shuffle function for arrays (Fisher-Yates)
+        const random = {
+            shuffleArray: function(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                }
+            }
+        };
+
+    </script>
+</body>
+</html>
