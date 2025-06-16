@@ -971,4 +971,4 @@ const perguntasLocais = [
         opcao_E: "I, III, IV e V.",
         resposta_correta: "B"
     }
-]
+];
