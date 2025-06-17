@@ -1,0 +1,62 @@
+# Nome do processo automático
+name: Build and Deploy to GitHub Pages
+
+# Define quando este processo deve ser executado
+on:
+  # Executa sempre que fizer um "push" para o ramo principal (main)
+  push:
+    branches: [ "main" ]
+  # Permite executar este processo manualmente a partir do separador Actions
+  workflow_dispatch:
+
+# Permissões necessárias para o processo publicar no GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Define o que acontece durante a publicação
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# Define as tarefas a serem executadas
+jobs:
+  # Tarefa única chamada "deploy"
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Copia o código do seu repositório para a máquina virtual
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Cria o ficheiro firebase-config.js usando os Secrets
+      - name: Create Firebase Config File
+        run: |
+          echo "window.firebaseConfig = {" > firebase-config.js
+          echo "  apiKey: '${{ secrets.FIREBASE_API_KEY }}'," >> firebase-config.js
+          echo "  authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}'," >> firebase-config.js
+          echo "  projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'," >> firebase-config.js
+          echo "  storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}'," >> firebase-config.js
+          echo "  messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'," >> firebase-config.js
+          echo "  appId: '${{ secrets.FIREBASE_APP_ID }}'" >> firebase-config.js
+          echo "};" >> firebase-config.js
+          echo "window.appId = '${{ secrets.APP_ID }}';" >> firebase-config.js
+
+      # 3. Prepara a pasta para ser publicada
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 4. Envia os ficheiros para o servidor de publicação
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      # 5. Publica o site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
