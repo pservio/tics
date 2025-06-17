@@ -77,17 +77,19 @@
 
                 <div>
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha os temas</h3>
-                    <p class="text-sm text-gray-500 mb-4">Selecione um ou mais temas. Se nenhum for escolhido, todas as questões serão consideradas.</p>
+                    <p class="text-sm text-gray-500 mb-2">Selecione um ou mais temas. Se nenhum for escolhido, todas as questões serão consideradas.</p>
                     <div id="themes-container" class="flex flex-wrap gap-2">
                         <!-- Temas carregados dinamicamente -->
                     </div>
+                    <!-- **MUDANÇA AQUI: Contador de perguntas disponíveis** -->
+                    <p id="question-count-display" class="text-sm text-gray-600 mt-4 text-center font-medium"></p>
                 </div>
 
                 <div>
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">2. Escolha o tamanho do Quiz</h3>
                     <div id="quiz-size-container" class="flex flex-col sm:flex-row gap-4">
-                        <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">3 Questões</button>
-                        <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">6 Questões</button>
+                        <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
+                        <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
                     </div>
                 </div>
                 
@@ -104,8 +106,7 @@
                     <span id="current-score">Pontos: 0</span>
                 </div>
                 <div id="question-container" class="space-y-4 flex-grow">
-                    <!-- **MUDANÇA AQUI: Div para as etiquetas de tema** -->
-                    <div id="question-theme-container" class="flex flex-wrap gap-2"></div>
+                    <div id="question-theme-container" class="flex flex-wrap gap-2 mb-2"></div>
                     <img id="question-image" src="" alt="Imagem da questão" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
                     <h3 id="question-enunciado" class="text-lg md:text-xl font-medium text-gray-800 leading-relaxed"></h3>
                     <div id="options-container" class="grid grid-cols-1 gap-3">
@@ -224,6 +225,41 @@
         const showLoading = () => loadingSpinner.style.display = 'flex';
         const hideLoading = () => loadingSpinner.style.display = 'none';
 
+        // **NOVA FUNÇÃO: Atualiza a contagem de perguntas em tempo real**
+        const updateAvailableQuestionsCount = () => {
+            const questionCountDisplay = document.getElementById('question-count-display');
+            const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
+            const selectedThemes = Array.from(selectedThemeElements).map(el => el.dataset.theme);
+
+            let filteredQuestions = allQuestions;
+            if (selectedThemes.length > 0) {
+                filteredQuestions = allQuestions.filter(q => 
+                    selectedThemes.some(selectedTheme => q.tema.includes(selectedTheme))
+                );
+            }
+            
+            const count = filteredQuestions.length;
+            questionCountDisplay.textContent = `${count} questões disponíveis com os temas selecionados.`;
+
+            document.querySelectorAll('.quiz-size-btn').forEach(btn => {
+                const size = parseInt(btn.dataset.size);
+                if (count < size) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-100', 'hover:border-gray-300');
+                } else {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-100', 'hover:border-gray-300');
+                }
+            });
+
+            const selectedSizeBtn = document.querySelector('.quiz-size-btn.border-blue-500');
+            if (selectedSizeBtn && selectedSizeBtn.disabled) {
+                selectedSizeBtn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
+                quizSize = 0;
+                document.getElementById('start-quiz-btn').disabled = true;
+            }
+        };
+
         const fetchQuestions = () => {
             if (typeof perguntasLocais === 'undefined') {
                 console.error("Erro Fatal: 'perguntas.js' não foi carregado.");
@@ -236,6 +272,7 @@
                 const allThemes = allQuestions.flatMap(q => q.tema);
                 uniqueThemes = [...new Set(allThemes)].filter(Boolean).sort();
                 populateThemes();
+                updateAvailableQuestionsCount(); // **MUDANÇA AQUI: chamada inicial
             } catch (err) {
                  console.error("Erro ao processar 'perguntas.js':", err);
                  showModal('Erro Crítico', 'Verifique a sintaxe do seu ficheiro `perguntas.js`.');
@@ -252,6 +289,7 @@
                 button.dataset.theme = theme;
                 button.addEventListener('click', () => {
                     button.classList.toggle('selected');
+                    updateAvailableQuestionsCount(); // **MUDANÇA AQUI: chamada a cada clique**
                 });
                 container.appendChild(button);
             });
@@ -294,13 +332,12 @@
             document.getElementById('current-score').textContent = `Pontos: ${score}`;
             document.getElementById('progress-bar').style.width = `${((currentQuestionIndex) / quizQuestions.length) * 100}%`;
             
-            // **MUDANÇA AQUI: Cria etiquetas para cada tema**
             const questionThemeContainer = document.getElementById('question-theme-container');
-            questionThemeContainer.innerHTML = ''; // Limpa temas anteriores
+            questionThemeContainer.innerHTML = '';
             if (question.tema && question.tema.length > 0) {
                 question.tema.forEach(theme => {
                     const themeTag = document.createElement('span');
-                    themeTag.className = 'bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+                    themeTag.className = 'bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full';
                     themeTag.textContent = theme;
                     questionThemeContainer.appendChild(themeTag);
                 });
@@ -375,7 +412,7 @@
                 } else if (quizSize === 6) {
                     finalScore *= 3;
                     bonusMessage = 'Incrível! Você acertou todas e seus pontos triplicaram!';
-                    icon = '�';
+                    icon = '🏆';
                 }
             } else if (correctAnswersCount > quizSize / 2) {
                 icon = '👍';
