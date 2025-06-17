@@ -81,7 +81,6 @@
                     <div id="themes-container" class="flex flex-wrap gap-2">
                         <!-- Temas carregados dinamicamente -->
                     </div>
-                    <!-- **MUDANÇA AQUI: Contador de perguntas disponíveis** -->
                     <p id="question-count-display" class="text-sm text-gray-600 mt-4 text-center font-medium"></p>
                 </div>
 
@@ -91,6 +90,8 @@
                         <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
                         <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
                     </div>
+                    <!-- **MUDANÇA AQUI: Notificação sobre regras de pontuação** -->
+                    <div id="quiz-rules-notification" class="mt-4 p-3 bg-blue-50 text-blue-800 rounded-lg text-center text-sm hidden"></div>
                 </div>
                 
                 <button id="start-quiz-btn" class="w-full bg-blue-600 text-white p-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Iniciar Quiz</button>
@@ -225,7 +226,6 @@
         const showLoading = () => loadingSpinner.style.display = 'flex';
         const hideLoading = () => loadingSpinner.style.display = 'none';
 
-        // **NOVA FUNÇÃO: Atualiza a contagem de perguntas em tempo real**
         const updateAvailableQuestionsCount = () => {
             const questionCountDisplay = document.getElementById('question-count-display');
             const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
@@ -243,13 +243,7 @@
 
             document.querySelectorAll('.quiz-size-btn').forEach(btn => {
                 const size = parseInt(btn.dataset.size);
-                if (count < size) {
-                    btn.disabled = true;
-                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-100', 'hover:border-gray-300');
-                } else {
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-100', 'hover:border-gray-300');
-                }
+                btn.disabled = count < size;
             });
 
             const selectedSizeBtn = document.querySelector('.quiz-size-btn.border-blue-500');
@@ -257,6 +251,7 @@
                 selectedSizeBtn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
                 quizSize = 0;
                 document.getElementById('start-quiz-btn').disabled = true;
+                document.getElementById('quiz-rules-notification').classList.add('hidden');
             }
         };
 
@@ -268,11 +263,19 @@
             }
 
             try {
-                allQuestions = perguntasLocais.filter(q => q.enunciado && q.resposta_correta && Array.isArray(q.tema));
+                allQuestions = perguntasLocais
+                    .filter(q => q.enunciado && q.resposta_correta && q.tema)
+                    .map(q => {
+                        const themes = (typeof q.tema === 'string') 
+                            ? q.tema.split(',').map(t => t.trim()) 
+                            : q.tema;
+                        return { ...q, tema: themes.filter(Boolean) };
+                    });
+
                 const allThemes = allQuestions.flatMap(q => q.tema);
                 uniqueThemes = [...new Set(allThemes)].filter(Boolean).sort();
                 populateThemes();
-                updateAvailableQuestionsCount(); // **MUDANÇA AQUI: chamada inicial
+                updateAvailableQuestionsCount();
             } catch (err) {
                  console.error("Erro ao processar 'perguntas.js':", err);
                  showModal('Erro Crítico', 'Verifique a sintaxe do seu ficheiro `perguntas.js`.');
@@ -289,7 +292,7 @@
                 button.dataset.theme = theme;
                 button.addEventListener('click', () => {
                     button.classList.toggle('selected');
-                    updateAvailableQuestionsCount(); // **MUDANÇA AQUI: chamada a cada clique**
+                    updateAvailableQuestionsCount();
                 });
                 container.appendChild(button);
             });
@@ -610,8 +613,9 @@
             
             modalCloseBtn.addEventListener('click', hideModal);
             
+            const quizSizeRulesNotification = document.getElementById('quiz-rules-notification');
             document.getElementById('quiz-size-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('quiz-size-btn')) {
+                if (e.target.classList.contains('quiz-size-btn') && !e.target.disabled) {
                     document.querySelectorAll('.quiz-size-btn').forEach(btn => {
                         btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
                         btn.classList.add('border-gray-300');
@@ -620,16 +624,13 @@
                     e.target.classList.remove('border-gray-300');
                     quizSize = parseInt(e.target.dataset.size);
                     document.getElementById('start-quiz-btn').disabled = false;
+
+                    // **MUDANÇA AQUI: Mostra a notificação de pontuação**
+                    quizSizeRulesNotification.classList.remove('hidden');
+                    if (quizSize === 3) {
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
+                    } else if (quizSize === 6) {
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
+                    }
                 }
             });
-
-            document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
-            document.getElementById('next-question-btn').addEventListener('click', () => {
-                currentQuestionIndex++;
-                displayQuestion();
-            });
-        });
-    </script>
-
-</body>
-</html>
