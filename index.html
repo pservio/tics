@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -104,8 +104,9 @@
                     <span id="current-score">Pontos: 0</span>
                 </div>
                 <div id="question-container" class="space-y-4 flex-grow">
-                    <p id="question-theme" class="text-sm font-semibold text-blue-600 uppercase"></p>
-                    <img id="question-image" src="" alt="Imagem da questão" class="max-w-full h-auto mx-auto rounded-lg shadow-md mb-4 hidden">
+                    <!-- **MUDANÇA AQUI: Div para as etiquetas de tema** -->
+                    <div id="question-theme-container" class="flex flex-wrap gap-2"></div>
+                    <img id="question-image" src="" alt="Imagem da questão" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
                     <h3 id="question-enunciado" class="text-lg md:text-xl font-medium text-gray-800 leading-relaxed"></h3>
                     <div id="options-container" class="grid grid-cols-1 gap-3">
                         <!-- Opções carregadas dinamicamente -->
@@ -165,12 +166,11 @@
         import { getFirestore, collection, doc, addDoc, getDocs, query, where, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        // --- CONFIGURAÇÃO E VARIÁVEIS GLOBAIS ---
         const firebaseConfig = window.firebaseConfig || {};
         const appId = window.appId || 'default-quiz-app';
 
         if (!firebaseConfig.apiKey) {
-            alert("Erro: Configuração do Firebase não encontrada. Certifique-se de que o ficheiro 'firebase-config.js' existe e está correto, ou que os GitHub Secrets estão configurados.");
+            alert("Erro: Configuração do Firebase não encontrada.");
         }
 
         const app = initializeApp(firebaseConfig);
@@ -203,8 +203,6 @@
         const modalMessage = document.getElementById('modal-message');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const loadingSpinner = document.getElementById('loading-spinner');
-
-        // --- FUNÇÕES DE CONTROLE DE UI ---
         
         const showScreen = (screenName) => {
             Object.values(screens).forEach(screen => screen.classList.remove('active-screen'));
@@ -226,21 +224,21 @@
         const showLoading = () => loadingSpinner.style.display = 'flex';
         const hideLoading = () => loadingSpinner.style.display = 'none';
 
-        // --- FUNÇÕES DE DADOS E LÓGICA DO QUIZ ---
-
         const fetchQuestions = () => {
-             if (typeof perguntasLocais === 'undefined') {
-                console.error("Erro Fatal: O ficheiro 'perguntas.js' não foi carregado ou a variável 'perguntasLocais' não foi definida.");
-                showModal('Erro Crítico', "O ficheiro de perguntas ('perguntas.js') não foi encontrado. Verifique se o ficheiro está na pasta correta no seu repositório do GitHub e se foi incluído no commit.");
+            if (typeof perguntasLocais === 'undefined') {
+                console.error("Erro Fatal: 'perguntas.js' não foi carregado.");
+                showModal('Erro Crítico', "O ficheiro de perguntas ('perguntas.js') não foi encontrado.");
                 return;
             }
+
             try {
-                allQuestions = perguntasLocais.filter(q => q.enunciado && q.resposta_correta);
-                uniqueThemes = [...new Set(allQuestions.map(q => q.tema).filter(t => t))];
+                allQuestions = perguntasLocais.filter(q => q.enunciado && q.resposta_correta && Array.isArray(q.tema));
+                const allThemes = allQuestions.flatMap(q => q.tema);
+                uniqueThemes = [...new Set(allThemes)].filter(Boolean).sort();
                 populateThemes();
             } catch (err) {
-                 console.error("Erro ao processar os dados de 'perguntas.js':", err);
-                 showModal('Erro Crítico', 'As questões não puderam ser lidas. Verifique se há erros de sintaxe (como uma vírgula em falta ou a mais) no seu ficheiro `perguntas.js`.');
+                 console.error("Erro ao processar 'perguntas.js':", err);
+                 showModal('Erro Crítico', 'Verifique a sintaxe do seu ficheiro `perguntas.js`.');
             }
         };
         
@@ -265,7 +263,9 @@
 
             let filteredQuestions = allQuestions;
             if (selectedThemes.length > 0) {
-                filteredQuestions = allQuestions.filter(q => selectedThemes.includes(q.tema));
+                filteredQuestions = allQuestions.filter(q => 
+                    selectedThemes.some(selectedTheme => q.tema.includes(selectedTheme))
+                );
             }
 
             if (filteredQuestions.length < quizSize) {
@@ -294,7 +294,18 @@
             document.getElementById('current-score').textContent = `Pontos: ${score}`;
             document.getElementById('progress-bar').style.width = `${((currentQuestionIndex) / quizQuestions.length) * 100}%`;
             
-            document.getElementById('question-theme').textContent = question.tema || 'Tema Geral';
+            // **MUDANÇA AQUI: Cria etiquetas para cada tema**
+            const questionThemeContainer = document.getElementById('question-theme-container');
+            questionThemeContainer.innerHTML = ''; // Limpa temas anteriores
+            if (question.tema && question.tema.length > 0) {
+                question.tema.forEach(theme => {
+                    const themeTag = document.createElement('span');
+                    themeTag.className = 'bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+                    themeTag.textContent = theme;
+                    questionThemeContainer.appendChild(themeTag);
+                });
+            }
+            
             document.getElementById('question-enunciado').innerHTML = question.enunciado;
             
             const img = document.getElementById('question-image');
@@ -364,7 +375,7 @@
                 } else if (quizSize === 6) {
                     finalScore *= 3;
                     bonusMessage = 'Incrível! Você acertou todas e seus pontos triplicaram!';
-                    icon = '🏆';
+                    icon = '�';
                 }
             } else if (correctAnswersCount > quizSize / 2) {
                 icon = '👍';
@@ -429,8 +440,6 @@
                 document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking.</p>`;
             });
         };
-
-        // --- FUNÇÕES DE AUTENTICAÇÃO ---
         
         const generatePassword = (length = 8) => {
             const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -482,8 +491,7 @@
             } catch (error) {
                 hideLoading();
                 console.error("Erro no registro: ", error);
-                // **MUDANÇA AQUI: Mostra o erro específico do Firebase**
-                showModal('Erro no Registro', `Ocorreu um erro ao tentar registrar. Verifique sua conexão ou as permissões do banco de dados.<br><br><small>Detalhes: ${error.message}</small>`);
+                showModal('Erro no Registro', `Ocorreu um erro ao tentar registrar.<br><br><small>Detalhes: ${error.message}</small>`);
             }
         };
 
@@ -517,13 +525,9 @@
             } catch (error) {
                 hideLoading();
                 console.error("Erro no login:", error);
-                // **MUDANÇA AQUI: Mostra o erro específico do Firebase**
-                showModal('Erro no Login', `Ocorreu um erro ao tentar fazer login. Verifique sua conexão ou as permissões do banco de dados.<br><br><small>Detalhes: ${error.message}</small>`);
+                showModal('Erro no Login', `Ocorreu um erro ao tentar fazer login.<br><br><small>Detalhes: ${error.message}</small>`);
             }
         };
-
-
-        // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 
         document.addEventListener('DOMContentLoaded', async () => {
             showLoading();
@@ -553,7 +557,6 @@
                 }
             });
 
-            // Navegação entre telas
             document.getElementById('go-to-register-btn').addEventListener('click', () => showScreen('register'));
             document.getElementById('go-to-login-btn').addEventListener('click', () => showScreen('login'));
             document.getElementById('play-again-btn').addEventListener('click', () => showScreen('setup'));
@@ -565,14 +568,11 @@
             ];
             viewRankingButtons.forEach(btn => btn.addEventListener('click', () => showScreen('ranking')));
 
-            // Formulários
             document.getElementById('login-form').addEventListener('submit', handleLogin);
             document.getElementById('register-form').addEventListener('submit', handleRegister);
             
-            // Modal
             modalCloseBtn.addEventListener('click', hideModal);
             
-            // Configuração do Quiz
             document.getElementById('quiz-size-container').addEventListener('click', (e) => {
                 if (e.target.classList.contains('quiz-size-btn')) {
                     document.querySelectorAll('.quiz-size-btn').forEach(btn => {
