@@ -596,35 +596,3 @@
 
 </body>
 </html>
-```
-
-### Causas Mais Prováveis e Como Resolver
-
-A nova mensagem de erro vai provavelmente indicar uma das seguintes situações:
-
-1.  **Erro: `Missing or insufficient permissions` (Falta de permissões)**
-    * **Causa:** As regras de segurança do seu Firestore estão a bloquear a escrita de novos utilizadores.
-    * **Solução:** Vá ao seu projeto na [Consola do Firebase](https://console.firebase.google.com/), selecione **Firestore Database**, vá ao separador **"Regras" (Rules)** e substitua o conteúdo por estas regras de desenvolvimento, que permitem a leitura e escrita a qualquer utilizador autenticado:
-        ```
-        rules_version = '2';
-        service cloud.firestore {
-          match /databases/{database}/documents {
-            match /{document=**} {
-              allow read, write: if request.auth != null;
-            }
-          }
-        }
-        ```
-    * **Importante:** Estas regras são abertas e servem para desenvolvimento. Para produção, devem ser mais restritivas.
-
-2.  **Erro: `Function Query.where() requires a custom index` (Necessita de um índice)**
-    * **Causa:** O Firestore precisa de um "índice" para poder procurar rapidamente por e-mails e garantir que não há duplicados.
-    * **Solução:** A mensagem de erro na **consola do seu navegador** (pressione F12) terá um link direto para criar o índice necessário com um só clique. Se não vir o link, pode criar o índice manualmente na Consola do Firebase:
-        1.  Vá a **Firestore Database > Índices (Indexes)**.
-        2.  Clique em **"Criar Índice"**.
-        3.  **Caminho da coleção:** `users` (ou o que estiver a usar no `usersCollectionPath`).
-        4.  **Campo:** `email` | **Ordem:** `Ascendente`.
-        5.  **Âmbito da consulta:** `Coleção`.
-        6.  Clique em **"Criar"**. A criação do índice pode demorar alguns minutos.
-
-Depois de aplicar a correção correspondente à mensagem de erro, a funcionalidade de registo deverá funcionar corretamen
