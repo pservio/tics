@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz ENADE - Artes Visuais</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self';">
+
+    <script src="https://cdn.tailwindcss.com"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -39,10 +42,8 @@
     </div>
     
     <div class="container mx-auto p-4 max-w-2xl w-full">
-        <!-- Main App Container -->
         <div id="app-container" class="bg-white rounded-xl shadow-lg overflow-hidden">
 
-            <!-- Tela de Login -->
             <div id="login-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center">Quiz ENADE</h1>
                 <p class="text-center text-gray-600">Artes Visuais</p>
@@ -54,7 +55,6 @@
                 <p class="text-gray-600">Não tem uma conta? <button id="go-to-register-btn" class="text-blue-600 font-semibold hover:underline">Registrar</button></p>
             </div>
 
-            <!-- Tela de Registro -->
             <div id="register-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Criar Conta</h2>
                 <form id="register-form" class="w-full max-w-sm space-y-4">
@@ -65,7 +65,6 @@
                 <p class="text-gray-600">Já tem uma conta? <button id="go-to-login-btn" class="text-blue-600 font-semibold hover:underline">Fazer Login</button></p>
             </div>
             
-            <!-- Tela de Configuração do Quiz -->
             <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8">
                  <div class="flex justify-between items-start">
                     <div>
@@ -79,8 +78,7 @@
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha os temas</h3>
                     <p class="text-sm text-gray-500 mb-2">Selecione um ou mais temas. Se nenhum for escolhido, todas as questões serão consideradas.</p>
                     <div id="themes-container" class="flex flex-wrap gap-2">
-                        <!-- Temas carregados dinamicamente -->
-                    </div>
+                        </div>
                     <p id="question-count-display" class="text-sm text-gray-600 mt-4 text-center font-medium"></p>
                 </div>
 
@@ -90,14 +88,12 @@
                         <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
                         <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
                     </div>
-                    <!-- **MUDANÇA AQUI: Notificação sobre regras de pontuação** -->
                     <div id="quiz-rules-notification" class="mt-4 p-3 bg-blue-50 text-blue-800 rounded-lg text-center text-sm hidden"></div>
                 </div>
                 
                 <button id="start-quiz-btn" class="w-full bg-blue-600 text-white p-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Iniciar Quiz</button>
             </div>
 
-            <!-- Tela do Quiz -->
             <div id="quiz-screen" class="screen p-6 md:p-8 flex-col">
                 <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
                     <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
@@ -111,13 +107,11 @@
                     <img id="question-image" src="" alt="Imagem da questão" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
                     <h3 id="question-enunciado" class="text-lg md:text-xl font-medium text-gray-800 leading-relaxed"></h3>
                     <div id="options-container" class="grid grid-cols-1 gap-3">
-                        <!-- Opções carregadas dinamicamente -->
-                    </div>
+                        </div>
                 </div>
                  <button id="next-question-btn" class="mt-6 w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors hidden">Próxima Questão</button>
             </div>
 
-            <!-- Tela de Resultados -->
             <div id="results-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6 text-center">
                  <h2 class="text-3xl font-bold text-gray-800">Quiz Finalizado!</h2>
                  <div id="results-icon" class="text-7xl"></div>
@@ -130,7 +124,6 @@
                  </div>
             </div>
 
-            <!-- Tela de Ranking -->
             <div id="ranking-screen" class="screen p-8 md:p-12 flex-col space-y-6">
                 <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Alunos</h2>
                 <div class="w-full bg-white rounded-lg border">
@@ -140,15 +133,13 @@
                         <div class="col-span-4 text-right">Pontuação</div>
                     </div>
                     <div id="ranking-list" class="divide-y">
-                        <!-- Ranking carregado dinamicamente -->
-                    </div>
+                        </div>
                 </div>
                 <button id="back-to-setup-btn" class="w-full max-w-sm mx-auto bg-gray-600 text-white p-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Voltar</button>
             </div>
         </div>
     </div>
     
-    <!-- Modal -->
     <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden items-center justify-center">
         <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center space-y-4">
             <h3 id="modal-title" class="text-2xl font-bold text-gray-800"></h3>
@@ -157,12 +148,9 @@
         </div>
     </div>
 
-    <!-- 1. Carrega o ficheiro com os dados das perguntas -->
     <script src="perguntas.js"></script>
-    <!-- 2. Carrega o ficheiro de configuração LOCAL do Firebase (será criado pela GitHub Action) -->
     <script src="firebase-config.js"></script>
     
-    <!-- 3. Carrega o ficheiro com a lógica da aplicação -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, addDoc, getDocs, query, where, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -173,6 +161,8 @@
 
         if (!firebaseConfig.apiKey) {
             alert("Erro: Configuração do Firebase não encontrada.");
+            // Adicionado: Esconder o spinner se a configuração do Firebase estiver faltando
+            hideLoading();
         }
 
         const app = initializeApp(firebaseConfig);
@@ -259,6 +249,8 @@
             if (typeof perguntasLocais === 'undefined') {
                 console.error("Erro Fatal: 'perguntas.js' não foi carregado.");
                 showModal('Erro Crítico', "O ficheiro de perguntas ('perguntas.js') não foi encontrado.");
+                // Adicionado: Esconder o spinner se o arquivo de perguntas não for carregado
+                hideLoading();
                 return;
             }
 
@@ -279,6 +271,8 @@
             } catch (err) {
                  console.error("Erro ao processar 'perguntas.js':", err);
                  showModal('Erro Crítico', 'Verifique a sintaxe do seu ficheiro `perguntas.js`.');
+                 // Adicionado: Esconder o spinner se houver erro no processamento das perguntas
+                 hideLoading();
             }
         };
         
@@ -572,8 +566,10 @@
         document.addEventListener('DOMContentLoaded', async () => {
             showLoading();
             
+            // Adicionado: Esconder o spinner se a configuração do Firebase estiver faltando (duplicata para garantir)
             if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
                 hideLoading();
+                showModal('Erro de Conexão', 'Configuração do Firebase não encontrada. Recarregue a página.');
                 return;
             }
 
@@ -582,17 +578,19 @@
             } catch (error) {
                 console.error("Firebase Auth Error:", error);
                 showModal('Erro de Conexão', `Não foi possível autenticar com o Firebase. Detalhes: ${error.message}`);
+                // Adicionado: Esconder o spinner se houver erro na autenticação anônima
+                hideLoading();
             }
 
             onAuthStateChanged(auth, (user) => {
                 if(user) {
                     console.log("Usuário autenticado:", user.uid);
                     fetchQuestions();
-                    hideLoading();
+                    hideLoading(); 
                     showScreen('login');
                 } else {
                     console.log("Usuário não autenticado.");
-                    hideLoading();
+                    hideLoading(); 
                     showModal('Erro de Autenticação', 'Não foi possível autenticar. Por favor, recarregue a página.');
                 }
             });
@@ -634,3 +632,7 @@
                     }
                 }
             });
+        }); // Fim de DOMContentLoaded
+    </script>
+</body>
+</html>
