@@ -1,7 +1,7 @@
 const perguntasLocais = [
     {
         id: 1,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 09<br><br>Artefatos artísticos, assim como as imagens, estão marcados por temporalidades múltiplas que inscrevem sentidos e significados em processos que se diferenciam por 'tempo de produção' e 'tempo de recepção' [cite: 1].<br>O tempo de produção caracteriza, sintetiza e condensa temporalidades que se sobrepõem[cite: 2]. A primeira, a temporalidade individual, é subjetiva e está circunscrita ao tempo/momento/processo de produção/ autoria de um artefato ou imagem [cite: 3]; a segunda, a temporalidade contextual, é situada e reconhecida em um tempo social, cultural e histórico[cite: 4]. Todavia, ambas estão sujeitas à mudanças. As temporalidades múltiplas favorecem contaminações teóricas, conceituais, perceptivas e práticas que acontecem entre diferentes sistemas e períodos [cite: 5].<br>Essas contaminações geram diálogos com a diversidade por meio de apropriações, interferências, marginalizações e, até mesmo, silêncios, produzindo espaços onde novos objetos e imagens podem influenciar imaginários sociais e subjetividades individuais[cite: 6].<br><br>MARTINS, R. Metodologias Visuais: com imagens e sobre imagens. In: DIAS, B.; IRWIN, R. L.Pesquisa Educacional baseada em Arte: A/r/tografia. Santa Maria: editora da UFSM, 2013 (adaptado)[cite: 7, 8].<br><br>Considerando as informações do texto, avalie as afirmações a seguir.<br><br>I. As temporalidades múltiplas que geram sentidos e significados podem se sobrepor de acordo com o tempo da obra de arte, refletindo as teorias de arte sobre os processos artísticos e os movimentos da arte[cite: 9].<br>II. O sfumato, que constitui um lineamento impreciso e possui suave sombreado, é um princípio da obra de Leonardo da Vinci no período renascentista, e que inscreve sentido e significado para o processo que se denomina como 'tempo de produção'[cite: 10].<br>III. O 'tempo de produção' de Leonardo da Vinci se sobrepõe ao 'tempo de recepção' de Marcel Duchamp, no sentido que o período do Renascimento ocorreu anteriormente ao período da Arte Moderna, mesmo se considerarmos como uma ação de apropriação[cite: 11].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -13,7 +13,7 @@ const perguntasLocais = [
     },
     {
         id: 2,
-        tema: "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 10<br><br>A arte contemporânea pode trabalhar sob uma perspectiva queer, na qual os artistas têm pouco interesse pela institucionalização das suas produções[cite: 14]. Em geral, esses artistas atuam à margem do mercado da arte, desenvolvendo as suas práticas em consonância com as pautas dos movimentos sociais, anarquistas, feministas, entre outras minorias para as quais dão voz[cite: 15]. Neste âmbito, as práticas colaborativas vêm crescendo de maneira significativa sob a ideia do anonimato, que busca eliminar a autoria da produção[cite: 16].<br><br>Considerando o texto apresentado, avalie as afirmações a seguir.<br><br>I. Originária do movimento gay, a arte queer possui forte caráter de entretenimento e pode ser observada nas paradas gays e em eventos carnavalescos pelo mundo[cite: 17].<br>II. A arte queer reflete seu compromisso com o mercado erótico, em obras de caráter homoeróticos, que debatem a consolidação da normatização de gênero[cite: 18].<br>III. A arte queer, compreendida como arte engajada em termos conceituais e contextuais, narra as experiências pessoais de artistas com propósitos como a denúncia e o combate às formas de exclusão e desigualdade[cite: 19].<br>IV. A arte queer é uma expressão da cultura de massa norte-americana, podendo ser considerada o movimento artístico precursor da contemporaneidade devido a sua criticidade e postura combativa no que se refere aos padrões vigentes[cite: 20].<br>V. O movimento artístico denominado arte queer é caracterizado por um conjunto de obras que chamam a atenção para a importância do debate sobre gênero e sexualidades insurgentes, dissidentes e não normativas[cite: 21].<br><br>É correto apenas o que se afirma em",
         opcao_A: "III e V.",
@@ -25,7 +25,7 @@ const perguntasLocais = [
     },
     {
         id: 3,
-        tema: "Pedagogia e Didática em Artes Visuais", "Processos de Criação e Pesquisa em Arte", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Processos de Criação e Pesquisa em Arte", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 11<br><br>A arte desperta os sentidos pela fruição. A arte é generosa e inclusiva, dá prazer[cite: 23, 24]. A arte é uma oferenda da vida que pode ter muitas identidades, pode ser ação, musicalidade ou visualidade, gastronomia, arquitetura, artefato, teatro, performance e mais. Não cabe em definições ou prescrições, a arte é livre[cite: 24, 25]. É ou pode vir a ser o imaginário, a poética, pode ser atividade humana que [re] cria a realidade, pode ser emocional, pode ser evento artístico e pode ser pedagógica [cite: 26].<br>Apesar de sua potência, a arte não é protagonista na educação, contudo, pode vir a ser[cite: 27]. O encontro entre a prática artística, a prática pedagógica e o conhecimento científico tem essa potência e, ao mesmo tempo, define conceitualmente a a|r|t|ografia, que é significada por Irwin como 'encontro constituído por meio de compreensões, experiências e representações artísticas e textuais'[cite: 28]. Esse encontro é entendido como uma interseção que modifica a forma de apreensão do conhecimento, uma vez que se situa em um espaço do novo e do inesperado, o evento[cite: 29]. Esse, por sua vez, provoca outros olhares, outros eventos e novas conexões [cite: 30].<br><br>SASSO, L. educação em visualidades no 'Chicão': Centro Educacional São Francisco do Distrito Federal, Brasília, 2018. (adaptado)[cite: 31, 32].<br><br>A partir desse contexto, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As articulações da arte com a teoria e a pesquisa e, em especial, com a prática pedagógica, propiciam, no âmbito escolar, uma abordagem capaz de ressignificar as imagens no universo de imagens em que o indivíduo está imerso[cite: 33].<br><br>PORQUE<br><br>II. Na perspectiva interdisciplinar da arte, entende-se que as imagens são concebidas como táticas de poder empregadas por diferentes grupos sociais em sua luta pela legitimação de valores e crenças[cite: 34].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -37,7 +37,7 @@ const perguntasLocais = [
     },
     {
         id: 4,
-        tema: "Educação Inclusiva e Acessibilidade", "Mediação Cultural e Educação Museal", "Arte, Tecnologia e Mídias Digitais",
+        tema: ["Educação Inclusiva e Acessibilidade", "Mediação Cultural e Educação Museal", "Arte, Tecnologia e Mídias Digitais"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 12<br><br>Texto I<br>Prevista na Política Nacional de Educação Especial, a educação inclusiva constitui uma 'ação política, cultural, social e pedagógica, em defesa do direito de todos os estudantes de estarem juntos, aprendendo e participando, sem nenhum tipo de discriminação'[cite: 37]. Para que isso seja possível, a escola precisa reconhecer os próprios desafios e encontrar estratégias pedagógicas para que práticas discriminatórias sejam superadas por meio de um sistema educacional inclusivo o que gerará alterações na organização estrutural e cultural do ambiente escolar[cite: 38]. Mais que adequar espaços às necessidades de cada aluno com deficiência, o projeto pedagógico inclusivo deve garantir sua integração como cidadão e proporcionar oportunidades iguais [cite: 39].<br><br>Texto II<br>As novas tendências museológicas multissensoriais entendem o museu como um espaço vivo e reativo, distante do 'armazém de preciosidades' silencioso e intocável do passado[cite: 41]. Uma maior aposta na comunicação e na interatividade traz novas emoções aos visitantes e novos desafios a curadores e equipes de mediação educativa[cite: 42]. Para transformar a visita ao museu em uma experiência memorável para pessoas com perfis diversificados, torna-se necessário explorar técnicas e tecnologias que permitam a criação de conteúdos informativos, didáticos e lúdicos que cativem o interesse e se adaptem às necessidades de cada visitante[cite: 43].<br><br>A partir da leitura dos textos e acerca da relação entre a arte e as práticas pedagógicas inclusivas, avalie as afirmações a seguir.<br><br>I. O investimento em tecnologias contribui para romper barreiras físicas que os recursos analógicos podem ocasionar, tanto em termos de produção como de fruição, recepção de produções visuais e culturais[cite: 45].<br>II. A criação de uma multiplicidade de soluções técnicas e tecnológicas adaptáveis às mais diversas situações contribui para que os sujeitos superem várias de suas limitações, o que lhes proporciona experiências singulares[cite: 46].<br>III. O incentivo à criação de estratégias que valorizam potencialidades coletivas, mais que potencialidades individuais, oferece condições de desenvolvimento da criatividade e propicia a formação artística dos sujeitos[cite: 47].<br>IV. A formulação de estratégias de comunicação baseadas em multiformato e na estimulação multissensorial, a fim de construir dinâmicas lúdico-educativas, possibilita interação ativa entre o sujeito e o ambiente de educação[cite: 48].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -49,7 +49,7 @@ const perguntasLocais = [
     },
     {
         id: 5,
-        tema: "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 13<br><br>Há muito tempo, o corpo negro é cercado por estereótipos[cite: 50]. Ora é erotizado, prevalecendo, nesse caso, os corpos das mulheres, ora é marginalizado[cite: 51]. A muSa Michelle Mattiuzzi, em sua performance Merci Beaucoup, Blanco!, explora criticamente, a partir de suas características pessoais, estereótipos sociais[cite: 52]. Assim, a artista, ao tratar da violência e da tortura oriundas do período escravocrata, evoca 'leituras' relacionadas à ignorância e negligência de um passado escravagista que se perpetuam até a contemporaneidade[cite: 53].<br><br>MATTIUZZI, M. 'Merci Beaucoup, Blanco!'. Acervo Histórico Vídeo Brasil. Foto: Pedro Napolitano Prata[cite: 56].<br><br>A partir das informações apresentadas, é correto afirmar que",
         opcao_A: "a artista questiona, com o seu trabalho, o que é o corpo feminino negro por meio da criação de personagens fictícios.",
@@ -61,7 +61,7 @@ const perguntasLocais = [
     },
     {
         id: 6,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Arte no Espaço Público e Arte Urbana",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Arte no Espaço Público e Arte Urbana"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 14<br><br>As imagens a seguir apresentam dois murais da artista Panmela Castro, mais conhecida como Anarkia Boladona, que faz da sua arte um instrumento de voz à luta feminista negra[cite: 61]. Na imagem 1, vemos o mural Jardim da Sororidade, localizado no centro do Rio de Janeiro[cite: 62]. Na imagem 2, a obra Together We Are Stronger, no Stedelij Museum, em Amsterdan[cite: 63].<br><br>A partir dos diálogos estabelecidos entre as artes contemporâneas e as causas feministas e étnico-raciais, que interseccionam raça, gênero e classe como demarcadores do acesso ao poder, privilégio e prestígio, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. O grafitti se impõe como expressão artística e manifestação cultural potente por falar a um número expressivo de pessoas, dando voz à agenda do feminismo negro, da igualdade de gênero e do racismo[cite: 66].<br><br>PORQUE<br><br>II. O grafitti surge como arte que nasce nas ruas, aliada às causas das minorias e, por isso, é tido como arte pública, uma vez que interfere diretamente na cidade por meio da participação nos espaços públicos que servem de cenário para a crítica e a denúncia social[cite: 67].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 68]",
@@ -73,7 +73,7 @@ const perguntasLocais = [
     },
     {
         id: 7,
-        tema: "Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 15<br><br>O artista Denilson, da etnia Baniwa, reivindicou a Antropofagia como pensamento indígena apropriado por Oswald de Andrade[cite: 71]. Ora, a reapropriação da apropriação não é uma questão menor[cite: 72]. A arte indígena nunca foi reconhecida como arte pela cultura brasileira[cite: 73]. Assim, a reivindicação dos artistas indígenas suscita perguntas: se a contribuição dos índios foi decisiva para a arte brasileira, por que os artistas indígenas precisam de passaporte para entrar no sistema da arte contemporânea? [cite: 74] Em outras palavras: por que precisam provar que o que fazem é arte segundo os critérios ocidentais, se a arte Moderna brasileira viu em suas criações potência estética suficiente para tomá-las como matriz para a sua própria existência? [cite: 75]<br><br>BANIWA, D. Natureza Morta 1. 2016. Infogravura, tamanhos variáveis[cite: 77].<br><br>A partir do texto e da imagem apresentados, assinale a opção correta.",
         opcao_A: "Os meios utilizados para a produção da obra de Denilson Baniwa fundam-se nos atuais recursos da arte contemporânea, descaracterizando-a como arte indígena[cite: 79].",
@@ -85,7 +85,7 @@ const perguntasLocais = [
     },
     {
         id: 8,
-        tema: "Arte, Tecnologia e Mídias Digitais", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal",
+        tema: ["Arte, Tecnologia e Mídias Digitais", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 16<br><br>O Festival Internacional de Linguagem Eletrônica (FILE) é um evento de artes de novas mídias que mistura tecnologia, vídeos, animações e games com instalações interativas, cuja primeira edição aconteceu em São Paulo, no ano 2000, seguindo assim até os dias atuais[cite: 84]. O FILE é considerado o maior festival de arte e tecnologia do Brasil, servindo como indicador da pluralidade de pesquisas e de produções nacionais nas múltiplas áreas da cultura digital (arte interativa, screenings, performances, games, arte sonora, realidade virtual, discussões teóricas sobre o tema e cinema digital)[cite: 85].<br><br>A partir das informações apresentadas e a respeito das características das artes em diálogo com as tecnologias, avalie as afirmações a seguir.<br><br>I. A interatividade se apresenta como possibilidade de fruição da obra de arte[cite: 89].<br>II. A linguagem digital surge como recurso para a criação de obras artísticas[cite: 90].<br>III. Os games experimentais se revelam como propostas artísticas inovadoras[cite: 91].<br>IV. As tecnologias servem à produção em massa de artefatos artísticos para o mercado de arte[cite: 91].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -97,7 +97,7 @@ const perguntasLocais = [
     },
     {
         id: 9,
-        tema: "Processos de Criação e Pesquisa em Arte", "Teoria, Historiografia e Crítica da Arte", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Processos de Criação e Pesquisa em Arte", "Teoria, Historiografia e Crítica da Arte", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 17<br><br>Liberada de cânones, em especial o da representação, em vigor durante quatro séculos no mundo ocidental, a arte passa a questionar fronteiras, deslocar limites, provocar situações, interagir com o espectador[cite: 94]. (...) Ao contrário do que se possa imaginar, a instauração da obra pressupõe, em muitos casos, operações técnicas e teóricas bastante complexas, abrindo margem considerável a cruzamentos e hibridismos tanto de conhecimentos quanto de procedimentos, tecnologias, matérias, materiais e objetos, algumas vezes, inusitados[cite: 95].<br><br>REY, S.; BRITES-UFRGS, B.; TESSLER, E.; LANCRI, J. Por uma abordagem metodológica da pesquisa em artes visuais. (adaptado)[cite: 96, 97, 98].<br><br>Considerando as informações apresentadas, avalie as afirmações a seguir.<br><br>I. A pesquisa em arte está embasada na prática investigativa traduzida pelo fazer artístico[cite: 99].<br>II. A pesquisa em arte está pautada em parâmetros metodológicos rígidos e conceitos bem estruturados[cite: 100].<br>III. A pesquisa em arte constrói o seu objeto de estudo ao mesmo tempo em que desenvolve a pesquisa teórica[cite: 101].<br>IV. A pesquisa em arte na contemporaneidade promove um conceito de linguagem que ultrapassa as categorias definidas e bem delimitadas pelas técnicas[cite: 102].<br>V. A pesquisa em arte implica na elaboração de uma linguagem pelo artista atrelada à subjetividade, evidenciada pela sua maneira de fazer e criar[cite: 103].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I, III e V.",
@@ -109,7 +109,7 @@ const perguntasLocais = [
     },
     {
         id: 10,
-        tema: "Educação Inclusiva e Acessibilidade", "Mediação Cultural e Educação Museal", "Políticas Públicas e Gestão em Educação",
+        tema: ["Educação Inclusiva e Acessibilidade", "Mediação Cultural e Educação Museal", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 18<br><br>A Lei de Diretrizes e Bases (Lei n. 9394/96) garante o acesso e a inclusão de pessoas com deficiências nas escolas regulares[cite: 105]. O avanço promovido por essa legislação favorece uma educação que respeita a singularidade dos estudantes[cite: 106]. Além do ambiente escolar, outros espaços promovem a inclusão de pessoas com deficiência[cite: 107]. No projeto Integrar pela Arte, obras como as de Joan Miró e Man Ray ganham uma 'visualidade tátil', permitindo experiências estéticas às pessoas cegas ou com baixa visão, conforme ilustram as imagens a seguir[cite: 108].<br><br>Considerando o texto e as imagens apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. O uso da 'visualidade tátil' em sala de aula possibilita que professores e professoras de Artes Visuais promovam experiências estéticas que superam a barreira da visão pela potencialização dos demais sentidos[cite: 110].<br><br>PORQUE<br><br>II. A inclusão prevista pela legislação educacional brasileira envolve todas as escolas públicas na busca por estratégias para atender aos alunos com deficiência de forma a garantir o acesso pleno e a inclusão em todas as disciplinas[cite: 111].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 112]",
@@ -121,7 +121,7 @@ const perguntasLocais = [
     },
     {
         id: 11,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 19<br><br>Marcada pela esfera ritualística, a criação de Bené Fonteles abarca instalações, esculturas e manifestos em profundo diálogo com questões ambientais, saberes populares e o desejo de fundir o 'ser brasileiro' e o 'ser universal'[cite: 115]. Desde a década de 1970, Fonteles empreende projetos transdisciplinares que extrapolam as fronteiras da arte, autodenominando-se 'artivista'[cite: 116]. Ágora: OcaTaperaTerreiro (2016) reúne traços importantes de sua trajetória, como o sincretismo simbólico e a cocriação[cite: 117]. Dentro do Pavilhão da Bienal, Fonteles propõe uma construção de teto de palha e paredes de taipa, materiais usados em habitações indígenas e caboclas[cite: 118]. O título carrega o desejo de interligar vários tempos e conhecimentos, tendo o terreiro como referência a um espaço de celebrações e oferendas[cite: 119]. A instalação abriga composições em que são usados materiais orgânicos, resquícios trazidos pelo mar, artefatos tradicionais e objetos coletados pelo artista durante suas jornadas pelo país[cite: 120]. Texturas, sons e cheiros compõem o ambiente, que abriga, em uma programação contínua, trocas entre o artista, músicos, xamãs, educadores e o público[cite: 121].<br><br>Com base nas informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. O diálogo entre o 'ser brasileiro' e o 'ser universal', associado a questões do meio ambiente e dos saberes populares, torna-se central na obra de Bené Fonteles, denotando a necessidade de transmutação da realidade e de reencantamento do mundo[cite: 124].<br><br>PORQUE<br><br>II. A junção dos saberes articula conhecimentos de contextos históricos, direitos humanos e manifestações artísticas e culturais entre as comunidades e promove um modo de ver que ressalta politicamente o valor de cada cultura[cite: 125].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 126]",
@@ -133,7 +133,7 @@ const perguntasLocais = [
     },
     {
         id: 12,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 20<br><br>Com o seu pôster-manifesto Your body is a battleground, a artista conceitual Barbara Kruger conferiu, em 1989, representação visual ao caráter político do corpo feminino na sociedade patriarcal[cite: 128]. Produzido para a Marcha das Mulheres em Washington, o cartaz ilustra a disputa pelo direito da mulher de decidir sobre o próprio corpo, mostrando como ele se torna uma zona de combate na qual e pela qual as mulheres lutam[cite: 129, 130]. Ao valer-se de uma imagem estereotipada da mulher perfeita, simétrica, voluptuosa, recortá-la ao meio e distorcer o seu lado esquerdo, Kruger explicita os efeitos destrutivos de tais representações[cite: 131].<br><br>KRUGER, B. Your body is a battleground. 1989, Serigrafia Fotográfica em Vinil[cite: 133].<br><br>A partir do texto e da imagem apresentados, avalie as afirmações a seguir.<br><br>I. A obra de Kruger apresenta características feministas e 'artivistas', uma vez que demonstra a busca por dignidade humana e aborda aspectos da realidade contemporânea de muitas mulheres[cite: 135].<br>II. A artista aprofunda questões políticas feministas em sua obra, misturando texto, imagens e suportes comumente utilizados em mídias publicitárias[cite: 136].<br>III. A partir da obra de Kruger, as questões de gênero podem ser trabalhadas no cotidiano escolar, de modo transversal, para valorização e diferenciação das características próprias de cada gênero[cite: 137].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -145,7 +145,7 @@ const perguntasLocais = [
     },
     {
         id: 13,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Mediação Cultural e Educação Museal",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Mediação Cultural e Educação Museal"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 21<br><br>Os problemas relativos ao lixo no mundo foram tema de diversas reportagens, tais como as publicadas pela BBC[cite: 140, 141].<br>Nas artes visuais, o tema do lixo é recorrente. Essa problemática foi tratada pelo artista Eduardo Srur, que, em 2014, realizou a exposição Aquário Morto, no Aquário do Guarujá, São Paulo[cite: 145].<br><br>SRUR, E. Aquário Morto. 2014. Fotografia[cite: 144].<br><br>Com base na imagem e nas informações apresentadas, é correto afirmar que a obra Aquário Morto",
         opcao_A: "apresentou uma crítica referente à responsabilidade estatal pelo descarte inadequado do lixo[cite: 146].",
@@ -157,7 +157,7 @@ const perguntasLocais = [
     },
     {
         id: 14,
-        tema: "Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 22<br><br>Na obra Diário (2015) Marilá Dardot se volta para as palavras dos noticiários, aos eventos sobre os quais lemos todos os dias e depois esquecemos[cite: 151]. A artista escreve com água em um muro de concreto manchetes sobre tragédias que encontra nos jornais, que logo após escritas, são absorvidas e se apagam instantaneamente[cite: 152]. Ao falarmos de palavras palavras que são mundos, que produzem continuamente existências possíveis, somos levados a questionar a importância daquilo que lemos e proferimos em nosso dia a dia, ao que damos atenção e o que ignoramos, o que repetimos e legitimamos[cite: 153].<br><br>Figura 1-DARDOT, M. Diário. 2015. Intervenção urbana, água sobre muro[cite: 155].<br>Figura 2- Técnica mista. Acervo da instituição IFB: Campus Samambaia, 2018[cite: 158].<br><br>Com base nas informações apresentadas e considerando a relação entre arte contemporânea, seu ensino e os processos de formação de identidades estabelecidos pelos discursos construídos social e culturalmente, avalie as afirmações a seguir.<br><br>I. As figuras registram modos pelos quais discursos atuais atravessam os sujeitos, enfatizando a temática do esquecimento[cite: 159].<br>II. As memórias das palavras favorecem a construção de discursos e também de individualidades[cite: 160].<br>III. As palavras usadas no cotidiano possibilitam questionamentos sobre memória e esquecimento, por meio da arte e seu ensino[cite: 161].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -169,7 +169,7 @@ const perguntasLocais = [
     },
     {
         id: 15,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 23<br><br>O Afrobapho é um coletivo baiano formado por jovens negros, LGBTQI+, moradores da periferia soteropolitana, que utilizam as artes integradas e os recursos de multimídia para promover mobilização social por meio de performances que interseccionam música, dança, vídeo, cenografia, indumentária e questões sobre a pauta das minorias[cite: 165].<br><br>Com base no exposto, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As ações do coletivo baiano, ao utilizarem cores neon, música, performance e referências afrofuturistas e ao levarem às ruas intervenções urbanas que discutem raça, classe, gênero e sexualidade, podem ser consideradas artivistas[cite: 167].<br><br>PORQUE<br><br>II. O artivismo caracteriza-se pela utilização de estratégias estéticas como ação política a fim de sensibilizar e problematizar junto à sociedade as condições de ser negro, pobre, gay, LGBTQI+ e morador de periferia, bem como suas reivindicações[cite: 168].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 169]",
@@ -181,7 +181,7 @@ const perguntasLocais = [
     },
     {
         id: 16,
-        tema: "Produção Artística Indígena Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal", "Arte e Ativismo Político-Social (Artivismo)",
+        tema: ["Produção Artística Indígena Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal", "Arte e Ativismo Político-Social (Artivismo)"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 24<br><br>A partir do termo umuarama (nome indígena para 'lugar de descanso'), Salissa Rosa criou uma horta no terreno anexo ao Museu de Arte da Pampulha, em Belo Horizonte[cite: 172]. Ela vislumbra a possibilidade de enraizar a cultura indígena na cidade, enfatizando que não são os indígenas que estão nas cidades, mas as cidades que se situam em territórios indígenas[cite: 173]. Em sua ação, todos serão convidados a cozinhar mandioca, milho, batata, peixe, pajuaru, que são a base da alimentação dos povos originários de Abya yala (nome indígena para América)[cite: 174]. Ainda, no terreno anexo ao museu, em volta de uma fogueira, ocorrem conversas no modo indígena, com cantos e histórias[cite: 175].<br><br>Considerando as informações apresentadas no texto, avalie as afirmações a seguir.<br><br>I. A obra de Salissa Rosa apresenta-se como uma espécie de escultura social, conceito que descreve a sociedade como uma grande obra de arte colaborativa[cite: 178].<br>II. Ao transladar a cultura e o ritual indígena para o museu, Salissa Rosa faz a apropriação de uma cultura e descaracteriza o objeto indígena[cite: 179].<br>III. A artista utiliza métodos de ensino da arte da culinária praticados em forma de oficina no museu, tendo como elemento matérico principal o alimento[cite: 180].<br>IV. Umuarama propõe uma ação artística educativa que modifica a condição de precariedade da realidade indígena[cite: 181].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -193,7 +193,7 @@ const perguntasLocais = [
     },
     {
         id: 17,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 25<br><br>TEXTO I:<br>Clarissa Tossin trata de temas como precariedade ecológica e justiça social e enfrenta a pegada ambiental cotidiana em nosso planeta[cite: 184]. Suas esculturas são compostas de camadas sedimentares de gesso, terracota, silicone e plástico derretido extraídos de seus resíduos pessoais, além de outros materiais não biodegradáveis como isopor e alumínio[cite: 185]. Com os trabalhos da exposição Future Fossil, Tossin questiona a sustentabilidade do nosso mundo atual e futuro[cite: 186]. As obras da artista, como mostra a imagem a seguir, compreendem uma constelação de planetas que projetam visões ambiguas de futuro[cite: 187].<br><br>Considerando essas informações, assinale a opção que apresenta a obra que se relaciona ao tema tratado pela artista Clarissa Tossin.",
         opcao_A: "BORGES, M. L. M. Pedras do Sertão. s/d. Barro sobre pedra[cite: 190].",
@@ -205,7 +205,7 @@ const perguntasLocais = [
     },
     {
         id: 18,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 26<br><br>Na instalação The Weather Project (o Projeto clima/tempo), Olafur Eliasson trata do clima, ressaltando os encontros fundamentais da natureza com a cidade e sua população[cite: 199]. O artista foca seu interesse na luz, na energia, no sol e no quanto dependemos da luz solar para viver e como não nos damos conta disso[cite: 200]. Eliasson trabalha com experiências que são feitas de percepções. Seu trabalho se baseia em como são criadas nossas percepções[cite: 201]. Olafur nos pergunta: de que maneira sabemos o que percebemos? Como podemos amplificar nossas percepções? [cite: 202]<br><br>ELIASON, O. The Wether Project, 2003[cite: 204].<br><br>Considerando o texto e a imagem apresentados, assinale a opção correta.",
         opcao_A: "A instalação de Olafur Eliasson, por estar contida no espaço interno do museu, inviabiliza a reflexão direta sobre o acesso ao meio ambiente, à natureza e às questões socioambientais[cite: 206].",
@@ -217,7 +217,7 @@ const perguntasLocais = [
     },
     {
         id: 19,
-        tema: "Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 27<br><br>Em A queda do céu, Davi Kopenawa, xamã e importante liderança yanomami, questiona a escrita do branco e a sua consequente forma de conhecimento[cite: 212]. Explica que a tradição dos Yanomami nunca foi escrita, 'os dizeres de nossos ancestrais nunca foram desenhados. São muito antigos, mas continuam sempre presentes em nosso pensamento até hoje.' [cite: 213] Em nota, o antropólogo Bruce Albert explica que Kopenawa incentivou o projeto de alfabetização em sua comunidade, para que os jovens pudessem defender os seus direitos[cite: 214].<br><br>BANIWA, D. Relacionamentos (AGRO) Tóxicos - Coração Sagrado. 2018. Autorretrato[cite: 216, 217].<br><br>Com base no texto e na imagem apresentados, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A obra de Denilson Baniwa revela o pleno domínio de um código de arte próprio da cultura do colonizador[cite: 219].<br><br>PORQUE<br><br>II. Ao dominar o código da linguagem do colonizador, integrantes de grupos colonizados inserem se na cultura dominante e encontram espaço reverberante às causas que lhes dizem respeito, livres do olhar exótico e da classificação de 'arte nativa'[cite: 220].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 221]",
@@ -229,7 +229,7 @@ const perguntasLocais = [
     },
     {
         id: 20,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 28<br><br>Ai Weiwei, artista contemporâneo chinês, é uma das mais expressivas vozes contra o regime chinês, não apenas por seu trabalho, mas também pela polêmica gerada em torno de seus constantes embates com as autoridades de seu país[cite: 225]. Sua obra, tal como Vaso Neolitico com logotipo de Coca-Cola (2010), trata do impacto do processo de modernização e ocidentalização na sociedade, cultura e tradição chinesa[cite: 226].<br><br>Sobre Ai Weiwei e sua obra, avalie as afirmações a seguir.<br><br>I. Ai Weiwei é um artista conceitual, sua ideia e postura crítica transcendem os aspectos estéticos de sua obra[cite: 228].<br>II. O artista ressignifica o artefato milenar chinês ao incorporar o logotipo da Coca-Cola no objeto apropriado[cite: 229].<br>III. A obra dialoga com aspectos históricos e ideológicos da cultura chinesa, em contraposição com a modernização que aconteceu no país[cite: 230].<br>IV. A obra de Ai Weiwei é impregnada de ativismo social e político, consolidando o conceito definido por Marcel Duchamp, de que não existem fronteiras entre a vida e a arte[cite: 231].<br><br>É correto o que se afirma em",
         opcao_A: "I e II, apenas.",
@@ -241,7 +241,7 @@ const perguntasLocais = [
     },
     {
         id: 21,
-        tema: "Identidade e Representação na Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2012 - QUESTÃO 29<br><br>No projeto Assentamentos, Rosana Paulino faz a conexão entre arte, memória e história e se coloca como mulher negra na sociedade brasileira[cite: 236]. Pela produção de fotografias, vídeo, instalações, esculturas e desenhos, e outras linguagens, a artista evidencia impossibilidades, dificuldades, opressões e sacrifícios, problemas enfrentados pela raça negra ao longo dos séculos[cite: 237]. A artista defendeu: 'Ou se refaz ou morre, senão os traumas vão passando para os descendentes. [...] a gente assenta, não para nem cristaliza. Aqui, as raízes vão ganhando força e a gente vai se sustentando...'[cite: 238].<br><br>Tendo por base o texto e as imagens apresentados, avalie as afirmações a seguir.<br><br>I. A obra da artista remete o espectador a uma história recente e ao mesmo tempo propicia a reflexão sobre as representações realizadas no passado e sobre as marcas deixadas por ele[cite: 240].<br>II. Na instalação, as peças estão costuradas de forma desencontrada, evidenciando as marcas de um processo de adaptação, que muitas vezes são transmitidas aos seus descendentes[cite: 241].<br>III. A mulher negra, figura central da nossa história, é apresentada despida e ressignificada de modo crítico por Rosana Paulino[cite: 242].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -253,7 +253,7 @@ const perguntasLocais = [
     },
     {
         id: 22,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Arte no Espaço Público e Arte Urbana", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Arte no Espaço Público e Arte Urbana", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 30<br><br>Rosalind Krauss constrói o conceito do campo ampliado como problematização de oposições, entre as quais está suspensa a categoria modernista escultura[cite: 245]. A partir dos sentidos opostos entre paisagem e arquitetura, ela constrói o quadrado semiótico com uma primeira expansão que considera o espelhamento dessa oposição binária, a qual, na lógica matemática, é considerada neutra: não paisagem e não arquitetura[cite: 246]. É onde encontra-se a escultura, de maneira periférica[cite: 247]. Porém, para a autora, esse lugar neutro não dá conta de explicar as obras que foram produzidas a partir dos anos 1960. Ela verifica que o trabalho de paisagismo é, ao mesmo tempo, paisagem e arquitetura, assim como as trilhas na natureza, o que os tornam complexos no quadrado proposto[cite: 247]. Dessa forma, ela amplia o campo da periferia para situar a produção artística contemporânea[cite: 248].<br><br>SERRA, R. Fulcrum. 1987. Aço corten[cite: 251].<br><br>Considerando o conceito proposto por Krauss e a obra apresentada, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A obra Fulcrum, de Richard Serra, é classificada como local-construção[cite: 253].<br><br>PORQUE<br><br>II. A obra Fulcrum está construída em um espaço urbano, à semelhança de uma obra arquitetônica, porém, constitui-se como não arquitetura, pois não cumpre tal função[cite: 254].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -265,7 +265,7 @@ const perguntasLocais = [
     },
     {
         id: 23,
-        tema: "Políticas Públicas e Gestão em Educação", "Educação Inclusiva e Acessibilidade",
+        tema: ["Políticas Públicas e Gestão em Educação", "Educação Inclusiva e Acessibilidade"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 31<br><br>Os quilombolas, compreendidos também como povos ou comunidades tradicionais, exigem que as políticas públicas a eles destinadas considerem a sua inter-relação com as dimensões históricas, políticas, econômicas, sociais, culturais e educacionais que acompanham a constituição dos quilombos no Brasil[cite: 258]. Consequentemente, a Educação Escolar Quilombola não pode ser pensada somente se levando em conta os aspectos normativos, burocráticos e institucionais relacionados à configuração das políticas educacionais[cite: 259]. A sua implementação deverá ser sempre acompanhada de consulta prévia e realizada pelo poder público junto às comunidades quilombolas e suas organizações[cite: 260].<br><br>Considerando o texto e as discussões sobre políticas de articulação escola/comunidade quilombola, avalie as afirmações a seguir.<br><br>I. A relação entre educação e movimentos sociais na educação quilombola objetiva adequar essa organização cultural ao sistema educacional[cite: 263].<br>II. A história, a memória, o território, a ancestralidade e os conhecimentos tradicionais da comunidade quilombola são aspectos considerados na garantia do direito à educação quilombola[cite: 264].<br>III. O papel da comunidade quilombola é determinante nos processos decisórios acerca da educação escolar a ser nela implementada[cite: 265].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -277,7 +277,7 @@ const perguntasLocais = [
     },
     {
         id: 24,
-        tema: "Teorias Fundamentais da Educação", "Arte e Ativismo Político-Social (Artivismo)",
+        tema: ["Teorias Fundamentais da Educação", "Arte e Ativismo Político-Social (Artivismo)"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 32<br><br>O pensamento de Paulo Freire a sua teoria do conhecimento deve ser entendido no contexto em que surgiu o Nordeste brasileiro, onde, no início da década de 1960, metade de seus 30 milhões de habitantes vivia na 'cultura do silêncio', como ele dizia, isto é, eram analfabetos[cite: 268]. Era preciso 'dar-lhes a palavra' para que transitassem para a participação na construção de um Brasil que fosse dono de seu próprio destino e que superasse o colonialismo[cite: 269].<br><br>Com base no texto e nas ideias freireanas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Paulo Freire denunciou a opressão e a exclusão gerada pela supressão do direito à educação e à cidadania, defendendo a educação como uma empreitada coletiva[cite: 271].<br><br>PORQUE<br><br>II. A educação deve ser compreendida como um ato político, pois deve incentivar a reflexão e a ação consciente e criativa do sujeito em seu processo de libertação[cite: 272].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 273]",
@@ -289,7 +289,7 @@ const perguntasLocais = [
     },
     {
         id: 25,
-        tema: "Educação Inclusiva e Acessibilidade", "Políticas Públicas e Gestão em Educação",
+        tema: ["Educação Inclusiva e Acessibilidade", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 33<br><br>O Decreto n. 5.626/2005, que dispõe sobre a Língua Brasileira de Sinais (Libras) considera a pessoa surda como aquela que, por ter perda auditiva, compreende e interage com o mundo por meio de experiências visuais[cite: 277]. Em consonância com o decreto, nas escolas públicas em que há crianças surdas ou com deficiência auditiva matriculadas, faz-se necessário o desenvolvimento de práticas capazes de garantir o seu direito à educação[cite: 278].<br><br>Considerando as ações necessárias para a escola garantir o direito à educação das crianças surdas, avalie as afirmações a seguir.<br><br>I. É necessário criar situações em sala de aula que promovam o convívio social entres as crianças, que estimule o respeito às diferenças, promovendo o reconhecimento das suas potencialidades e o desenvolvimento afetivo, cognitivo, linguístico e sociocultural[cite: 280].<br>II. A Libras deve ser assegurada como a primeira língua da criança surda, considerando-se a Língua Portuguesa, na modalidade escrita, como a segunda[cite: 281].<br>III. É fundamental disponibilizar intérpretes de Libras para as crianças surdas, e caso não seja possível, é preciso solicitar aos familiares que procurem outra escola mais preparada[cite: 282].<br>IV. A escola deve fomentar parcerias com os pais com o objetivo de acolhê-los e ajudá-los a constituir uma imagem positiva de seu filho surdo, auxiliando-o na compreensão da sua realidade[cite: 283].<br>V. Os professores precisam desenvolver, em relação aos alunos surdos, processos de avaliação mais subjetivos com foco nas dificuldades de aprendizagem desses alunos[cite: 284].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e V.",
@@ -301,7 +301,7 @@ const perguntasLocais = [
     },
     {
         id: 26,
-        tema: "Políticas Públicas e Gestão em Educação",
+        tema: ["Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 34<br><br>As percepções sobre o termo liderança revelam uma configuração ainda precária da realidade brasileira no campo da gestão escolar[cite: 286]. As pesquisas internacionais apresentam uma gama significativa de resultados sobre o tema há, pelo menos, mais de duas décadas[cite: 287]. Vale lembrar que os estudos sobre escolas eficazes, na sua maioria, apontam o efeito da liderança do gestor como um dos principais fatores explicativos dessa equação [cite: 288].<br>Um sobrevoo nos dados da pesquisa Olhares Cotidianos sobre a Gestão Escolar (OCGE), realizada com gestores e professores de seis escolas de um município brasileiro, permite identificar, de forma geral, noções sobre o termo, ao se solicitar ao grupo algum tipo de caracterização mais precisa de liderança: 'Isso aí é uma coisa que se tem ou não se tem.' [cite: 290] (Ana, Grupo Liderança). 'O dom da palavra, do convencimento...' [cite: 291] (Andrea, Grupo Liderança). 'Carisma' [cite: 291] (Cíntia, Grupo Liderança). 'A pessoa nasce com isso ou não.' [cite: 292] (Adriana, Grupo Liderança).<br><br>Relacionando as ideias de liderança expostas pelas participantes da pesquisa sobre o exercício da gestão escolar, avalie as afirmações a seguir.<br><br>I. As respostas de Ana e Adriana reforçam as concepções defendidas pelas investigações científicas do campo educacional contemporâneo sobre liderança, que afirmam que nem todos podem ser gestores escolares e que é preciso ter a qualidade de empreendedor para ocupar esse cargo[cite: 296].<br>II. Ana e Cíntia expõem ideias que são coerentes com os estudos atuais sobre a prática da gestão escolar, pois enfatizam o estilo administrativo do gestor, que é um fator fundamental para se compreender a liderança e as suas relações com os objetivos educacionais das escolas[cite: 297].<br>III. Em suas respostas, Andrea e Cíntia expressam a ideia de liderança a partir de um de seus aspectos, o interpessoal, embora outros fatores relevantes interfiram na gestão escolar, como o administrativo e/ou o pedagógico[cite: 298].<br>IV. As afirmações das participantes relacionam a liderança a uma capacidade de convencimento e a uma habilidade inata do líder concepções já ultrapassadas pelas investigações educacionais sobre o tema no cenário contemporâneo[cite: 299].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e IV.",
@@ -313,7 +313,7 @@ const perguntasLocais = [
     },
     {
         id: 27,
-        tema: "Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2021 - QUESTÃO 35<br><br>As redes sociais promovem formas de interação entre indivíduos agrupados por interesses mútuos, identidades semelhantes e também por valores compartilhados[cite: 302]. Nesse contexto, a Internet vem se tornando um importante espaço para movimentos sociais por possibilitar uma acelerada e ampla difusão de ideias e absorção de novos elementos em busca de algo em comum[cite: 303]. Assim, os movimentos sociais se fazem valer cada vez mais da 'democracia informacional', da 'ciberdemocracia' e da prática do 'ciberativismo'[cite: 304].<br><br>A partir das ideias sobre comunicação e interação virtual, avalie as afirmações a seguir.<br><br>I. Os movimentos sociais tendem a perder força, prestígio e visibilidade com o crescimento da virtualidade junto à nova geração de jovens e adultos[cite: 306].<br>II. Ciberdemocracia, democracia informacional e ciberativismo podem ser classificados como movimentos advindos da virtualidade[cite: 307].<br>III. As redes sociais potencializam o ativismo fazendo uso da virtualidade, no entanto, ainda são pouco exploradas pelos movimentos sociais da atualidade[cite: 308].<br>IV. Tempo e espaço são conceitos a serem repensados a partir da inserção cada vez maior da virtualidade na vida social[cite: 310].<br>V. É papel do educador formar e preparar os alunos para uma atuação responsável e crítica frente à virtualidade, explorando suas potencialidades[cite: 311].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I, II, e III.",
@@ -325,7 +325,7 @@ const perguntasLocais = [
     },
     {
         id: 28,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 09<br><br>As implicações mais amplas da maneira como a arte era pensada no feminismo foram se tornando cada vez mais claras em meados dos anos 1970. A insistência no direito de não agir nem como sujeito neutro nem como substituto do macho, mas como mulher, havia posto em foco a questão da identidade[cite: 314]. Contudo, apesar de reconhecida como tal, não era uma questão que pudesse se confinar aos limites do gênero[cite: 315].<br><br>MILLER, J. H. We Can Do it! Cartaz, 1943[cite: 314].<br><br>Tendo como referência as informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A partir da segunda metade do século XX, a arte aprofundou aspectos de contestação política e cultural, marcados pela conexão com questões sociais, pela abordagem interdisciplinar e pelo uso de novos materiais e suportes expressivos[cite: 318, 319].<br><br>PORQUE<br><br>II. O mundo testemunhou, a partir da segunda metade do século XX, o aparecimento de movimentos sociais que buscavam dar voz a minorias identitárias, e que influenciaram a sociedade em todos os aspectos, inclusive em relação à concepção de sujeito e de novas subjetividades[cite: 320].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -337,7 +337,7 @@ const perguntasLocais = [
     },
     {
         id: 29,
-        tema: "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 10<br><br>Quando o status construído do gênero é teorizado como radicalmente independente do sexo, o próprio gênero se torna artifício flutuante, com a consequência de que homem e masculino podem, com igual facilidade, significar tanto um corpo feminino como um masculino, e mulher e feminino, tanto um corpo masculino como um feminino [cite: 326].<br><br>Figura 1: GAGA, L. You and I. Capa do single, 2011.<br>Figura 2: ARRUDA, V. Autorretrato com peruca loura e batom (1998)[cite: 326].<br><br>Considerando o diálogo direto das obras de artistas contemporâneos de diversas áreas com uma agenda Queer, ligada às demandas socioculturais e políticas da população LGBT (lésbicas, gays, bissexuais, travestis, transexuais e trangêneros), assinale a opção correta.",
         opcao_A: "Na figura 1, a relação entre palavra e imagem estabelece um questionamento da dimensão do corpo biológico como produto do meio[cite: 329].",
@@ -349,7 +349,7 @@ const perguntasLocais = [
     },
     {
         id: 30,
-        tema: "Pedagogia e Didática em Artes Visuais", "Políticas Públicas e Gestão em Educação",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 11<br><br>Decorrida a primeira década do século XXI, encontramo-nos perante uma realidade marcada pela complexidade, volatilidade e incerteza associadas à globalização, ao desenvolvimento tecnológico acelerado, à crise social e financeira e às tensões daí resultantes[cite: 334]. Nesse contexto, verificamos que a estrutura curricular e a organização das nossas escolas permanecem baseadas em um modelo de compartimentação de conteúdos, com pouca relação com as competências e conhecimentos necessários à sobrevivência e ao êxito para os quais a criatividade é fundamental[cite: 335]. A transdisciplinaridade surge como resposta, possível, aos desafios atuais[cite: 336].<br><br>Considerando as informações apresentadas, é correto afirmar que a transdisciplinaridade no ensino das Artes Visuais",
         opcao_A: "amplia o repertório de conhecimentos e promove a dispersão em conteúdos de diferentes linguagens[cite: 338].",
@@ -361,7 +361,7 @@ const perguntasLocais = [
     },
     {
         id: 31,
-        tema: "Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 12<br><br>A obra Marulho, de Cildo Meirelles, foi produzida a partir de imagens de revistas, sons e percepções que remetem ao mar[cite: 344].<br><br>MEIRELLES, C. Marulho. Instalação, 1991-2001[cite: 343].<br><br>A partir da imagem e da informação apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A obra de Cildo Meirelles consiste em modalidade artística contemporânea que gera muita discussão entre estudantes e professores acerca de sua artisticidade, seja em espaços de educação formal seja nos de educação não formal[cite: 346].<br><br>PORQUE<br><br>II. A obra Marulho consiste em uma instalação que contempla a utilização de procedimentos e materiais, no chamado campo ampliado da escultura, extraídos do cotidiano e ressignificados na obra, rompendo com os padrões tradicionais de compreensão do fenômeno artístico[cite: 348].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 349]",
@@ -373,7 +373,7 @@ const perguntasLocais = [
     },
     {
         id: 32,
-        tema: "Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 13<br><br>Em Fairy Tales (Contos de fadas), uma das performances mais conhecidas de Francis Alÿs, retratada na imagem a seguir, o artista caminhou pelas ruas de Estocolmo vestindo um casaco de lã que ia se desmanchando ao longo de sua caminhada, uma vez que uma linha do casaco estava presa no início de sua trajetória[cite: 354, 355].<br><br>A partir da imagem e das informações apresentadas, avalie as afirmações a seguir, a respeito da performance de Francis Alys.<br><br>I. A linha deixada por Alÿs durante sua caminhada delineia o espaço, mapeando seu itinerário[cite: 357].<br>II. A trilha deixada sobre a superfície do caminho indica que o artista se refere a mitos e histórias como Ariadne e João e Maria[cite: 358].<br>III. O performer sabe que o rastro que deixa, o traço sutil e evanescente de um desenho que perpassa a cidade, é fadado ao desaparecimento, ou seja, a ser absorvido pela cidade, sendo, portanto, a ela que a performance se destina[cite: 359].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -385,7 +385,7 @@ const perguntasLocais = [
     },
     {
         id: 33,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Processos de Criação e Pesquisa em Arte",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Processos de Criação e Pesquisa em Arte"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 14<br><br>O que está escrito a respeito de uma pessoa ou um fato é, declaradamente, uma interpretação, do mesmo modo que as manifestações visuais feitas à mão, como pinturas e desenhos[cite: 361]. Imagens fotografadas não parecem manifestações acerca do mundo, mas, sim, pedaços dele, miniaturas da realidade que qualquer um pode fazer ou adquirir[cite: 362]. Entretanto, fotografar é apropriar-se da coisa fotografada. Significa por a si mesmo em determinada relação com o mundo, semelhante ao conhecimento e, portanto, ao poder[cite: 363].<br><br>SONTAG, S. Sobre fotografia. São Paulo: Companhia das Letras, 2004 (adaptado)[cite: 364].<br><br>Com base no texto apresentado, assinale a alternativa correta.",
         opcao_A: "A fotografia, por se tratar de um retrato da realidade, restringe a capacidade do fotógrafo de nela inserir traços de sua personalidade[cite: 365].",
@@ -397,7 +397,7 @@ const perguntasLocais = [
     },
     {
         id: 34,
-        tema: "Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 15<br><br>O desenvolvimento do processo de ensino em Arte na escola não deve reforçar determinados estereótipos nem hierarquizar, naturalizar ou cristalizar as identidades já legitimadas por grupos sociais e culturais dominantes, reforçando muitas vezes situações de preconceito, exclusão e bullying[cite: 370]. O papel da escola deve ser o de problematizar a (des)construção das múltiplas identidades por meio do uso das imagens cotidianas, orientando os estudantes para um comportamento de alteridade[cite: 371]. Assim, o trabalho do arte/educador deve ser o de elaborar propostas desafiadoras, criando situações metodológicas em Artes Visuais para que os educandos reflitam sobre a diversidade imagética e cultural[cite: 372].<br><br>A partir desse contexto, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As atividades desenvolvidas em sala de aula devem proporcionar aos educandos a oportunidade de reconhecerem o repertório visual acumulado durante sua experiência de vida, e desenvolverem o potencial de observação e atenção sobre o que está sendo visto[cite: 375].<br><br>PORQUE<br><br>II. O processo de ensino em Arte deve ser guiado pelo professor por um caminho pré-determinado que promova no estudante um olhar criativo e capaz de ler as imagens[cite: 376].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -409,7 +409,7 @@ const perguntasLocais = [
     },
     {
         id: 35,
-        tema: "Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 16<br><br>A zona portuária do Rio de Janeiro está de cara nova. Um mural de 3 mil metros quadrados que poderá entrar para o livro dos recordes como o maior do mundo, criado pelo artista brasileiro Eduardo Kobra, em 2016, chama a atenção de quem passa por lá, hipnotizado pelas cores e impressões tridimensionais[cite: 382]. Na obra, denominada Etnias e retratada na imagem a seguir, cinco rostos representam etnias de cada continente[cite: 383].<br><br>KOBRA, E. Mural Etnias: Todos somos um. Grafite, 2016[cite: 384].<br><br>A partir dessas informações, avalie as afirmações a seguir.<br><br>I. Murais são produções artísticas que compõem paisagens urbanas de grandes cidades, agregam valor ao patrimônio cultural local e ampliam o acesso à arte, divulgando expressões ou movimentos de criação coletiva[cite: 385].<br>II. Técnicas variadas de pintura são utilizadas durante a realização de um mural para que o público entenda a dimensão do conceito de diversidade dos grandes centros urbanos[cite: 386].<br>III. Murais são instrumentos educativos de grande relevância na divulgação de obras de artistas politicamente engajados[cite: 387].<br>IV. O grafite é uma técnica coletiva de construção de mural que, focada na produção de discursos afirmativos étnicos, visa democratizar o acesso à cultura local[cite: 388].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -421,7 +421,7 @@ const perguntasLocais = [
     },
     {
         id: 36,
-        tema: "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 17<br><br>Misturas, hiatos e tensões constituem a africanidade inerente à cultura brasileira[cite: 390]. Por um lado, a transposição forçada de africanos ao Brasil para serem escravizados, entre os séculos XVI e XIX, determinou rupturas diversas e uma complexidade social que são ainda hoje bastante perceptíveis[cite: 391]. Por outro lado, a participação deles e de seus descendentes na construção da sociedade brasileira tem gerado entrelaçamentos culturais que são observáveis em quase todos os domínios sociais[cite: 392]. Vídeos, performances colaborativas e instalações multimídias são os meios mais frequentes de intervenção do artista baiano Marcondes Dourado, que aborda tópicos de religião, carnaval, sexo, gênero, trabalho, história e, consequentemente, política, que atravessam e são perpassados pela questão afro-brasileira[cite: 393].<br><br>DOURADO, M. Lavagem da Capela do Mam. Performance, 2007[cite: 395].<br><br>Considerando as informações apresentadas e a imagem que retrata a performance Lavagem da Capela do Mam, de Marcondes Dourado, avalie as afirmações a seguir.<br><br>I. A obra de Marcondes Dourado está em sintonia com os princípios da arte contemporânea e com o reconhecimento da presença dos afrodescendentes na composição da cultura brasileira[cite: 396].<br>II. Em sua obra, Marcondes Dourado apresenta apropriações simbólicas da religiosidade afro-brasileira, transformadas em um universo plástico-simbólico[cite: 397].<br>III. A relevância artística da obra de Marcondes Dourado deve-se às políticas públicas afirmativas para afrodescendentes, crescentes nos últimos anos no Brasil[cite: 398].<br><br>É correto o que se afirma em",
         opcao_A: "II, apenas.",
@@ -433,7 +433,7 @@ const perguntasLocais = [
     },
     {
         id: 37,
-        tema: "Linguagens e Práticas da Arte Contemporânea", "Arte, Sustentabilidade e Crítica Ambiental", "Arte no Espaço Público e Arte Urbana",
+        tema: ["Linguagens e Práticas da Arte Contemporânea", "Arte, Sustentabilidade e Crítica Ambiental", "Arte no Espaço Público e Arte Urbana"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 18<br><br>O artista chinês contemporâneo Song Dong faz reflexões sociais e culturais acerca de seu país e do mundo por meio de suas obras[cite: 400]. Em 2004, para a abertura da 26ª Bienal de São Paulo, ele produziu Eating the World[cite: 401]. Sobre o piso, construiu uma representação do mapa-mundi com doces de diversos tipos para serem consumidos pelos visitantes[cite: 402]. A obra foi realizada com a participação do público, que, literalmente, a devorou em poucos minutos[cite: 403]. Desde então, ele produziu versões dessa obra, com o nome Eating the City, em diversas cidades, recriando maquetes comestíveis feitas com bolo, pão, biscoitos, macarrão e outros alimentos[cite: 404, 405]. De acordo com Song Dong, 'uma das razões para a expansão das cidades são os desejos dos homens; a rápida expansão da cidade é como uma boca que engole tudo ao seu redor'[cite: 406].<br><br>Considerando os elementos presentes nas obras de Song Dong que as caracterizam como arte contemporânea, avalie as afirmações a seguir.<br><br>I. O artista explora questões da vida cotidiana, por exemplo, o crescimento das grandes cidades e o consumismo das populações[cite: 410].<br>II. As obras são construídas com elementos prontos e pertencentes ao dia a dia das pessoas, como diversos tipos de alimentos[cite: 411].<br>III. É com a ação do público que as obras se realizam e possibilitam reflexões acerca de questões contemporâneas[cite: 412].<br>IV. As obras representam, de forma verossímil, a cidade e todo o seu contexto com grande riqueza de detalhes[cite: 413].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -445,7 +445,7 @@ const perguntasLocais = [
     },
     {
         id: 38,
-        tema: "Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 19<br><br>Recentemente, o termo mediação passou a ser usado como sinônimo do trabalho educativo realizado nos museus e que, de algum modo, substituiria termos como visita guiada, visita orientada, visita monitorada, visita acompanhada e outros do gênero[cite: 415]. Assim, define-se a mediação não como uma forma de transmissão de conhecimentos prontos e definidos, recebidos passivamente pelo público visitante, mas como um espaço possível para a realização de experiências, a partir do contato e da relação construída com as obras expostas[cite: 416]. Também podem ser considerados elementos mediadores os textos críticos e curatoriais, as notícias divulgadas pelos meios de comunicação, a museografia e a própria arquitetura dos espaços expositivos, entre outros[cite: 417].<br><br>Considerando as ideias do texto, avalie as afirmações a seguir.<br><br>I. O uso dos termos visita monitorada e visita orientada transmite a ideia de que o visitante é um participante ativo diante das informações acerca do acervo e de como se comportar nos espaços expositivos[cite: 419].<br>II. O termo mediador agrega também o sentido de educador, aquele profissional capaz de explorar diversas possibilidades para o melhor aproveitamento da experiência com a obra de arte e com a exposição[cite: 420].<br>III. A mediação proporciona, para cada visitante, referências estéticas que possibilitam a promoção do estranhamento ou o deslocamento de uma perspectiva cotidiana para outras, incitando, nesse processo, o exercício do olhar[cite: 421].<br>IV. A mediação pode ser entendida como uma nova forma de perceber a relação educativa, em museus ou em outras instituições de saberes, uma vez que amplia a experiência educativa nessa atividade, na qual o visitante é (ou deve ser) estimulado a participar da troca de conhecimentos[cite: 422].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -457,7 +457,7 @@ const perguntasLocais = [
     },
     {
         id: 39,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 20<br><br>Durante a década de 1970, diversos artistas desenvolveram poéticas visuais especializadas na manipulação e alteração, muitas vezes, radical das paisagens[cite: 426]. As obras eram construídas em escalas monumentais, ainda que de duração efêmera[cite: 427].<br><br>MARIA, W. Lightining Field. Instalação, 1977[cite: 425].<br>SMITHSON, R. Spiral Jetty. Instalação, 1970[cite: 425, 426].<br><br>A respeito das obras de Walter de Maria e Robert Smithson, avalie as afirmações a seguir.<br><br>I. Essas obras, de maneira geral, por não terem encontrado lugar apropriado dentro das galerias de arte e museus, tornaram-se campos exóticos para visitação[cite: 429].<br>II. Normalmente as obras produzidas por artistas como Walter de Maria e Robert Smithson são inseridas na definição de Arte Ambiental, também conhecida como Earth Art ou Land Art, e refletem grande preocupação com o meio ambiente[cite: 430].<br>III. A apreensão das obras apresentadas é feita por meio de sua respectiva conversão em documento, isto é, em registro visual e audiovisual[cite: 431].<br>IV. Ambas as obras podem ser consideradas como manifestações de esculturas no campo ampliado, segundo as definições da teórica Rosalind Krauss[cite: 432].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e IV.",
@@ -469,7 +469,7 @@ const perguntasLocais = [
     },
     {
         id: 40,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 21<br><br>As obras retratadas nas imagens a seguir fizeram parte da mostra intitulada Causa+Arte, realizada em 2014 como parte da programação da Virada Sustentável, evento brasileiro de sustentabilidade[cite: 435]. A primeira instalação, do artista Jaime Prades, intitulada À Deriva, parte do tema 'E se a água entrar em extinção?' [cite: 436] A obra é formada por um pequeno barco de madeira que flutua em um rio representado por 800 galões de água vazios e de uma terra representada por entulho coletado nas caçambas de lixo da cidade[cite: 437]. Na segunda instalação, a palavra consumo_é escrita com letras desenhadas por meio de fardos de lixo[cite: 438]. A obra, produzida pelo Coletivo de Arte e Design Bijari, chama a atenção para o excesso de consumo como comportamento negativo da sociedade contemporânea, porque compromete diversos recursos naturais do planeta[cite: 439]. Na obra, o lixo se torna protagonista[cite: 440].<br><br>A partir das informações apresentadas e considerando a relação entre artes visuais e educação ambiental, avalie as afirmações a seguir.<br><br>I. A arte contribui para a construção da cidadania ao incentivar a criação artística que sensibilize a população acerca da importância da preservação do meio ambiente e do patrimônio natural[cite: 442, 443].<br>II. A obra de arte criada pela coletividade reforça o entendimento de que a arte pode ser engajada como um tipo de arte-manifesto, de arte a serviço do ativismo[cite: 444].<br>III. A reutilização de materiais em obras de arte mascara a necessidade de políticas públicas para a destinação e o reaproveitamento adequados do lixo[cite: 445].<br>IV. A arte possibilita a compreensão de que os indivíduos são parte integrante da natureza e, por isso, ao preservarem o meio ambiente, preservam a vida[cite: 446].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -481,7 +481,7 @@ const perguntasLocais = [
     },
     {
         id: 41,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 22<br><br>A priori, antes de suas obras, a arte é uma crítica da feroz seriedade que a realidade impõe sobre os seres humanos[cite: 453]. Ao dar nome a esse estado de coisas, a arte acredita que está soltando amarras[cite: 454]. Eis sua alegria e também, sem dúvida, sua seriedade ao modificar a consciência existente[cite: 455].<br><br>ADORNO, T. W. A arte é alegre? (adaptado)[cite: 456].<br>PORTINARI, C. Retirantes. 1944[cite: 458].<br><br>Considerando o texto de Adorno e a reprodução da pintura Retirantes, de Cândido Portinari, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Retirantes, que mostra a situação dramática de sofrimento e privação de muitos brasileiros, é arte voltada à crítica da realidade histórica e social[cite: 459].<br><br>PORQUE<br><br>II. A arte tem um caráter crítico na medida em que, antes de ser arte, mostra e explicita o sofrimento ao qual a realidade submete as pessoas[cite: 460].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 461]",
@@ -493,7 +493,7 @@ const perguntasLocais = [
     },
     {
         id: 42,
-        tema: "Arte, Tecnologia e Mídias Digitais", "Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Arte, Tecnologia e Mídias Digitais", "Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 23<br><br>Mais de 10 mil metros quadrados de área expositiva do Museu Afro Brasil, localizado em São Paulo, podem ser percorridos em apenas alguns cliques[cite: 465]. A instituição anunciou que mais de 100 obras de sua coleção podem agora ser vistas gratuitamente por meio de um aplicativo em qualquer computador ou dispositivo móvel conectado à internet[cite: 466]. As imagens das obras e do museu foram captadas em 360 graus. Os três andares do museu, localizado dentro do Parque Ibirapuera, foram mapeados e algumas obras pré-selecionadas podem ser analisadas separadamente e com detalhes[cite: 467, 468].<br><br>Com base nas informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A visita virtual ao Museu Afro Brasil constitui um dos novos espaços de aprendizagem e possibilita a leitura contextualizada de obras de arte[cite: 470].<br><br>PORQUE<br><br>II. Museus são fontes de conhecimento de aspectos materiais e imateriais de culturas e identidades diversas que, hoje, podem ser acessados por meio de recursos tecnológicos relativamente simples[cite: 471].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 472]",
@@ -505,7 +505,7 @@ const perguntasLocais = [
     },
     {
         id: 43,
-        tema: "Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)",
+        tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 24<br><br>TEXTO 1<br>À primeira vista, a escultura aparenta ser um entalhamento de um tradicional indígena americano[cite: 478]. A face melancólica, as miçangas, a pele de cobra e as penas expressam um legado roubado[cite: 479]. Mas o trabalho de Durham um artista indígena Cherokee, escritor e ativista político - vai muito além do estereótipo de arte indígena[cite: 480]. A escultura está vestindo plástico, bijuterias hippies e um sutiã de loja de departamento[cite: 481]. O corpo é uma montagem de objetos reciclados. Malinche era uma princesa indígena que foi amante de um homem branco, e o trabalho do artista pode ser interpretado como símbolo da opressão sexual e da dominação colonial[cite: 482]. Essa escultura remete a culturas híbridas, e também a questões relacionadas ao preconceito do olhar ocidental, ou seja, ao desejo de tratar a arte não ocidental como etnografia exótica, e à prontidão para aceitar representações estereotipadas dos povos indígenas [cite: 483].<br><br>TEXTO 2<br>No momento em que o critério da autenticidade deixa de se aplicar à produção artística, toda a função social da arte se transforma[cite: 486]. Em vez de fundar-se no ritual, ela passa a fundar-se em outra práxis, a política[cite: 487].<br><br>Considerando as informações apresentadas, assinale a opção correta.",
         opcao_A: "A escultura de Durham apresenta comprometimento discursivo com as diferenças culturais[cite: 489].",
@@ -517,7 +517,7 @@ const perguntasLocais = [
     },
     {
         id: 44,
-        tema: "Políticas Públicas e Gestão em Educação", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Políticas Públicas e Gestão em Educação", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 25<br><br>Em maio de 2016, foi publicada a Lei n. 13.278, uma antiga reivindicação dos profissionais da educação em arte[cite: 494, 495]. A lei determina como obrigatória a inserção das quatro linguagens artes visuais, dança, música e teatro nos currículos dos diversos níveis da Educação Básica brasileira[cite: 496]. A nova norma altera a Lei de Diretrizes e Bases da Educação Nacional (Lei n. 9.394/1996) e firma o prazo de cinco anos para que seja promovida a formação necessária dos professores[cite: 497].<br><br>Considerando as informações apresentadas, avalie as afirmações a seguir.<br><br>I. A obrigatoriedade de inserção das quatro linguagens artísticas pode repercutir efeito contrário ao pretendido pelo legislador, na medida em que um professor com formação específica em uma dessas linguagens tenha de, por força das circunstâncias socioeconômicas locais, responsabilizar-se também pelo ensino das demais linguagens[cite: 499].<br>II. A prática pedagógica do professor polivalente favorece a qualidade do ensino da arte, pois garante a diversidade de linguagens na disciplina[cite: 500].<br>III. O texto da Lei n. 13.278/2016 sinaliza para o estabelecimento de políticas públicas voltadas à formação inicial e continuada dos profissionais da educação em arte[cite: 501].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -529,7 +529,7 @@ const perguntasLocais = [
     },
     {
         id: 45,
-        tema: "Identidade e Representação na Arte Contemporânea", "Produção Artística Indígena Contemporânea", "Arte, Tecnologia e Mídias Digitais",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Produção Artística Indígena Contemporânea", "Arte, Tecnologia e Mídias Digitais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 26<br><br>PERES, E. Índios Rikibaktsa registram com celulares algumas disputas dos Jogos Indígenas. Fotografia, 2011[cite: 503].<br><br>A partir da fotografia apresentada e considerando os processos de formação de identidade, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Os povos indígenas, ao incorporarem tecnologias não indígenas a seus hábitos e tradições, descaracterizam suas culturas[cite: 505].<br><br>PORQUE<br><br>II. Na contemporaneidade, a partir da concepção de sujeito, as identidades passaram a ser compreendidas como múltiplas e dinâmicas, em virtude dos processos de subjetivação e intersubjetivação[cite: 506, 507].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I. [cite: 508]",
@@ -541,7 +541,7 @@ const perguntasLocais = [
     },
     {
         id: 46,
-        tema: "Pedagogia e Didática em Artes Visuais", "Processos de Criação e Pesquisa em Arte",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Processos de Criação e Pesquisa em Arte"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 27<br><br>As propostas pedagógicas desenvolvidas pelos professores de Artes Visuais são decorrentes de projetos de ensino-aprendizagem com as devidas justificativas e objetivos[cite: 512]. Nessas propostas, os docentes devem demonstrar conhecimento acerca do tema e apresentar metodologia e ações para a realização do fazer pedagógico, bem como estratégias de mediação e formas de execução[cite: 513]. Necessitam, ainda, apresentar o método de avaliação e seus critérios[cite: 514]. Essa última etapa é fundamental não apenas para avaliar a produção dos alunos, mas também possibilitar a reflexão acerca da coerência da proposta e da eficácia do projeto em todas suas etapas[cite: 515]. A avaliação é um modo de leitura dos alunos, do professor e dos assuntos tratados, e fornece um mapa dos interesses e das necessidades da turma[cite: 516]. É ponto de chegada e de partida, é meio, começo, fim e reinício[cite: 517].<br><br>Considerando a especificidade da avaliação em Artes Visuais, avalie as afirmações a seguir.<br><br>I. A avaliação da aprendizagem em Artes Visuais pressupõe planejamento, reflexão, estudo, critérios predefinidos frente aos processos de produção do conhecimento e de criação artística[cite: 521].<br>II. No cenário avaliativo em Artes Visuais, é necessário que os percursos individuais e coletivos de aprendizagem estejam articulados entre si[cite: 522].<br>III. A avaliação em Artes Visuais na contemporaneidade considera os cânones artísticos de beleza, proporção e organização espacial em seu processo qualitativo e quantitativo[cite: 523].<br>IV. No processo avaliativo em Artes Visuais, podem ser utilizados seminários, pesquisas de campo, portfólios e produções escritas e visuais como instrumentos de avaliação[cite: 524].<br><br>É correto o que se afirma em",
         opcao_A: "III, apenas.",
@@ -553,7 +553,7 @@ const perguntasLocais = [
     },
     {
         id: 47,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 28<br><br>Artefatos artísticos, assim como as imagens, estão marcados por temporalidades múltiplas que inscrevem sentidos e significados em processos que se diferenciam por tempo de produção e tempo de recepção[cite: 527]. As temporalidades múltiplas favorecem contaminações teóricas, conceituais, perceptivas e práticas de diferentes sistemas e períodos[cite: 528]. Essas contaminações geram diálogos com a diversidade por meio de apropriações, interferências, marginalizações e, até mesmo, silêncios, produzindo espaços onde novos objetos e imagens podem influenciar imaginários sociais e subjetividades individuais[cite: 529].<br><br>A partir da ideia apresentada no texto, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As obras de arte são atravessadas por temporalidades múltiplas que geram diferentes experiências em tempos distintos, independentemente das questões teóricas, conceituais, perceptivas e práticas artísticas[cite: 536].<br><br>PORQUE<br><br>II. Os artefatos artísticos são afetados pelas temporalidades individuais e contextuais. A respeito dessas asserções, assinale a opção correta[cite: 537].",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -565,7 +565,7 @@ const perguntasLocais = [
     },
     {
         id: 48,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 29<br><br>Uma multidão de figuras humanas feitas de pedra, cada uma com expressões e roupas únicas, habita sem alarde um pedaço do fundo do mar no litoral do México[cite: 542]. A cerca de oito metros de profundidade, nas águas cristalinas do Caribe, esconde-se o primeiro parque de esculturas subaquáticas do mundo, que tem até um museu a céu aberto ou melhor, em alto-mar[cite: 543]. O Museu Subaquático de Arte; Musa conta com um acervo de 400 esculturas submersas ao redor da ilha Mujeres, em Cancun, no México[cite: 544]. As obras criadas pelo artista inglês Jason de Caires Taylor são feitas com um material poroso, uma espécie de concreto ecológico de pH neutro, que é perfeito para resistir algumas centenas de anos debaixo d'água e facilita o crescimento de corais e o abrigo de várias espécies [...]. [cite: 545, 546] As criaturas marítimas, aliás, são peças fundamentais para o trabalho[cite: 547]. São elas que colorem, distorcem e transformam as dramáticas figuras submersas, construindo uma ambiciosa, mutante e frágil representação da evolução da vida[cite: 548].<br><br>Em face desse contexto, é correto afirmar que o trabalho do artista representa",
         opcao_A: "uma agressão ao meio ambiente, por inserir elementos artificiais dentro do mar do Caribe[cite: 550].",
@@ -577,7 +577,7 @@ const perguntasLocais = [
     },
     {
         id: 49,
-        tema: "Arte no Espaço Público e Arte Urbana", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte no Espaço Público e Arte Urbana", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 30<br><br>O espaço público tem sido ocupado, cada vez mais, por instalações, intervenções artísticas, grafites e performances[cite: 556]. Essas manifestações artísticas inscrevem as cidades no circuito da arte e no universo cultural e político[cite: 557]. A performance Quando todos calam, registrada na fotografia acima, foi realizada pela artista Berna Reale, na região do mercado Ver-o-Peso, em Belém do Pará[cite: 558].<br><br>A partir das informações apresentadas, avalie as afirmações a seguir.<br><br>I. Intervencionista, a arte urbana pode ser considerada um tipo de ativismo artístico[cite: 560].<br>II. A arte urbana promove a fruição do objeto artístico no âmbito da esfera pública, fomentando uma política de democratização da arte[cite: 561].<br>III. A arte urbana mantém-se como principal forma de resistência cultural[cite: 562].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -589,7 +589,7 @@ const perguntasLocais = [
     },
     {
         id: 50,
-        tema: "Pedagogia e Didática em Artes Visuais", "Teorias Fundamentais da Educação",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Teorias Fundamentais da Educação"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 31<br><br>A didática escolar cumpre funções de caráter político, educativo e científico a um só tempo[cite: 564]. A integralização dessas funções pela didática escolar torna essa disciplina acadêmica algo mais complexo que a simples procura e implementação de procedimentos de ensino[cite: 565]. Por meio desse processo, a unidade dialética da teoria e da prática assume as características de uma verdadeira investigação científica da realidade cotidiana da prática pedagógica[cite: 566, 567].<br><br>A partir das informações apresentadas, avalie as afirmações a seguir.<br><br>I. A práxis pedagógica envolve a adoção do método dialético no processo de elaboração do conhecimento em articulação com a teoria histórico-cultural[cite: 570].<br>II. A apropriação crítica e histórica do conhecimento é um instrumento de compreensão da realidade social e de atuação crítica para a transformação da sociedade[cite: 571].<br>III. A Didática é uma área do conhecimento que utiliza os elementos do cotidiano escolar e das questões sociais para atualizar a prática docente[cite: 572].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -601,7 +601,7 @@ const perguntasLocais = [
     },
     {
         id: 51,
-        tema: "Educação Inclusiva e Acessibilidade", "Políticas Públicas e Gestão em Educação",
+        tema: ["Educação Inclusiva e Acessibilidade", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 32<br><br>Um aluno da rede pública de ensino, com 11 anos de idade, está matriculado no 5º ano do Ensino Fundamental e tem surdez profunda bilateral[cite: 574]. Ele é bem humorado, brincalhão e bastante sociável[cite: 575]. É fluente na língua brasileira de sinais (Libras), mas apresenta dificuldades de leitura e escrita da língua portuguesa[cite: 575]. Tem potencial cognitivo elevado, embora necessite de constante interferência e auxílio da professora para realizar suas atividades[cite: 576].<br><br>Considerando a situação apresentada e o que estabelece a Política Nacional da Educação Especial na perspectiva da Educação Inclusiva, deve-se assegurar a esse aluno",
         opcao_A: "escolarização que atenda à proposta educacional bilíngue, considerando-se a língua de sinais como primeira língua[cite: 578].",
@@ -613,7 +613,7 @@ const perguntasLocais = [
     },
     {
         id: 52,
-        tema: "Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea", "Políticas Públicas e Gestão em Educação",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 33<br><br>As escolas brasileiras não têm um único jeito de ensinar sobre gênero e sexualidade; pesquisas evidenciam currículos e práticas pedagógicas e de gestão marcadas pela discriminação[cite: 583, 584]. Distinções sexistas nas aulas, na chamada, nas filas de meninos e de meninas, nos uniformes, no tratamento e nas expectativas sobre alunos ou alunas, tolerância da violência verbal e até física entre os meninos, representações de homens e mulheres nos materiais didáticos, abordagem quase exclusivamente biológica da sexualidade no livro didático, estigmatização referente à manifestação da sexualidade das adolescentes, perseguição sofrida por homossexuais, travestis e transexuais, evidenciam o quanto a escola (já) ensina, em diferentes momentos e espaços, sobre masculinidade, feminilidade, sexo, afeto, conjugalidade, família[cite: 585, 586].<br><br>Nesse contexto, para construir uma prática pedagógica que promova transformações no sentido da igualdade de gênero a partir do respeito às diferenças, espera-se que a escola",
         opcao_A: "incorpore o conceito de gênero nos diferentes componentes do currículo de maneira transversal[cite: 588].",
@@ -625,7 +625,7 @@ const perguntasLocais = [
     },
     {
         id: 53,
-        tema: "Teorias Fundamentais da Educação",
+        tema: ["Teorias Fundamentais da Educação"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 34<br><br>Lev Semenovitch Vygotsky, psicólogo russo, elaborou sua teoria tendo por base o desenvolvimento do indivíduo como resultado de um processo sócio-histórico, enfatizando o papel da linguagem e da aprendizagem nesse desenvolvimento[cite: 593]. Esse pressuposto teórico, conhecido como Teoria Histórico-Cultural, apresenta como questão central a apropriação de conhecimentos pela interação do sujeito com o contexto social[cite: 594].<br><br>Considerando os pressupostos da teoria vygotskyana, avalie as afirmações a seguir.<br><br>I. O desenvolvimento cognitivo é produzido no processo de internalização da interação social com a cultura[cite: 596].<br>II. Ao acessar a língua escrita, o indivíduo se apropria das técnicas inerentes a este instrumento cultural, modificando suas funções mentais superiores[cite: 597].<br>III. A apropriação da linguagem específica do meio sociocultural transforma os rumos do desenvolvimento individual[cite: 598].<br>IV. O desenvolvimento das funções psíquicas superiores decorre de funções existentes no indivíduo[cite: 599].<br>V. A educação sistemática e organizada pode contribuir com o processo de aquisição dos sistemas de conceitos científicos, o que modifica a estrutura do pensamento do indivíduo[cite: 600].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e IV.",
@@ -637,7 +637,7 @@ const perguntasLocais = [
     },
     {
         id: 54,
-        tema: "Teorias Fundamentais da Educação", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Teorias Fundamentais da Educação", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "ENADE 2017 - QUESTÃO 35<br><br>A professora de uma escola pública tem sua prática pedagógica fundamentada na teoria de Jean Piaget[cite: 603]. Essa professora irá desenvolver com uma turma do 5º ano do Ensino Fundamental uma aula de Ciências sobre o tema força e movimento, utilizando a abordagem construtivista[cite: 604].<br><br>Nesse contexto, qual deverá ser a proposta de trabalho elaborada pela professora?",
         opcao_A: "Demonstrar aos estudantes, em laboratório, experimentos relacionados ao tema e realizar avaliação do conteúdo trabalhado[cite: 606].",
@@ -649,7 +649,7 @@ const perguntasLocais = [
     },
     {
         id: 55,
-        tema: "Políticas Públicas e Gestão em Educação", "Identidade e Representação na Arte Contemporânea", "Produção Artística Indígena Contemporânea",
+        tema: ["Políticas Públicas e Gestão em Educação", "Identidade e Representação na Arte Contemporânea", "Produção Artística Indígena Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 09<br><br>A Lei Federal n. 10.639, de 09 de janeiro de 2003, alterou a Lei de Diretrizes e Bases da Educação ao instituir a obrigatoriedade da temática da História e Cultura Afro-Brasileira no currículo oficial dos estabelecimentos de ensino do país[cite: 612]. Em 2008, a Lei Federal n. 11.645 alterou o texto da anterior, incluindo a obrigatoriedade do ensino da História e Cultura Indígena[cite: 613]. Esse processo representa o resultado das reivindicações de setores da sociedade brasileira historicamente desprestigiados na educação formal[cite: 614].<br><br>Essa legislação tem reflexos no ensino da Arte, pois",
         opcao_A: "a área de Artes aborda a temática da História e Cultura Afro-brasileira no ensino fundamental da rede pública, organizando as celebrações do dia da Consciência Negra e confeccionando ilustrações da contribuição dos descendentes de africanos para a sociedade brasileira[cite: 615].",
@@ -661,7 +661,7 @@ const perguntasLocais = [
     },
     {
         id: 56,
-        tema: "Pedagogia e Didática em Artes Visuais", "Mediação Cultural e Educação Museal",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Mediação Cultural e Educação Museal"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 10<br><br>Conceber a arte como experiência e a obra como relato aberto oferece-nos um ponto de partida privilegiado para motivação dos estudantes para a educação artística*, porque permite incluir, como objeto de estudo, os artefatos de sua própria cultura estética, promovendo, desse modo, uma maior integração entre suas experiências vitais e a arte[cite: 625]. Como se isso não fosse suficiente, na medida em que os estudantes são ativos tecedores deste relato sempre inacabado, que constitui cada produto artístico, o exercício de interpretação amplia a capacidade de experimentar, como próprias, formas alheias de experiência estética e reduz o tédio que produz a exegese acadêmica [cite: 626].<br>* Educação artística é a terminologia utilizada na Europa para também designar o Ensino das Artes Visuais[cite: 627].<br><br>Considerando as informações apresentadas no texto, assinale a opção correta.",
         opcao_A: "As propostas pedagógicas culturalistas em artes visuais não colocam os artefatos da cultura estética dos estudantes no centro do ensino ou da produção artística em artes visuais[cite: 631].",
@@ -673,7 +673,7 @@ const perguntasLocais = [
     },
     {
         id: 57,
-        tema: "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade",
+        tema: ["Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 11<br><br>Em 2004, o artista britânico Banksy realizou um stencil provocante no qual apresenta os personagens Ronald McDonald e Mickey Mouse de mãos dadas com a vietnamita Kim Phuc[cite: 639]. A imagem da criança faz menção à conhecida fotografia de Nick Ut, que registrou crianças fugindo de um bombardeio de napalm durante a Guerra do Vietnã em 1972[cite: 640].<br><br>Figura 1. Banky. Napalm (2004-5)[cite: 636, 637].<br>Figura 2. Nick Ut. Criança nua de nove anos fugindo de um ataque de napalm, Trang Bang Village, Vietnã, 1972[cite: 638].<br><br>Considerando as imagens apresentadas, avalie as afirmações sobre a obra de Banksy.<br><br>I. A obra apresenta uma das características marcantes da pós-modernidade: a apropriação de imagens[cite: 641].<br>II. A obra apresenta intertextualidades implícitas com a fotografia de Nick Ut e com a cultura de massa americana[cite: 642].<br>III. A obra, de forma satírica, faz uma crítica social e política ao modelo de sociedade americano[cite: 643].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -685,7 +685,7 @@ const perguntasLocais = [
     },
     {
         id: 58,
-        tema: "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 12<br><br>O artista deve sempre trabalhar com as coisas que o tocam profundamente[cite: 647]. Se lhe toca o azul, trabalhe, pois, com o azul[cite: 648]. Se lhe tocam os problemas relacionados com a sua condição no mundo, trabalhe então com esses problemas[cite: 649]. No meu caso, tocaram-me sempre as questões referentes à minha condição de mulher e negra[cite: 650]. Olhar no espelho e me localizar em um mundo que muitas vezes se mostra preconceituoso e hostil é um desafio diário[cite: 651]. Aceitar as regras impostas por um padrão de beleza ou de comportamento que traz muito de preconceito, velado ou não, ou discutir esses padrões, eis a questão[cite: 652].<br><br>Rosana Paulino. Bastidores. Imagem transferida sobre tecido, bastidor e linha de costura. 1997[cite: 646].<br><br>Com base no texto e nas imagens apresentadas, avalie as afirmações a seguir.<br><br>I. Na série 'Bastidores', a violência simbólica aparece nas linhas que costuram as bocas, gargantas e olhos[cite: 654].<br>II. Os bastidores, essa espécie de armação de madeira circular em que se prega o que se quer bordar, forma a moldura de uma condição: figuras de mulheres negras estampadas[cite: 655].<br>III. Os olhos costurados, fechados para o mundo e, principalmente, para sua condição revelam uma escolha: gritar, mesmo que por outras bocas estampadas no tecido[cite: 656].<br>IV. O fio que torce, puxa, modifica o formato do rosto, produz bocas que não gritam, olhos que não vêem e dão nós na garganta[cite: 657].<br><br>É correto o que se afirma em",
         opcao_A: "I e II, apenas.",
@@ -697,7 +697,7 @@ const perguntasLocais = [
     },
     {
         id: 59,
-        tema: "Políticas Públicas e Gestão em Educação", "Relações entre Arte, Memória e Sociedade", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Políticas Públicas e Gestão em Educação", "Relações entre Arte, Memória e Sociedade", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - Questão 13<br><br>O patrimônio cultural de um povo é formado pelo conjunto dos saberes, fazeres, expressões, práticas e seus produtos, que remetem à história, à memória e à identidade[cite: 660]. A preservação do patrimônio cultural significa, principalmente, cuidar dos bens aos quais esses valores estão associados, ou seja, cuidar de bens representativos da história e da cultura de um lugar ou de um grupo social[cite: 661]. A Constituição Federal de 1988, em seus artigos 215 e 216, ampliou a noção de patrimônio cultural ao reconhecer a existência de bens culturais de natureza material e imaterial e, também, ao estabelecer outras formas de preservação como o registro e o inventário além do tombamento [...][cite: 662].<br><br>A partir do texto acima, avalie as afirmações a seguir.<br><br>I. O patrimônio imaterial cuida da preservação de bens culturais como, por exemplo, ofícios e saberes artesanais, manifestos, danças e músicas, modos de vestir e falar, rituais e festas religiosas e populares, bens que revelam os múltiplos aspectos da cultura cotidiana de uma comunidade[cite: 666].<br>II. A vinculação de indivíduos a uma sociedade, a um grupo, ou a um lugar contribui para a ampliação do sentido de pertencimento, qualidade fundamental para a preservação do seu patrimônio cultural[cite: 667].<br>III. Ao invés de falar da identidade como uma coisa acabada, deveríamos falar de identificação, e vê-la como um processo em andamento[cite: 668].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -709,7 +709,7 @@ const perguntasLocais = [
     },
     {
         id: 60,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 14<br><br>A pós-modernidade abriga uma gama de procedimentos artísticos que envolvem material, técnica, conteúdo, linguagem e processos, entre outros elementos que constituem a criação artística[cite: 670].<br><br>Em relação ao período que precede ao pós-moderno, avalie as afirmações a seguir.<br><br>I. O referido período tem como características a valorização da tradição clássica ou acadêmica e o predomínio da escultura[cite: 672].<br>II. Marcel Duchamp questionou a identidade do objeto artístico em face do crescimento e domínio do mercado sobre a arte[cite: 673].<br>III. O referido período fundamenta-se em emoções, sentimentos e sensações, com a clara intenção de arrebatar o espectador a uma esfera sensível e subjetiva[cite: 674].<br>IV. O referido período tem como uma de suas características a profusão desmedida de conteúdos dispostos em toda ordem de materiais, que se prestam como suporte às ideias do artista[cite: 675].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e III.",
@@ -721,7 +721,7 @@ const perguntasLocais = [
     },
     {
         id: 61,
-        tema: "Arte no Espaço Público e Arte Urbana", "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte no Espaço Público e Arte Urbana", "Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 15<br><br>A intervenção urbana é uma forma de arte interacional, criativa e poética, voltada para o espaço público, o cotidiano e as pessoas[cite: 678]. Em 23 de abril de 2014, dia de São Jorge, o 'Coletivo PI', um coletivo de mulheres, encerrou seu projeto intitulado 'Entre Saltos', em Salvador, Bahia, depois de passar por São Paulo, Campinas e Porto Alegre[cite: 679]. Mais de trinta mulheres vestidas de vermelho ou rosa, calçadas com sapatos de salto alto, saíram caminhando do Espaço Xisto, no bairro Barris, às quatro horas da tarde[cite: 680]. Seguiram pela Sete de Setembro até chegar ao Pelourinho. Elas encerraram o projeto, uma hora e meia depois, seguidas por homens e mulheres, no Dique do Tororó, lago que possui estátuas dos orixás, inclusive Ogum, representação de São Jorge na crença de matriz africana[cite: 681].<br><br>Considerando as duas informações acima, avalie as afirmações a seguir.<br><br>I. Intervenção urbana é um processo comunicativo que reinventa, mesmo que temporariamente, novos sentidos ao espaço[cite: 684].<br>II. A intervenção do 'Coletivo PI' aborda a construção da feminilidade, bem como a imagem do feminino em relação à esfera pública[cite: 685].<br>III. A intervenção do 'Coletivo PI' questiona poderes e representações de gênero instituídas[cite: 686].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -733,7 +733,7 @@ const perguntasLocais = [
     },
     {
         id: 62,
-        tema: "Pedagogia e Didática em Artes Visuais", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 16<br><br>Uma visão panorâmica do ensino das artes mostra que nela se refletem os vários problemas que afetam a educação brasileira[cite: 689]. Se enfocarmos um dos mais importantes, o elitismo, veremos que transparece não apenas nos programas curriculares, como também na concepção que boa parte dos arte-educadores têm de Arte[cite: 690]. Com efeito, ao invés de perceberem que a arte é uma só, sem que se possa classificá-la de acordo com a origem social de seus produtores, promovem igualmente tal divisão: consideram que arte é somente a chamada 'grande arte' ou 'artes maiores', isto é, a obra dos grandes mestres eruditos: pintores, escultores, músicos, escritores, teatrólogos etc. As manifestações artísticas correlatas a estas, mas do campo da cultura popular, são consideradas, como inferiores, e como tal, indignas de se fazerem presentes na escola[cite: 691].<br><br>Considerando o texto e a concepção de arte na educação brasileira, assinale a opção correta.",
         opcao_A: "A cultura trazida pelos estudantes, manifestada sob várias formas, tem sido, em regra, considerada no cotidiano escolar[cite: 694].",
@@ -745,7 +745,7 @@ const perguntasLocais = [
     },
     {
         id: 63,
-        tema: "Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 17<br><br>'Gulp' é uma animação em curta metragem, realizada com um dispositivo móvel[cite: 699]. A animação foi realizada com a técnica de Stop motion, isto é, feito frame a frame, utilizando objetos, atores e arte na areia da praia[cite: 700]. Para cada quadro, cada foto ou frame do filme, se utilizou de um telefone celular [cite: 701].<br>O uso de telefones celulares, entendido como dispositivo móvel, é cada vez mais frequente nas escolas[cite: 702]. Como ferramenta de ensino em artes, os telefones celulares trazem desafios a serem superados[cite: 703]. Eles incitam questões sobre seus possíveis usos de maneira reflexiva e crítica, além de questões sobre formas de utilizá-lo como instrumento social e integrador[cite: 704]. No contexto do ensino, podemos transformá-lo em um novo instrumento de construção de novos modos de ver, aprender, produzir imagens e conhecimento[cite: 705].<br><br>Em relação aos fragmentos de texto apresentados e considerando a temática abordada, avalie as afirmações a seguir.<br><br>I. A animação 'Gulp' entrecruza linguagens de maneira intertextual. Para utilizá-las no ensino de arte, basta um celular e o interesse dos estudantes[cite: 707].<br>II. Para a realização de animação em sala de aula o professor terá como principais desafios: modos de utilização intertextual e a poética a ser desenvolvida[cite: 708].<br>III. O uso do telefone celular em sala de aula pode ser um bom recurso instrumental e um desafio criativo para o professor, que necessita capacitar-se em metodologias e linguagens das novas tecnologias[cite: 710].<br><br>É correto o que se afirma em",
         opcao_A: "II, apenas.",
@@ -757,7 +757,7 @@ const perguntasLocais = [
     },
     {
         id: 64,
-        tema: "Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 18<br><br>Quando pensamos a educação intercultural voltada para o ensino das artes, podemos perceber que essa abordagem congrega características particularmente importantes, pois envolve conceitos como identidade cultural, alteridade, universalidade e regionalismos, igualdades e diferenças[cite: 712]. Nesse sentido, a abordagem intercultural apresenta perspectivas para o professor de artes trabalhar com temáticas como, por exemplo, sexualidade, racismo, inclusão, identidades juvenis, de periferia e de grupos religiosos[cite: 713].<br><br>Considerando o texto apresentado, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A educação intercultural no ensino das artes visuais permite confluir uma série de conceitos que facilitam o debate das verdades julgadas absolutas e a percepção de estruturas de poder, por vezes ocultas, abrindo perspectivas para uma visão estética e sociocultural mais próxima do cotidiano dos estudantes[cite: 716].<br><br>PORQUE<br><br>II. Para as culturas jovens marginalizadas, presentes no cotidiano de muitos estudantes, a possibilidade legítima de afirmação sociocultural é aceitação do jogo da arte pela arte, adotando os conceitos estéticos da chamada grande arte, ou seja, a arte dos museus, das bienais e das galerias comerciais[cite: 717].<br><br>Acerca dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -769,7 +769,7 @@ const perguntasLocais = [
     },
     {
         id: 65,
-        tema: "Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Mediação Cultural e Educação Museal", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 19<br><br>A ideia de museu procede de nosso hábito de colecionar objetos e lhes atribuir valor simbólico, afetivo, cultural ou simplesmente material[cite: 719]. [...] Hoje, os museus, com ideias mais atualizadas, não se destinam exclusivamente às exposições de artefatos históricos, eles trazem ao público obras de diferentes artistas e nacionalidades; promovem cursos, palestras e exibição de filmes; viabilizam a educação e mediação da arte[cite: 723, 724].<br><br>Considerando a ação educativa a partir da mediação nos espaços físicos e simbólicos dos museus, avalie as afirmações a seguir.<br><br>I. A mediação abre espaços de experimentação para artistas, professores e outras pessoas que buscam debates culturais e educacionais construtivos; produz materiais teóricos e práticos, contribuindo para as relações sociais e estudos sobre arte[cite: 726, 727].<br>II. A mediação contempla um conceito ampliado de arte que fomenta uma democracia viva e dinâmica[cite: 728]. Ela envolve a integração de conteúdos artísticos e culturais em outras áreas e tem a finalidade de configurar uma participação crítica e consciente nos processos sociais[cite: 729].<br>III. A mediação é realizada por pessoas que dominam as especificidades das linguagens artísticas, e requer sua institucionalização pelo museu[cite: 730]. Dessa maneira, forma grupos seletos para analisarem e interpretarem obras de arte[cite: 731].<br>IV. A mediação exige abordagens interdisciplinares, pois cria acessos aos mundos do cotidiano da vida e da mídia, além de educar culturalmente[cite: 732].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -781,7 +781,7 @@ const perguntasLocais = [
     },
     {
         id: 66,
-        tema: "Teoria, Historiografia e Crítica da Arte", "Processos de Criação e Pesquisa em Arte",
+        tema: ["Teoria, Historiografia e Crítica da Arte", "Processos de Criação e Pesquisa em Arte"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 20<br><br>A arte, em suma, não deixa de ser expressiva por colocar em forma visível relações entre as coisas, sem maior indicação das particularidades das relações do que é necessário para compor um todo[cite: 736, 737]. Toda a obra de arte se abstrai, em certa medida, dos traços particulares dos objetos expressados[cite: 738]. Caso contrário, ela apenas criaria, por meio da imitação exata, uma ilusão da presença das próprias coisas[cite: 739].<br><br>Francis Bacon. Estudo de auto-retrato - Tríptico. Óleo sobre tela, 1985-86[cite: 735].<br><br>Tomando como referência o tríptico de Bacon e o texto de John Dewey, avalie as afirmações a seguir.<br><br>I. Quanto maior for a relação complexa entre as coisas que servem de referência, ou motivo, para uma pintura, mais uma obra de arte se torna expressiva[cite: 742].<br>II. As pinturas de Bacon chamam a atenção para simples questões de representação e incapacidade técnica manifestada pelo artista[cite: 743].<br>III. A pintura contemporânea busca a ilusão da presença das coisas, pessoas e objetos, por meio da imitação exata daquilo que é pintado[cite: 744].<br>IV. As pinturas dadas como exemplo abstraem-se, isto é, separam-se dos traços concretos do motivo e esse processo aumenta a expressividade da proposta artística, sem se acrescentar mais do que aquilo que o artista achou necessário para compor um todo[cite: 745].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I.",
@@ -793,7 +793,7 @@ const perguntasLocais = [
     },
     {
         id: 67,
-        tema: "Relações entre Arte, Memória e Sociedade", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Relações entre Arte, Memória e Sociedade", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 21<br><br>Reconhecer a diversidade do Referencial Cultural não significa que não se possa avaliar, distinguir e hierarquizar o saber produzido[cite: 748]. Haverá sempre referências que serão marcadas e/ou significativas, seja pelo valor material, seja pelo valor simbólico envolvido[cite: 749]. Por outro lado, bens aparentemente insignificantes podem ser fundamentais para a construção da identidade social de uma comunidade, de uma cidade, de um grupo étnico [cite: 750].<br>A Festa do Divino Espírito Santo é uma manifestação cultural e religiosa de origem portuguesa, disseminada no período da colonização e ainda hoje presente em todas as regiões do Brasil[cite: 751].<br><br>Considerando as informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Referencial Cultural é uma expressão utilizada sobretudo em textos que têm como base uma concepção antropológica de cultura[cite: 756]. Essa perspectiva plural norteia as interpretações e as atuações no campo da preservação de bens culturais[cite: 757].<br><br>PORQUE<br><br>II. A ênfase na diversidade da produção imaterial, atribui sentido e valor aos diferentes sujeitos envolvidos nas práticas que se tornam sociais[cite: 758].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 759]",
@@ -805,7 +805,7 @@ const perguntasLocais = [
     },
     {
         id: 68,
-        tema: "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Pedagogia e Didática em Artes Visuais", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Pedagogia e Didática em Artes Visuais", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 22<br><br>Guillermo Gómez-Peña é um artista performático, nascido na Cidade do México em 1955. Em 1978, emigrou para os Estados Unidos[cite: 761]. Sua obra é intertextual. Em sua estética experimental, mistura políticas ativistas, humor espanhol e participação do público para criar o que ele chama de 'experiência total'[cite: 762].<br>'[...] Neste ponto, percebo que o espaço entre o meu passado remoto chicano/mexicano meu futuro é imenso e que minha identidade pode ziguezaguear livremente entre os dois. No final das contas, foram a minha arte e literatura que me deram uma cidadania plena. Eu inventei meu próprio país conceitual.' [cite: 763]<br><br>Em relação ao texto de Gomez-Peña, avalie as afirmações a seguir.<br><br>I. Gomez-Peña direciona seu discurso para o que sente e pensa por meio da escrita. Mas uma imagem pode ser um texto pintado, uma poesia pode ser um texto escrito, uma música pode ser um texto cantado etc. No ensino de arte é possível a experimentação intertextual, e o estudante pode performar e se expressar por meio de intertextualidades[cite: 767, 768].<br>II. Gomez-Peña, em trânsito entre as realidades espaciais de seu país de nascimento, o México, e do país onde vive hoje, os Estados Unidos, transpõe para a arte sua problemática[cite: 769]. Ele cria um 'mapeamento reverso', em que sua identidade e seu sentimento de pertencimento estão em seu corpo, e não em um país[cite: 770]. O corpo e a fidelidade a si constituem o país do artista[cite: 771].<br>III. Gomez-Peña realiza um discurso em favor da maioria dos povos latinos e não-latinos que falam a língua espanhola e que, no entanto, se sujeitam à minoria de língua inglesa de povos mono culturais[cite: 772]. Essas são questões pessoais do artista, que não devem perpassar os conteúdos do ensino de arte[cite: 773].<br>IV. Gomez-Peña fala sobre sua arte de modo intertextual. Com sua 'experiência total', o artista propõe para o ensino de arte uma articulação entre performance, identidade e políticas ativistas, de modo que as minorias possam se educar na cidadania[cite: 774].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -817,7 +817,7 @@ const perguntasLocais = [
     },
     {
         id: 69,
-        tema: "Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Políticas Públicas e Gestão em Educação",
+        tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 23<br><br>Os Wajāpi, povos indígenas do grupo linguístico Tupi-Guarani, vivem em cerca de quarenta aldeias agrupadas no estado do Amapá[cite: 777]. Eles desenvolveram uma linguagem única, uma mistura de arte gráfica e verbal chamada Arte Kusiwa[cite: 778]. Essa arte reflete sua visão de mundo e, por meio dela, esses povos transmitem conhecimento da vida à comunidade [cite: 779].<br><br>Com base no texto acima, a arte e a cultura indígena dos povos Wajāpi<br><br>I. representam desafios à sociedade brasileira em relação à criação de políticas públicas voltadas para o reconhecimento, respeito, valoração e preservação dessas etnias constitutivas da diversa identidade brasileira[cite: 783].<br>II. constituem um corpo não-diferencial, em que um não existe sem o outro, assim como a proposta, na arte contemporânea, da bodyart. O perigo de sua extinção reside no possível comprometimento da geração mais jovem em valorizar, preservar e conhecer a Kusiwa [cite: 784, 785].<br>III. são baseadas em crenças arcaicas, por esse motivo eles necessitam de políticas públicas voltadas para seu reconhecimento e para construção de uma história adaptada à nossa sociedade, de modo a se atualizarem e, assim, se incluírem no corpo homogêneo da identidade brasileira[cite: 786].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -829,7 +829,7 @@ const perguntasLocais = [
     },
     {
         id: 70,
-        tema: "Linguagens e Práticas da Arte Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)",
+        tema: ["Linguagens e Práticas da Arte Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 24<br><br>Hannah Wilke, uma das primeiras artistas feministas norte-americanas, iniciou sua carreira na década de 1970 criando vaginas em cerâmica, enquanto realizava performances[cite: 792]. A iraniana Shirin Neshat escreve em seu corpo uma história de discriminação da mulher no islã[cite: 794]. Marc Quinn, artista britânico, cria estranhas imagens com o próprio corpo como um autorretrato feito com seu sangue, retirado e congelado para depois ser esculpido e mantido refrigerado[cite: 795].<br><br>Considerando as informações apresentadas, avalie asserções a seguir e a relação proposta entre elas.<br><br>I. Na arte contemporânea, em suas várias poéticas, o corpo assume papéis concomitantes de sujeito e objeto, que aparecem mesclados de forma a simbolizar a carne e a crítica, misturadas[cite: 797].<br><br>PORQUE<br><br>II. O trabalho desses artistas evidenciam-se como bodyart, corroborando com um projeto de servidão voluntária do corpo na sociedade de consumo[cite: 798].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -841,7 +841,7 @@ const perguntasLocais = [
     },
     {
         id: 71,
-        tema: "Arte, Sustentabilidade e Crítica Ambiental", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 25<br><br>Mas existe algo na visão que não pertence à física. William Blake sabia disso e afirmou: 'A árvore que o sábio vê não é a mesma árvore que o tolo vê'[cite: 802, 803]. Sei disso por experiência própria. Quando vejo os ipês floridos, sinto-me como Moisés diante da sarça ardente: ali está uma epifania do sagrado[cite: 804]. Mas uma mulher que vivia perto da minha casa decretou a morte de um ipê que florescia a frente de sua casa porque ele sujava o chão, dava muito trabalho para a sua vassoura[cite: 805]. Seus olhos não viam a beleza. Só viam o lixo[cite: 806].<br><br>A partir do trecho apresentado, que aborda a articulação entre o ver e o saber, e considerando a perspectiva de uma educação ambiental por meio do ensino da arte, avalie as afirmações a seguir.<br><br>I. O exercício do ver voltado para a educação ambiental é uma prática cotidiana em sensibilizar-se, tal como fez o autor ao perceber a epifania do sagrado nos ipês floridos e a importância da preservação ambiental[cite: 808].<br>II. O ver é um exercício que se insere no regime de visibilidade das práticas estabelecidas pelos atores sociais em seus meios ambientes[cite: 809]. É possível percebê-las em ações ambientais tais como derrubar árvores, como fez a mulher ou nelas perceber a beleza, tal como fez o autor[cite: 810].<br>III. O exercício do ver requer, também, a constituição de subjetividades sobre o visível e não visível[cite: 811]. Soma-se a isso a desconstrução de práticas condicionadas do ver associadas a ações políticas direcionadas ao social e às relações humanas[cite: 812].<br>IV. O ver é um exercício do sentido experimentado, a visibilidade daquilo que se tornou praticamente invisível tal como os ipês floridos mencionados pelo autor, pelo esgotamento de sua recorrente exposição, no meio ambiente[cite: 813].<br><br>É correto o que se afirma em",
         opcao_A: "I e II, apenas.",
@@ -853,7 +853,7 @@ const perguntasLocais = [
     },
     {
         id: 72,
-        tema: "Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Identidade e Representação na Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 26<br><br>Algumas práticas educativas em Arte adotam a perspectiva multicultural[cite: 816]. Esse enfoque consiste em algo além do que apenas incluir unidades e lições sobre outras culturas no currículo escolar[cite: 817]. Implica em centrar nosso interesse nos grandes temas e funções da arte, que são interculturais e transculturais[cite: 818]. Implica também em não deixar passar a oportunidade de incluir exemplos de culturas locais e de arte, relacionados com temas mais concretos e próximos da vida dos estudantes[cite: 819].<br><br>Considerando o texto apresentado, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As abordagens multiculturais valorizam as diferenças culturais e as relacionam com a vida pessoal e social dos sujeitos[cite: 822].<br><br>PORQUE<br><br>II. A aprendizagem faz sentido para os estudantes especialmente quando conectada com os próprios interesses, experiências de mundo e vida[cite: 823].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I. [cite: 824]",
@@ -865,7 +865,7 @@ const perguntasLocais = [
     },
     {
         id: 73,
-        tema: "Mediação Cultural e Educação Museal", "Arte, Sustentabilidade e Crítica Ambiental", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Mediação Cultural e Educação Museal", "Arte, Sustentabilidade e Crítica Ambiental", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 27<br><br>O Instituto Inhotim é um museu a céu aberto e uma instituição brasileira que exibe continuamente um acervo de excelência internacional de arte contemporânea[cite: 826]. Ele se localiza em Brumadinho, Minas Gerais, dentro do domínio da Mata Atlântica [...]. Ele exibe conjuntamente um acervo botânico e um artístico[cite: 827, 828]. A experiência do Inhotim está, em grande parte, associada ao desenvolvimento de uma relação espacial entre arte e natureza, pois o espectador é convidado a percorrer por obras de arte, jardins, paisagens de florestas e ambientes rurais [...], estabelece uma vivência ativa do espaço[cite: 828, 829].<br><br>Considerando a especificidade desse modelo de museu, sob a perspectiva da inter-relação da arte com a educação ambiental, avalie as afirmações a seguir.<br><br>I. Esse modelo de museu contemporâneo evidencia que é possivel um desenvolvimento sustentável na inter-relação arte/natureza a partir de um trabalho educacional de vivência ativa do espaço, que prioriza a formação e a inserção de jovens no meio ambiente estimulando a sua consciência e crítica em relação às questões socioambientais[cite: 831].<br>II. Esse modelo de museu contemporâneo abarca a convergência de valores seculares, éticos, sociais e políticos, além de manter estreitas conexões com o processo histórico da relação arte/meio ambiente no Brasil[cite: 832]. É a partir dessa vivência ativa do espaço que é possível despertar a consciência de conservação e preservação ambiental[cite: 833].<br>III. Há uma contradição entre a proposta do Instituto Inhotim e a realidade do cotidiano escolar[cite: 834]. O que dá suporte ao Instituto é um grande esquema econômico, muito diferente da realidade encontrada na escola[cite: 835].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -877,7 +877,7 @@ const perguntasLocais = [
     },
     {
         id: 74,
-        tema: "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Políticas Públicas e Gestão em Educação",
+        tema: ["Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 28<br><br>A figura a seguir mostra uma obra visual, que faz parte de uma série de trabalhos do artista Cildo Meireles intitulada Inserções em circuitos ideológicos[cite: 838]. Nessa série, o artista imprimia mensagens em garrafas de refrigerante e utilizava o sistema de distribuição do refrigerante para fazer circular a sua obra[cite: 839]. Alguns exemplares desse trabalho foram recuperados e hoje fazem parte do acervo de museus de arte[cite: 840].<br><br>Considerando a obra apresentada como representante da cultura visual de uma época, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As pessoas compravam o refrigerante sem ter consciência de que levavam uma obra de arte, mas hoje sabe-se da importância desse objeto como patrimônio cultural, cujo conhecimento e valorização devem ser abordados pelos professores de artes visuais[cite: 842].<br><br>PORQUE<br><br>II. Atualmente também são valorizados elementos do patrimônio imaterial, que fazem parte da cultura mas não são tangíveis, tais como: as práticas de um povo, seus conhecimentos e suas técnicas[cite: 843].<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
@@ -889,7 +889,7 @@ const perguntasLocais = [
     },
     {
         id: 75,
-        tema: "Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais", "Teoria, Historiografia e Crítica da Arte",
+        tema: ["Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais", "Teoria, Historiografia e Crítica da Arte"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 29<br><br>O filme de ciência ficção '2001, Odisséia no Espaço', do diretor Stanley Kubrick, é considerado um dos melhores filmes já realizados pela qualidade da imagem e dos efeitos visuais, o realismo científico, o predomínio do som e a imagem sobre a linguagem verbal e, principalmente, por sua trama aberta a múltiplas interpretações[cite: 848]. É um épico que conduz, já em 1968, às reflexões em torno das relações entre a humanidade e a tecnologia[cite: 849].<br><br>Considerando o filme como um recurso de aprendizagem na educação em artes visuais para o ensino médio, avalie as afirmações a seguir.<br><br>I. Esse filme apresenta possibilidades de abordagem transdisciplinar para a educação em artes visuais no ensino médio, em virtude das relações que estabelece entre arte, design, ciência, tecnologia, filosofia e linguagem[cite: 862].<br>II. O enredo do filme, que é complexo e conduz a uma situação incerta, compromete a inserção pedagógica desse filme nas escolas, pois é aberto a múltiplas interpretações, favorecendo confusões conceituais[cite: 863].<br>III. Filmes de ficção científica são adequados para a educação em artes visuais no ensino médio, porque permitem um espaço de descontração, diversão e descanso, embora não constituam, em si, obras de arte[cite: 864, 865].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -901,7 +901,7 @@ const perguntasLocais = [
     },
     {
         id: 76,
-        tema: "Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea",
+        tema: ["Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 30<br><br>Fefe Talavera, artista paulista descendente de mexicanos, cria monstros e criaturas pelo agrupamento de letras recortadas e coladas (lambe-lambe) sobre muros e paredes[cite: 868]. O trabalho da artista é inspirado nos famosos alebrijes, bonecos do artesanato mexicano feitos de papel[cite: 869].<br><br>Considerando o texto e a imagem apresentados, avalie as afirmações a seguir.<br><br>I. O trabalho de Talavera possibilita a socialização da arte por meio da interferência urbana, assim como fizeram os muralistas mexicanos José Orozco, Davi Siqueiros e Diego Rivera[cite: 871].<br>II. Por fazer uma referência cultural aos bonecos de papel do artesanato mexicano, o trabalho de Talavera ressignifica uma arte popular quando a toma como tema de seu tempo[cite: 872].<br>III. Ao utilizar o ambiente urbano para se expressar, Talavera denota um gesto conceitual e seu trabalho é reconhecido como arte pelo mercado artístico convencional[cite: 873].<br>IV. A intervenção gráfica de Talavera disputa atenção com as milhares de mensagens panfletárias espalhadas nas grandes cidades[cite: 874].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e III.",
@@ -913,7 +913,7 @@ const perguntasLocais = [
     },
     {
         id: 77,
-        tema: "Políticas Públicas e Gestão em Educação",
+        tema: ["Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 31<br><br>A gestão democrática pode ser definida como um processo político no qual as pessoas que atuam na e sobre a escola identificam problemas, discutem, deliberam, planejam, encaminham, acompanham, controlam e avaliam o conjunto das ações voltadas ao desenvolvimento da própria escola, na busca da solução daqueles problemas[cite: 879]. Esse processo, sustentado no diálogo, na alteridade e no reconhecimento das especificidades técnicas das diversas funções presentes na escola, tem como base a participação efetiva de todos os segmentos da comunidade escolar, o respeito às normas coletivamente construídas para os processos de tomada de decisões e a garantia de amplo acesso às informações aos sujeitos da escola [cite: 880].<br><br>Com base nos textos apresentados, conclui-se que a gestão democrática da educação<br><br>I. implica colocar as instituições a serviço da formação qualificada dos estudantes, tendo a participação como prática cotidiana de todos os envolvidos [cite: 882].<br>II. propicia a criação de uma cultura institucional crítico-reflexiva, cujos envolvidos tenham discernimento em relação aos conteúdos que necessitam ou não para tomarem decisões sempre coletivas [cite: 883].<br>III. pressupõe a existência de líderes capazes de orientar pessoas para o desenvolvimento de ações que visem ao cumprimento de objetivos definidos por eles [cite: 884].<br>IV. efetiva-se pelo processo de construção coletiva do projeto pedagógico e de seu acompanhamento e avaliação[cite: 885].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
@@ -925,7 +925,7 @@ const perguntasLocais = [
     },
     {
         id: 78,
-        tema: "Políticas Públicas e Gestão em Educação",
+        tema: ["Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 32<br><br>O Plano Nacional de Educação (PNE) inclui 20 metas e estratégias traçadas para o setor nos próximos 10 anos[cite: 887]. Entre as metas, está a aplicação de valor equivalente a 10% do Produto Interno Bruto (PIB) na educação pública, promovendo a universalização do acesso à educação infantil para crianças de quatro a cinco anos, do ensino fundamental e do ensino médio[cite: 888]. Esse plano também prevê a abertura de mais vagas no ensino superior, investimentos maiores em educação básica em tempo integral e em educação profissional, além da valorização do magistério [cite: 889].<br>A Lei n.º 13.005, de 25 de junho de 2014, que aprova o PNE, prevê importantes dispositivos, tais como o monitoramento contínuo, a articulação orçamentária e a criação de um Sistema Nacional de Educação[cite: 891, 892, 893, 895].<br><br>Considerando as informações acima, conclui-se que o PNE",
         opcao_A: "possibilita ao país iniciar seu processo de desenvolvimento, pois prevê aumento anual de 10% nos patamares de aplicação do PIB em educação e sistema de monitoramento da aplicação de investimentos, o Sistema de Avaliação da Educação Básica, a ser instituído nos próximos dois anos[cite: 896].",
@@ -937,7 +937,7 @@ const perguntasLocais = [
     },
     {
         id: 79,
-        tema: "Pedagogia e Didática em Artes Visuais", "Políticas Públicas e Gestão em Educação",
+        tema: ["Pedagogia e Didática em Artes Visuais", "Políticas Públicas e Gestão em Educação"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 33<br><br>Os currículos organizam conhecimentos, culturas, valores e artes a que todo ser humano tem direito[cite: 901]. Assim, o currículo deve ser analisado conforme as experiências vividas pelos estudantes, nas quais se articulam os saberes, aprendidos por eles na vivência e na convivência em suas comunidades, com os conhecimentos sistematizados que a escola deve Ihes tornar acessíveis[cite: 902].<br><br>A partir da definição de currículo abordada pelo autor, avalie as afirmações a seguir.<br><br>I. A construção do currículo constitui um processo de seleção cultural, o que pode colocar em desvantagem determinados grupos sociais e culturais[cite: 907].<br>II. O sistema educativo confere ao currículo efetividade que envolve uma multiplicidade de relações, razão pela qual este deve ser considerado práxis e sua materialização corresponder à forma como foi idealizado[cite: 908].<br>III. As teorias críticas reconhecem a existência de poderes diversos diluídos nas relações sociais, conferindo ao currículo a função de atuar em processos para a inclusão escolar[cite: 909].<br>IV. É desafio da escola incluir no currículo experiências culturais diversificadas, que não reproduzam estruturas da vida social em suas assimetrias e desigualdades[cite: 910].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -949,7 +949,7 @@ const perguntasLocais = [
     },
     {
         id: 80,
-        tema: "Políticas Públicas e Gestão em Educação", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Políticas Públicas e Gestão em Educação", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 34<br><br>O Projeto Político-Pedagógico (PPP) relaciona-se à organização do trabalho pedagógico da escola, indicando uma direção, explicitando os fundamentos teórico-metodológicos, os objetivos, o tipo de organização e as formas de implementação e avaliação da escola[cite: 913].<br><br>Considerando a elaboração do PPP, avalie as seguintes afirmações.<br><br>I. O PPP constitui-se em processo participativo de decisões para instaurar uma forma de organização do trabalho pedagógico que desvele os conflitos e as contradições no interior da escola[cite: 916].<br>II. A discussão do PPP exige uma reflexão acerca da concepção de educação e sua relação com a sociedade e a escola, o que implica refletir sobre o homem a ser formado[cite: 917].<br>III. A construção do PPP requer o convencimento dos professores, da equipe escolar e dos funcionários para trabalharem em prol do plano estabelecido pela gestão educacional[cite: 918].<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
@@ -961,7 +961,7 @@ const perguntasLocais = [
     },
     {
         id: 81,
-        tema: "Educação Inclusiva e Acessibilidade", "Pedagogia e Didática em Artes Visuais",
+        tema: ["Educação Inclusiva e Acessibilidade", "Pedagogia e Didática em Artes Visuais"],
         imagem_url: "",
         enunciado: "Enade 2014 - QUESTÃO 35<br><br>Da visão dos direitos humanos e do conceito de cidadania fundamentado no reconhecimento das diferenças e na participação dos sujeitos, decorre uma identificação dos mecanismos e processos de hierarquização que operam na regulação e produção de desigualdades[cite: 920]. Essa problematização explicita os processos normativos de distinção dos alunos em razão de características intelectuais, físicas, culturais, sociais e linguísticas, estruturantes do modelo tradicional de educação escolar [cite: 921].<br><br>As questões suscitadas no texto ratificam a necessidade de novas posturas docentes, de modo a atender a diversidade humana presente na escola[cite: 923]. Nesse sentido, no que diz respeito a seu fazer docente frente aos alunos, o professor deve<br><br>I. desenvolver atividades que valorizem o conhecimento historicamente elaborado pela humanidade e aplicar avaliações criteriosas com o fim de aferir, em conceitos ou notas, o desempenho dos alunos [cite: 924].<br>II. instigar ou compartilhar as informações e a busca pelo conhecimento de forma coletiva, por meio de relações respeitosas acerca dos diversos posicionamentos dos alunos, promovendo o acesso às inovações tecnológicas [cite: 925].<br>III. planejar ações pedagógicas extraescolares, visando ao convívio com a diversidade; selecionar e organizar os grupos, a fim de evitar conflitos [cite: 926, 927].<br>IV. realizar práticas avaliativas que evidenciem as habilidades e competências dos alunos, instigando esforços individuais para que cada um possa melhorar o desempenho escolar [cite: 928].<br>V. utilizar recursos didáticos diversificados, que busquem atender a necessidade de todos e de cada um dos alunos, valorizando o respeito individual e coletivo[cite: 929].<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e III.",
