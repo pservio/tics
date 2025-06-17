@@ -166,13 +166,10 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
         // --- CONFIGURAÇÃO E VARIÁVEIS GLOBAIS ---
-        // As configurações são agora carregadas a partir de firebase-config.js
         const firebaseConfig = window.firebaseConfig || {};
         const appId = window.appId || 'default-quiz-app';
 
-        // Verifica se a configuração do Firebase foi carregada
         if (!firebaseConfig.apiKey) {
-            // Usa um pop-up simples caso a lógica do modal ainda não tenha carregado
             alert("Erro: Configuração do Firebase não encontrada. Certifique-se de que o ficheiro 'firebase-config.js' existe e está correto, ou que os GitHub Secrets estão configurados.");
         }
 
@@ -218,7 +215,7 @@
 
         const showModal = (title, message) => {
             modalTitle.textContent = title;
-            modalMessage.innerHTML = message; // Use innerHTML to allow for formatted messages
+            modalMessage.innerHTML = message;
             modal.style.display = 'flex';
         };
 
@@ -232,14 +229,18 @@
         // --- FUNÇÕES DE DADOS E LÓGICA DO QUIZ ---
 
         const fetchQuestions = () => {
+             if (typeof perguntasLocais === 'undefined') {
+                console.error("Erro Fatal: O ficheiro 'perguntas.js' não foi carregado ou a variável 'perguntasLocais' não foi definida.");
+                showModal('Erro Crítico', "O ficheiro de perguntas ('perguntas.js') não foi encontrado. Verifique se o ficheiro está na pasta correta no seu repositório do GitHub e se foi incluído no commit.");
+                return;
+            }
             try {
-                // A variável `perguntasLocais` está agora disponível globalmente a partir do ficheiro perguntas.js
                 allQuestions = perguntasLocais.filter(q => q.enunciado && q.resposta_correta);
                 uniqueThemes = [...new Set(allQuestions.map(q => q.tema).filter(t => t))];
                 populateThemes();
             } catch (err) {
-                 console.error("Erro ao carregar questões locais:", err);
-                 showModal('Erro Crítico', 'Não foi possível carregar as questões do quiz. Verifique o formato dos dados em perguntas.js.');
+                 console.error("Erro ao processar os dados de 'perguntas.js':", err);
+                 showModal('Erro Crítico', 'As questões não puderam ser lidas. Verifique se há erros de sintaxe (como uma vírgula em falta ou a mais) no seu ficheiro `perguntas.js`.');
             }
         };
         
@@ -272,7 +273,6 @@
                 return;
             }
 
-            // Shuffle and pick questions
             quizQuestions = filteredQuestions.sort(() => 0.5 - Math.random()).slice(0, quizSize);
             
             currentQuestionIndex = 0;
@@ -332,9 +332,9 @@
 
             const allOptionButtons = document.querySelectorAll('.option-btn');
             allOptionButtons.forEach(btn => {
-                btn.disabled = true; // Disable all buttons
+                btn.disabled = true;
                 if (btn.dataset.option === correctOption) {
-                    btn.classList.add('correct'); // Highlight correct answer
+                    btn.classList.add('correct');
                 }
             });
 
@@ -367,7 +367,7 @@
                     icon = '🏆';
                 }
             } else if (correctAnswersCount > quizSize / 2) {
-                icon = '�';
+                icon = '👍';
             }
 
             document.getElementById('results-icon').textContent = icon;
@@ -377,17 +377,16 @@
             
             showScreen('results');
             
-            // Update user score in Firestore
             if (currentUser) {
                 showLoading();
                 const userDocRef = doc(db, usersCollectionPath, currentUser.id);
                 const newTotalScore = (currentUser.score || 0) + finalScore;
                 try {
                     await updateDoc(userDocRef, { score: newTotalScore });
-                    currentUser.score = newTotalScore; // Update local user object
+                    currentUser.score = newTotalScore;
                 } catch (error) {
                     console.error("Erro ao atualizar pontuação:", error);
-                    showModal("Erro", "Não foi possível salvar sua pontuação. Verifique sua conexão.");
+                    showModal("Erro de Atualização", `Não foi possível salvar sua pontuação. Detalhes: ${error.message}`);
                 } finally {
                     hideLoading();
                 }
@@ -419,7 +418,6 @@
 
         let rankingUnsubscribe = null;
         const listenToRanking = () => {
-            // Unsubscribe from previous listener if it exists
             if (rankingUnsubscribe) {
                 rankingUnsubscribe();
             }
@@ -456,7 +454,6 @@
             showLoading();
 
             try {
-                // Check if email already exists
                 const q = query(usersCollection, where("email", "==", email));
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
@@ -470,7 +467,7 @@
                 await addDoc(usersCollection, {
                     name: name,
                     email: email,
-                    password: password, // In a real app, this would be hashed.
+                    password: password,
                     score: 0
                 });
                 
@@ -485,7 +482,8 @@
             } catch (error) {
                 hideLoading();
                 console.error("Erro no registro: ", error);
-                showModal('Erro', 'Ocorreu um erro ao tentar registrar. Tente novamente.');
+                // **MUDANÇA AQUI: Mostra o erro específico do Firebase**
+                showModal('Erro no Registro', `Ocorreu um erro ao tentar registrar. Verifique sua conexão ou as permissões do banco de dados.<br><br><small>Detalhes: ${error.message}</small>`);
             }
         };
 
@@ -514,12 +512,13 @@
                     document.getElementById('user-name-display').textContent = currentUser.name.split(' ')[0];
                     hideLoading();
                     showScreen('setup');
-                    listenToRanking(); // Start listening for ranking updates after login
+                    listenToRanking();
                 }
             } catch (error) {
                 hideLoading();
                 console.error("Erro no login:", error);
-                showModal('Erro', 'Ocorreu um erro ao tentar fazer login. Tente novamente.');
+                // **MUDANÇA AQUI: Mostra o erro específico do Firebase**
+                showModal('Erro no Login', `Ocorreu um erro ao tentar fazer login. Verifique sua conexão ou as permissões do banco de dados.<br><br><small>Detalhes: ${error.message}</small>`);
             }
         };
 
@@ -529,17 +528,16 @@
         document.addEventListener('DOMContentLoaded', async () => {
             showLoading();
             
-            // Só continua se a configuração do Firebase estiver presente
             if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
                 hideLoading();
-                return; // Para a execução se não houver config
+                return;
             }
 
             try {
                 await signInAnonymously(auth);
             } catch (error) {
                 console.error("Firebase Auth Error:", error);
-                showModal('Erro de Conexão', 'Não foi possível conectar aos serviços. Algumas funcionalidades podem não funcionar.');
+                showModal('Erro de Conexão', `Não foi possível autenticar com o Firebase. Detalhes: ${error.message}`);
             }
 
             onAuthStateChanged(auth, (user) => {
@@ -598,4 +596,35 @@
 
 </body>
 </html>
-�
+```
+
+### Causas Mais Prováveis e Como Resolver
+
+A nova mensagem de erro vai provavelmente indicar uma das seguintes situações:
+
+1.  **Erro: `Missing or insufficient permissions` (Falta de permissões)**
+    * **Causa:** As regras de segurança do seu Firestore estão a bloquear a escrita de novos utilizadores.
+    * **Solução:** Vá ao seu projeto na [Consola do Firebase](https://console.firebase.google.com/), selecione **Firestore Database**, vá ao separador **"Regras" (Rules)** e substitua o conteúdo por estas regras de desenvolvimento, que permitem a leitura e escrita a qualquer utilizador autenticado:
+        ```
+        rules_version = '2';
+        service cloud.firestore {
+          match /databases/{database}/documents {
+            match /{document=**} {
+              allow read, write: if request.auth != null;
+            }
+          }
+        }
+        ```
+    * **Importante:** Estas regras são abertas e servem para desenvolvimento. Para produção, devem ser mais restritivas.
+
+2.  **Erro: `Function Query.where() requires a custom index` (Necessita de um índice)**
+    * **Causa:** O Firestore precisa de um "índice" para poder procurar rapidamente por e-mails e garantir que não há duplicados.
+    * **Solução:** A mensagem de erro na **consola do seu navegador** (pressione F12) terá um link direto para criar o índice necessário com um só clique. Se não vir o link, pode criar o índice manualmente na Consola do Firebase:
+        1.  Vá a **Firestore Database > Índices (Indexes)**.
+        2.  Clique em **"Criar Índice"**.
+        3.  **Caminho da coleção:** `users` (ou o que estiver a usar no `usersCollectionPath`).
+        4.  **Campo:** `email` | **Ordem:** `Ascendente`.
+        5.  **Âmbito da consulta:** `Coleção`.
+        6.  Clique em **"Criar"**. A criação do índice pode demorar alguns minutos.
+
+Depois de aplicar a correção correspondente à mensagem de erro, a funcionalidade de registo deverá funcionar corretamen
