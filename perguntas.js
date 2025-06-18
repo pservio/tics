@@ -62,7 +62,7 @@ const perguntasLocais = [
     {
         id: 6,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Arte no Espaço Público e Arte Urbana"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade21-14.png?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 14<br><br>As imagens a seguir apresentam dois murais da artista Panmela Castro, mais conhecida como Anarkia Boladona, que faz da sua arte um instrumento de voz à luta feminista negra . Na imagem 1, vemos o mural Jardim da Sororidade, localizado no centro do Rio de Janeiro . Na imagem 2, a obra Together We Are Stronger, no Stedelij Museum, em Amsterdan .<br><br>A partir dos diálogos estabelecidos entre as artes contemporâneas e as causas feministas e étnico-raciais, que interseccionam raça, gênero e classe como demarcadores do acesso ao poder, privilégio e prestígio, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. O grafitti se impõe como expressão artística e manifestação cultural potente por falar a um número expressivo de pessoas, dando voz à agenda do feminismo negro, da igualdade de gênero e do racismo .<br><br>PORQUE<br><br>II. O grafitti surge como arte que nasce nas ruas, aliada às causas das minorias e, por isso, é tido como arte pública, uma vez que interfere diretamente na cidade por meio da participação nos espaços públicos que servem de cenário para a crítica e a denúncia social .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -86,7 +86,7 @@ const perguntasLocais = [
     {
         id: 8,
         tema: ["Arte, Tecnologia e Mídias Digitais", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade21-16.png?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 16<br><br>O Festival Internacional de Linguagem Eletrônica (FILE) é um evento de artes de novas mídias que mistura tecnologia, vídeos, animações e games com instalações interativas, cuja primeira edição aconteceu em São Paulo, no ano 2000, seguindo assim até os dias atuais . O FILE é considerado o maior festival de arte e tecnologia do Brasil, servindo como indicador da pluralidade de pesquisas e de produções nacionais nas múltiplas áreas da cultura digital (arte interativa, screenings, performances, games, arte sonora, realidade virtual, discussões teóricas sobre o tema e cinema digital) .<br><br>A partir das informações apresentadas e a respeito das características das artes em diálogo com as tecnologias, avalie as afirmações a seguir.<br><br>I. A interatividade se apresenta como possibilidade de fruição da obra de arte .<br>II. A linguagem digital surge como recurso para a criação de obras artísticas .<br>III. Os games experimentais se revelam como propostas artísticas inovadoras .<br>IV. As tecnologias servem à produção em massa de artefatos artísticos para o mercado de arte .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
         opcao_B: "I e IV.",
@@ -110,7 +110,7 @@ const perguntasLocais = [
     {
         id: 10,
         tema: ["Educação Inclusiva e Acessibilidade", "Mediação Cultural e Educação Museal", "Políticas Públicas e Gestão em Educação"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade21-18.png?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 18<br><br>A Lei de Diretrizes e Bases (Lei n. 9394/96) garante o acesso e a inclusão de pessoas com deficiências nas escolas regulares . O avanço promovido por essa legislação favorece uma educação que respeita a singularidade dos estudantes . Além do ambiente escolar, outros espaços promovem a inclusão de pessoas com deficiência . No projeto Integrar pela Arte, obras como as de Joan Miró e Man Ray ganham uma 'visualidade tátil', permitindo experiências estéticas às pessoas cegas ou com baixa visão, conforme ilustram as imagens a seguir .<br><br>Considerando o texto e as imagens apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. O uso da 'visualidade tátil' em sala de aula possibilita que professores e professoras de Artes Visuais promovam experiências estéticas que superam a barreira da visão pela potencialização dos demais sentidos .<br><br>PORQUE<br><br>II. A inclusão prevista pela legislação educacional brasileira envolve todas as escolas públicas na busca por estratégias para atender aos alunos com deficiência de forma a garantir o acesso pleno e a inclusão em todas as disciplinas .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -158,7 +158,7 @@ const perguntasLocais = [
     {
         id: 14,
         tema: ["Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea", "Pedagogia e Didática em Artes Visuais"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade21-22.png?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 22<br><br>Na obra Diário (2015) Marilá Dardot se volta para as palavras dos noticiários, aos eventos sobre os quais lemos todos os dias e depois esquecemos . A artista escreve com água em um muro de concreto manchetes sobre tragédias que encontra nos jornais, que logo após escritas, são absorvidas e se apagam instantaneamente . Ao falarmos de palavras palavras que são mundos, que produzem continuamente existências possíveis, somos levados a questionar a importância daquilo que lemos e proferimos em nosso dia a dia, ao que damos atenção e o que ignoramos, o que repetimos e legitimamos .<br><br>Figura 1-DARDOT, M. Diário. 2015. Intervenção urbana, água sobre muro .<br>Figura 2- Técnica mista. Acervo da instituição IFB: Campus Samambaia, 2018 .<br><br>Com base nas informações apresentadas e considerando a relação entre arte contemporânea, seu ensino e os processos de formação de identidades estabelecidos pelos discursos construídos social e culturalmente, avalie as afirmações a seguir.<br><br>I. As figuras registram modos pelos quais discursos atuais atravessam os sujeitos, enfatizando a temática do esquecimento .<br>II. As memórias das palavras favorecem a construção de discursos e também de individualidades .<br>III. As palavras usadas no cotidiano possibilitam questionamentos sobre memória e esquecimento, por meio da arte e seu ensino .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "III, apenas.",
@@ -194,7 +194,7 @@ const perguntasLocais = [
     {
         id: 17,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade21-25.png?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 25<br><br>TEXTO I:<br>Clarissa Tossin trata de temas como precariedade ecológica e justiça social e enfrenta a pegada ambiental cotidiana em nosso planeta . Suas esculturas são compostas de camadas sedimentares de gesso, terracota, silicone e plástico derretido extraídos de seus resíduos pessoais, além de outros materiais não biodegradáveis como isopor e alumínio . Com os trabalhos da exposição Future Fossil, Tossin questiona a sustentabilidade do nosso mundo atual e futuro . As obras da artista, como mostra a imagem a seguir, compreendem uma constelação de planetas que projetam visões ambiguas de futuro .<br><br>Considerando essas informações, assinale a opção que apresenta a obra que se relaciona ao tema tratado pela artista Clarissa Tossin.",
         opcao_A: "BORGES, M. L. M. Pedras do Sertão. s/d. Barro sobre pedra .",
         opcao_B: "NOBLE, T.; WEBSTER, S. Miss understood & Mr. Meanor. 1997. Lixo e itens pessoais, madeira, projetor de luz e sensor de luz .",
@@ -338,7 +338,7 @@ const perguntasLocais = [
     {
         id: 29,
         tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade17-10.png?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 10<br><br>Quando o status construído do gênero é teorizado como radicalmente independente do sexo, o próprio gênero se torna artifício flutuante, com a consequência de que homem e masculino podem, com igual facilidade, significar tanto um corpo feminino como um masculino, e mulher e feminino, tanto um corpo masculino como um feminino  .<br><br>Figura 1: GAGA, L. You and I. Capa do single, 2011.<br>Figura 2: ARRUDA, V. Autorretrato com peruca loura e batom (1998) .<br><br>Considerando o diálogo direto das obras de artistas contemporâneos de diversas áreas com uma agenda Queer, ligada às demandas socioculturais e políticas da população LGBT (lésbicas, gays, bissexuais, travestis, transexuais e trangêneros), assinale a opção correta.",
         opcao_A: "Na figura 1, a relação entre palavra e imagem estabelece um questionamento da dimensão do corpo biológico como produto do meio .",
         opcao_B: "Na figura 2, o artista organiza visualmente corpos que transitam na hibridez dos múltiplos gêneros .",
@@ -458,7 +458,7 @@ const perguntasLocais = [
     {
         id: 39,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade17-20.png?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 20<br><br>Durante a década de 1970, diversos artistas desenvolveram poéticas visuais especializadas na manipulação e alteração, muitas vezes, radical das paisagens . As obras eram construídas em escalas monumentais, ainda que de duração efêmera .<br><br>MARIA, W. Lightining Field. Instalação, 1977 .<br>SMITHSON, R. Spiral Jetty. Instalação, 1970 .<br><br>A respeito das obras de Walter de Maria e Robert Smithson, avalie as afirmações a seguir.<br><br>I. Essas obras, de maneira geral, por não terem encontrado lugar apropriado dentro das galerias de arte e museus, tornaram-se campos exóticos para visitação .<br>II. Normalmente as obras produzidas por artistas como Walter de Maria e Robert Smithson são inseridas na definição de Arte Ambiental, também conhecida como Earth Art ou Land Art, e refletem grande preocupação com o meio ambiente .<br>III. A apreensão das obras apresentadas é feita por meio de sua respectiva conversão em documento, isto é, em registro visual e audiovisual .<br>IV. Ambas as obras podem ser consideradas como manifestações de esculturas no campo ampliado, segundo as definições da teórica Rosalind Krauss .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e IV.",
         opcao_B: "II e III.",
@@ -470,7 +470,7 @@ const perguntasLocais = [
     {
         id: 40,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade17-21.png?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 21<br><br>As obras retratadas nas imagens a seguir fizeram parte da mostra intitulada Causa+Arte, realizada em 2014 como parte da programação da Virada Sustentável, evento brasileiro de sustentabilidade . A primeira instalação, do artista Jaime Prades, intitulada À Deriva, parte do tema 'E se a água entrar em extinção?'   A obra é formada por um pequeno barco de madeira que flutua em um rio representado por 800 galões de água vazios e de uma terra representada por entulho coletado nas caçambas de lixo da cidade . Na segunda instalação, a palavra consumo_é escrita com letras desenhadas por meio de fardos de lixo . A obra, produzida pelo Coletivo de Arte e Design Bijari, chama a atenção para o excesso de consumo como comportamento negativo da sociedade contemporânea, porque compromete diversos recursos naturais do planeta . Na obra, o lixo se torna protagonista .<br><br>A partir das informações apresentadas e considerando a relação entre artes visuais e educação ambiental, avalie as afirmações a seguir.<br><br>I. A arte contribui para a construção da cidadania ao incentivar a criação artística que sensibilize a população acerca da importância da preservação do meio ambiente e do patrimônio natural .<br>II. A obra de arte criada pela coletividade reforça o entendimento de que a arte pode ser engajada como um tipo de arte-manifesto, de arte a serviço do ativismo .<br>III. A reutilização de materiais em obras de arte mascara a necessidade de políticas públicas para a destinação e o reaproveitamento adequados do lixo .<br>IV. A arte possibilita a compreensão de que os indivíduos são parte integrante da natureza e, por isso, ao preservarem o meio ambiente, preservam a vida .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
         opcao_B: "I e III.",
@@ -566,7 +566,7 @@ const perguntasLocais = [
     {
         id: 48,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade17-29.png?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 29<br><br>Uma multidão de figuras humanas feitas de pedra, cada uma com expressões e roupas únicas, habita sem alarde um pedaço do fundo do mar no litoral do México . A cerca de oito metros de profundidade, nas águas cristalinas do Caribe, esconde-se o primeiro parque de esculturas subaquáticas do mundo, que tem até um museu a céu aberto ou melhor, em alto-mar . O Museu Subaquático de Arte; Musa conta com um acervo de 400 esculturas submersas ao redor da ilha Mujeres, em Cancun, no México . As obras criadas pelo artista inglês Jason de Caires Taylor são feitas com um material poroso, uma espécie de concreto ecológico de pH neutro, que é perfeito para resistir algumas centenas de anos debaixo d'água e facilita o crescimento de corais e o abrigo de várias espécies [...].   As criaturas marítimas, aliás, são peças fundamentais para o trabalho . São elas que colorem, distorcem e transformam as dramáticas figuras submersas, construindo uma ambiciosa, mutante e frágil representação da evolução da vida .<br><br>Em face desse contexto, é correto afirmar que o trabalho do artista representa",
         opcao_A: "uma agressão ao meio ambiente, por inserir elementos artificiais dentro do mar do Caribe .",
         opcao_B: "uma agressão ao meio ambiente aquático, que se justifica por favorecer o turismo regional .",
@@ -674,7 +674,7 @@ const perguntasLocais = [
     {
         id: 57,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade14-11.png?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 11<br><br>Em 2004, o artista britânico Banksy realizou um stencil provocante no qual apresenta os personagens Ronald McDonald e Mickey Mouse de mãos dadas com a vietnamita Kim Phuc . A imagem da criança faz menção à conhecida fotografia de Nick Ut, que registrou crianças fugindo de um bombardeio de napalm durante a Guerra do Vietnã em 1972 .<br><br>Figura 1. Banky. Napalm (2004-5) .<br>Figura 2. Nick Ut. Criança nua de nove anos fugindo de um ataque de napalm, Trang Bang Village, Vietnã, 1972 .<br><br>Considerando as imagens apresentadas, avalie as afirmações sobre a obra de Banksy.<br><br>I. A obra apresenta uma das características marcantes da pós-modernidade: a apropriação de imagens .<br>II. A obra apresenta intertextualidades implícitas com a fotografia de Nick Ut e com a cultura de massa americana .<br>III. A obra, de forma satírica, faz uma crítica social e política ao modelo de sociedade americano .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "II, apenas.",
@@ -830,7 +830,7 @@ const perguntasLocais = [
     {
         id: 70,
         tema: ["Linguagens e Práticas da Arte Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/enade14-24.png?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 24<br><br>Hannah Wilke, uma das primeiras artistas feministas norte-americanas, iniciou sua carreira na década de 1970 criando vaginas em cerâmica, enquanto realizava performances . A iraniana Shirin Neshat escreve em seu corpo uma história de discriminação da mulher no islã . Marc Quinn, artista britânico, cria estranhas imagens com o próprio corpo como um autorretrato feito com seu sangue, retirado e congelado para depois ser esculpido e mantido refrigerado .<br><br>Considerando as informações apresentadas, avalie asserções a seguir e a relação proposta entre elas.<br><br>I. Na arte contemporânea, em suas várias poéticas, o corpo assume papéis concomitantes de sujeito e objeto, que aparecem mesclados de forma a simbolizar a carne e a crítica, misturadas .<br><br>PORQUE<br><br>II. O trabalho desses artistas evidenciam-se como bodyart, corroborando com um projeto de servidão voluntária do corpo na sociedade de consumo .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
         opcao_B: "As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.",
