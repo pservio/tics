@@ -50,7 +50,7 @@ const perguntasLocais = [
     {
         id: 5,
         tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image1.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 13<br><br>Há muito tempo, o corpo negro é cercado por estereótipos . Ora é erotizado, prevalecendo, nesse caso, os corpos das mulheres, ora é marginalizado . A muSa Michelle Mattiuzzi, em sua performance Merci Beaucoup, Blanco!, explora criticamente, a partir de suas características pessoais, estereótipos sociais . Assim, a artista, ao tratar da violência e da tortura oriundas do período escravocrata, evoca 'leituras' relacionadas à ignorância e negligência de um passado escravagista que se perpetuam até a contemporaneidade .<br><br>MATTIUZZI, M. 'Merci Beaucoup, Blanco!'. Acervo Histórico Vídeo Brasil. Foto: Pedro Napolitano Prata .<br><br>A partir das informações apresentadas, é correto afirmar que",
         opcao_A: "a artista questiona, com o seu trabalho, o que é o corpo feminino negro por meio da criação de personagens fictícios.",
         opcao_B: "a arte contemporânea, tal como a performance de Michelle Mattiuzzi, equipara um tipo de arte engajada e pós-colonialista à arte dita 'da cultura dominante' .",
@@ -74,7 +74,7 @@ const perguntasLocais = [
     {
         id: 7,
         tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image4.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 15<br><br>O artista Denilson, da etnia Baniwa, reivindicou a Antropofagia como pensamento indígena apropriado por Oswald de Andrade . Ora, a reapropriação da apropriação não é uma questão menor . A arte indígena nunca foi reconhecida como arte pela cultura brasileira . Assim, a reivindicação dos artistas indígenas suscita perguntas: se a contribuição dos índios foi decisiva para a arte brasileira, por que os artistas indígenas precisam de passaporte para entrar no sistema da arte contemporânea?   Em outras palavras: por que precisam provar que o que fazem é arte segundo os critérios ocidentais, se a arte Moderna brasileira viu em suas criações potência estética suficiente para tomá-las como matriz para a sua própria existência?  <br><br>BANIWA, D. Natureza Morta 1. 2016. Infogravura, tamanhos variáveis .<br><br>A partir do texto e da imagem apresentados, assinale a opção correta.",
         opcao_A: "Os meios utilizados para a produção da obra de Denilson Baniwa fundam-se nos atuais recursos da arte contemporânea, descaracterizando-a como arte indígena .",
         opcao_B: "A arte indígena, como a obra de Denilson Baniwa, compõe o corpo de objetos artísticos brasileiros e somou-se à renovação e à criação estética do Modernismo no Brasil .",
@@ -134,7 +134,7 @@ const perguntasLocais = [
     {
         id: 12,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image21.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 20<br><br>Com o seu pôster-manifesto Your body is a battleground, a artista conceitual Barbara Kruger conferiu, em 1989, representação visual ao caráter político do corpo feminino na sociedade patriarcal . Produzido para a Marcha das Mulheres em Washington, o cartaz ilustra a disputa pelo direito da mulher de decidir sobre o próprio corpo, mostrando como ele se torna uma zona de combate na qual e pela qual as mulheres lutam. Ao valer-se de uma imagem estereotipada da mulher perfeita, simétrica, voluptuosa, recortá-la ao meio e distorcer o seu lado esquerdo, Kruger explicita os efeitos destrutivos de tais representações .<br><br>KRUGER, B. Your body is a battleground. 1989, Serigrafia Fotográfica em Vinil .<br><br>A partir do texto e da imagem apresentados, avalie as afirmações a seguir.<br><br>I. A obra de Kruger apresenta características feministas e 'artivistas', uma vez que demonstra a busca por dignidade humana e aborda aspectos da realidade contemporânea de muitas mulheres .<br>II. A artista aprofunda questões políticas feministas em sua obra, misturando texto, imagens e suportes comumente utilizados em mídias publicitárias .<br>III. A partir da obra de Kruger, as questões de gênero podem ser trabalhadas no cotidiano escolar, de modo transversal, para valorização e diferenciação das características próprias de cada gênero .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "III, apenas.",
@@ -146,7 +146,7 @@ const perguntasLocais = [
     {
         id: 13,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Arte e Ativismo Político-Social (Artivismo)", "Mediação Cultural e Educação Museal"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image41.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 21<br><br>Os problemas relativos ao lixo no mundo foram tema de diversas reportagens, tais como as publicadas pela BBC.<br>Nas artes visuais, o tema do lixo é recorrente. Essa problemática foi tratada pelo artista Eduardo Srur, que, em 2014, realizou a exposição Aquário Morto, no Aquário do Guarujá, São Paulo .<br><br>SRUR, E. Aquário Morto. 2014. Fotografia .<br><br>Com base na imagem e nas informações apresentadas, é correto afirmar que a obra Aquário Morto",
         opcao_A: "apresentou uma crítica referente à responsabilidade estatal pelo descarte inadequado do lixo .",
         opcao_B: "fracassou no aspecto da conscientização sobre o descarte do lixo, conforme demonstram as reportagens .",
@@ -170,7 +170,7 @@ const perguntasLocais = [
     {
         id: 15,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image25.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 23<br><br>O Afrobapho é um coletivo baiano formado por jovens negros, LGBTQI+, moradores da periferia soteropolitana, que utilizam as artes integradas e os recursos de multimídia para promover mobilização social por meio de performances que interseccionam música, dança, vídeo, cenografia, indumentária e questões sobre a pauta das minorias .<br><br>Com base no exposto, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As ações do coletivo baiano, ao utilizarem cores neon, música, performance e referências afrofuturistas e ao levarem às ruas intervenções urbanas que discutem raça, classe, gênero e sexualidade, podem ser consideradas artivistas .<br><br>PORQUE<br><br>II. O artivismo caracteriza-se pela utilização de estratégias estéticas como ação política a fim de sensibilizar e problematizar junto à sociedade as condições de ser negro, pobre, gay, LGBTQI+ e morador de periferia, bem como suas reivindicações .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -206,7 +206,7 @@ const perguntasLocais = [
     {
         id: 18,
         tema: ["Arte, Sustentabilidade e Crítica Ambiental", "Linguagens e Práticas da Arte Contemporânea", "Mediação Cultural e Educação Museal"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image61.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 26<br><br>Na instalação The Weather Project (o Projeto clima/tempo), Olafur Eliasson trata do clima, ressaltando os encontros fundamentais da natureza com a cidade e sua população . O artista foca seu interesse na luz, na energia, no sol e no quanto dependemos da luz solar para viver e como não nos damos conta disso . Eliasson trabalha com experiências que são feitas de percepções. Seu trabalho se baseia em como são criadas nossas percepções . Olafur nos pergunta: de que maneira sabemos o que percebemos? Como podemos amplificar nossas percepções?  <br><br>ELIASON, O. The Wether Project, 2003 .<br><br>Considerando o texto e a imagem apresentados, assinale a opção correta.",
         opcao_A: "A instalação de Olafur Eliasson, por estar contida no espaço interno do museu, inviabiliza a reflexão direta sobre o acesso ao meio ambiente, à natureza e às questões socioambientais .",
         opcao_B: "A obra de Olafur Eliasson apresenta uma solução para a necessidade de acesso à energia, em contextos sociais e climáticos diversos .",
@@ -218,7 +218,7 @@ const perguntasLocais = [
     {
         id: 19,
         tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image17.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 27<br><br>Em A queda do céu, Davi Kopenawa, xamã e importante liderança yanomami, questiona a escrita do branco e a sua consequente forma de conhecimento . Explica que a tradição dos Yanomami nunca foi escrita, 'os dizeres de nossos ancestrais nunca foram desenhados. São muito antigos, mas continuam sempre presentes em nosso pensamento até hoje.'   Em nota, o antropólogo Bruce Albert explica que Kopenawa incentivou o projeto de alfabetização em sua comunidade, para que os jovens pudessem defender os seus direitos .<br><br>BANIWA, D. Relacionamentos (AGRO) Tóxicos - Coração Sagrado. 2018. Autorretrato .<br><br>Com base no texto e na imagem apresentados, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A obra de Denilson Baniwa revela o pleno domínio de um código de arte próprio da cultura do colonizador .<br><br>PORQUE<br><br>II. Ao dominar o código da linguagem do colonizador, integrantes de grupos colonizados inserem se na cultura dominante e encontram espaço reverberante às causas que lhes dizem respeito, livres do olhar exótico e da classificação de 'arte nativa' .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -230,7 +230,7 @@ const perguntasLocais = [
     {
         id: 20,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image38.jpg?raw=true",
         enunciado: "ENADE 2021 - QUESTÃO 28<br><br>Ai Weiwei, artista contemporâneo chinês, é uma das mais expressivas vozes contra o regime chinês, não apenas por seu trabalho, mas também pela polêmica gerada em torno de seus constantes embates com as autoridades de seu país . Sua obra, tal como Vaso Neolitico com logotipo de Coca-Cola (2010), trata do impacto do processo de modernização e ocidentalização na sociedade, cultura e tradição chinesa .<br><br>Sobre Ai Weiwei e sua obra, avalie as afirmações a seguir.<br><br>I. Ai Weiwei é um artista conceitual, sua ideia e postura crítica transcendem os aspectos estéticos de sua obra .<br>II. O artista ressignifica o artefato milenar chinês ao incorporar o logotipo da Coca-Cola no objeto apropriado .<br>III. A obra dialoga com aspectos históricos e ideológicos da cultura chinesa, em contraposição com a modernização que aconteceu no país .<br>IV. A obra de Ai Weiwei é impregnada de ativismo social e político, consolidando o conceito definido por Marcel Duchamp, de que não existem fronteiras entre a vida e a arte .<br><br>É correto o que se afirma em",
         opcao_A: "I e II, apenas.",
         opcao_B: "II e III, apenas.",
@@ -242,7 +242,7 @@ const perguntasLocais = [
     {
         id: 21,
         tema: ["Identidade e Representação na Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image43.jpg?raw=true",
         enunciado: "ENADE 2012 - QUESTÃO 29<br><br>No projeto Assentamentos, Rosana Paulino faz a conexão entre arte, memória e história e se coloca como mulher negra na sociedade brasileira . Pela produção de fotografias, vídeo, instalações, esculturas e desenhos, e outras linguagens, a artista evidencia impossibilidades, dificuldades, opressões e sacrifícios, problemas enfrentados pela raça negra ao longo dos séculos . A artista defendeu: 'Ou se refaz ou morre, senão os traumas vão passando para os descendentes. [...] a gente assenta, não para nem cristaliza. Aqui, as raízes vão ganhando força e a gente vai se sustentando...' .<br><br>Tendo por base o texto e as imagens apresentados, avalie as afirmações a seguir.<br><br>I. A obra da artista remete o espectador a uma história recente e ao mesmo tempo propicia a reflexão sobre as representações realizadas no passado e sobre as marcas deixadas por ele .<br>II. Na instalação, as peças estão costuradas de forma desencontrada, evidenciando as marcas de um processo de adaptação, que muitas vezes são transmitidas aos seus descendentes .<br>III. A mulher negra, figura central da nossa história, é apresentada despida e ressignificada de modo crítico por Rosana Paulino .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "III, apenas.",
@@ -326,7 +326,7 @@ const perguntasLocais = [
     {
         id: 28,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image54.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 09<br><br>As implicações mais amplas da maneira como a arte era pensada no feminismo foram se tornando cada vez mais claras em meados dos anos 1970. A insistência no direito de não agir nem como sujeito neutro nem como substituto do macho, mas como mulher, havia posto em foco a questão da identidade . Contudo, apesar de reconhecida como tal, não era uma questão que pudesse se confinar aos limites do gênero .<br><br>MILLER, J. H. We Can Do it! Cartaz, 1943 .<br><br>Tendo como referência as informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A partir da segunda metade do século XX, a arte aprofundou aspectos de contestação política e cultural, marcados pela conexão com questões sociais, pela abordagem interdisciplinar e pelo uso de novos materiais e suportes expressivos .<br><br>PORQUE<br><br>II. O mundo testemunhou, a partir da segunda metade do século XX, o aparecimento de movimentos sociais que buscavam dar voz a minorias identitárias, e que influenciaram a sociedade em todos os aspectos, inclusive em relação à concepção de sujeito e de novas subjetividades .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
@@ -362,7 +362,7 @@ const perguntasLocais = [
     {
         id: 31,
         tema: ["Linguagens e Práticas da Arte Contemporânea", "Teoria, Historiografia e Crítica da Arte", "Pedagogia e Didática em Artes Visuais"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image44.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 12<br><br>A obra Marulho, de Cildo Meirelles, foi produzida a partir de imagens de revistas, sons e percepções que remetem ao mar .<br><br>MEIRELLES, C. Marulho. Instalação, 1991-2001 .<br><br>A partir da imagem e da informação apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. A obra de Cildo Meirelles consiste em modalidade artística contemporânea que gera muita discussão entre estudantes e professores acerca de sua artisticidade, seja em espaços de educação formal seja nos de educação não formal .<br><br>PORQUE<br><br>II. A obra Marulho consiste em uma instalação que contempla a utilização de procedimentos e materiais, no chamado campo ampliado da escultura, extraídos do cotidiano e ressignificados na obra, rompendo com os padrões tradicionais de compreensão do fenômeno artístico .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -374,7 +374,7 @@ const perguntasLocais = [
     {
         id: 32,
         tema: ["Linguagens e Práticas da Arte Contemporânea", "Arte no Espaço Público e Arte Urbana", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image42.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 13<br><br>Em Fairy Tales (Contos de fadas), uma das performances mais conhecidas de Francis Alÿs, retratada na imagem a seguir, o artista caminhou pelas ruas de Estocolmo vestindo um casaco de lã que ia se desmanchando ao longo de sua caminhada, uma vez que uma linha do casaco estava presa no início de sua trajetória .<br><br>A partir da imagem e das informações apresentadas, avalie as afirmações a seguir, a respeito da performance de Francis Alys.<br><br>I. A linha deixada por Alÿs durante sua caminhada delineia o espaço, mapeando seu itinerário .<br>II. A trilha deixada sobre a superfície do caminho indica que o artista se refere a mitos e histórias como Ariadne e João e Maria .<br>III. O performer sabe que o rastro que deixa, o traço sutil e evanescente de um desenho que perpassa a cidade, é fadado ao desaparecimento, ou seja, a ser absorvido pela cidade, sendo, portanto, a ela que a performance se destina .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "II, apenas.",
@@ -410,7 +410,7 @@ const perguntasLocais = [
     {
         id: 35,
         tema: ["Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image9.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 16<br><br>A zona portuária do Rio de Janeiro está de cara nova. Um mural de 3 mil metros quadrados que poderá entrar para o livro dos recordes como o maior do mundo, criado pelo artista brasileiro Eduardo Kobra, em 2016, chama a atenção de quem passa por lá, hipnotizado pelas cores e impressões tridimensionais . Na obra, denominada Etnias e retratada na imagem a seguir, cinco rostos representam etnias de cada continente .<br><br>KOBRA, E. Mural Etnias: Todos somos um. Grafite, 2016 .<br><br>A partir dessas informações, avalie as afirmações a seguir.<br><br>I. Murais são produções artísticas que compõem paisagens urbanas de grandes cidades, agregam valor ao patrimônio cultural local e ampliam o acesso à arte, divulgando expressões ou movimentos de criação coletiva .<br>II. Técnicas variadas de pintura são utilizadas durante a realização de um mural para que o público entenda a dimensão do conceito de diversidade dos grandes centros urbanos .<br>III. Murais são instrumentos educativos de grande relevância na divulgação de obras de artistas politicamente engajados .<br>IV. O grafite é uma técnica coletiva de construção de mural que, focada na produção de discursos afirmativos étnicos, visa democratizar o acesso à cultura local .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
         opcao_B: "I e IV.",
@@ -422,7 +422,7 @@ const perguntasLocais = [
     {
         id: 36,
         tema: ["Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image14.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 17<br><br>Misturas, hiatos e tensões constituem a africanidade inerente à cultura brasileira . Por um lado, a transposição forçada de africanos ao Brasil para serem escravizados, entre os séculos XVI e XIX, determinou rupturas diversas e uma complexidade social que são ainda hoje bastante perceptíveis . Por outro lado, a participação deles e de seus descendentes na construção da sociedade brasileira tem gerado entrelaçamentos culturais que são observáveis em quase todos os domínios sociais . Vídeos, performances colaborativas e instalações multimídias são os meios mais frequentes de intervenção do artista baiano Marcondes Dourado, que aborda tópicos de religião, carnaval, sexo, gênero, trabalho, história e, consequentemente, política, que atravessam e são perpassados pela questão afro-brasileira .<br><br>DOURADO, M. Lavagem da Capela do Mam. Performance, 2007 .<br><br>Considerando as informações apresentadas e a imagem que retrata a performance Lavagem da Capela do Mam, de Marcondes Dourado, avalie as afirmações a seguir.<br><br>I. A obra de Marcondes Dourado está em sintonia com os princípios da arte contemporânea e com o reconhecimento da presença dos afrodescendentes na composição da cultura brasileira .<br>II. Em sua obra, Marcondes Dourado apresenta apropriações simbólicas da religiosidade afro-brasileira, transformadas em um universo plástico-simbólico .<br>III. A relevância artística da obra de Marcondes Dourado deve-se às políticas públicas afirmativas para afrodescendentes, crescentes nos últimos anos no Brasil .<br><br>É correto o que se afirma em",
         opcao_A: "II, apenas.",
         opcao_B: "III, apenas.",
@@ -434,7 +434,7 @@ const perguntasLocais = [
     {
         id: 37,
         tema: ["Linguagens e Práticas da Arte Contemporânea", "Arte, Sustentabilidade e Crítica Ambiental", "Arte no Espaço Público e Arte Urbana"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image28.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 18<br><br>O artista chinês contemporâneo Song Dong faz reflexões sociais e culturais acerca de seu país e do mundo por meio de suas obras . Em 2004, para a abertura da 26ª Bienal de São Paulo, ele produziu Eating the World . Sobre o piso, construiu uma representação do mapa-mundi com doces de diversos tipos para serem consumidos pelos visitantes . A obra foi realizada com a participação do público, que, literalmente, a devorou em poucos minutos . Desde então, ele produziu versões dessa obra, com o nome Eating the City, em diversas cidades, recriando maquetes comestíveis feitas com bolo, pão, biscoitos, macarrão e outros alimentos . De acordo com Song Dong, 'uma das razões para a expansão das cidades são os desejos dos homens; a rápida expansão da cidade é como uma boca que engole tudo ao seu redor' .<br><br>Considerando os elementos presentes nas obras de Song Dong que as caracterizam como arte contemporânea, avalie as afirmações a seguir.<br><br>I. O artista explora questões da vida cotidiana, por exemplo, o crescimento das grandes cidades e o consumismo das populações .<br>II. As obras são construídas com elementos prontos e pertencentes ao dia a dia das pessoas, como diversos tipos de alimentos .<br>III. É com a ação do público que as obras se realizam e possibilitam reflexões acerca de questões contemporâneas .<br>IV. As obras representam, de forma verossímil, a cidade e todo o seu contexto com grande riqueza de detalhes .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
         opcao_B: "I e IV.",
@@ -482,7 +482,7 @@ const perguntasLocais = [
     {
         id: 41,
         tema: ["Arte e Ativismo Político-Social (Artivismo)", "Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image2.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 22<br><br>A priori, antes de suas obras, a arte é uma crítica da feroz seriedade que a realidade impõe sobre os seres humanos . Ao dar nome a esse estado de coisas, a arte acredita que está soltando amarras . Eis sua alegria e também, sem dúvida, sua seriedade ao modificar a consciência existente .<br><br>ADORNO, T. W. A arte é alegre? (adaptado) .<br>PORTINARI, C. Retirantes. 1944 .<br><br>Considerando o texto de Adorno e a reprodução da pintura Retirantes, de Cândido Portinari, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Retirantes, que mostra a situação dramática de sofrimento e privação de muitos brasileiros, é arte voltada à crítica da realidade histórica e social .<br><br>PORQUE<br><br>II. A arte tem um caráter crítico na medida em que, antes de ser arte, mostra e explicita o sofrimento ao qual a realidade submete as pessoas .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -506,7 +506,7 @@ const perguntasLocais = [
     {
         id: 43,
         tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image20.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 24<br><br>TEXTO 1<br>À primeira vista, a escultura aparenta ser um entalhamento de um tradicional indígena americano . A face melancólica, as miçangas, a pele de cobra e as penas expressam um legado roubado . Mas o trabalho de Durham um artista indígena Cherokee, escritor e ativista político - vai muito além do estereótipo de arte indígena . A escultura está vestindo plástico, bijuterias hippies e um sutiã de loja de departamento . O corpo é uma montagem de objetos reciclados. Malinche era uma princesa indígena que foi amante de um homem branco, e o trabalho do artista pode ser interpretado como símbolo da opressão sexual e da dominação colonial . Essa escultura remete a culturas híbridas, e também a questões relacionadas ao preconceito do olhar ocidental, ou seja, ao desejo de tratar a arte não ocidental como etnografia exótica, e à prontidão para aceitar representações estereotipadas dos povos indígenas  .<br><br>TEXTO 2<br>No momento em que o critério da autenticidade deixa de se aplicar à produção artística, toda a função social da arte se transforma . Em vez de fundar-se no ritual, ela passa a fundar-se em outra práxis, a política .<br><br>Considerando as informações apresentadas, assinale a opção correta.",
         opcao_A: "A escultura de Durham apresenta comprometimento discursivo com as diferenças culturais .",
         opcao_B: "A escultura de Durham pode ser considerada obra de arte porque segue critérios de autenticidade .",
@@ -530,7 +530,7 @@ const perguntasLocais = [
     {
         id: 45,
         tema: ["Identidade e Representação na Arte Contemporânea", "Produção Artística Indígena Contemporânea", "Arte, Tecnologia e Mídias Digitais"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image19.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 26<br><br>PERES, E. Índios Rikibaktsa registram com celulares algumas disputas dos Jogos Indígenas. Fotografia, 2011 .<br><br>A partir da fotografia apresentada e considerando os processos de formação de identidade, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Os povos indígenas, ao incorporarem tecnologias não indígenas a seus hábitos e tradições, descaracterizam suas culturas .<br><br>PORQUE<br><br>II. Na contemporaneidade, a partir da concepção de sujeito, as identidades passaram a ser compreendidas como múltiplas e dinâmicas, em virtude dos processos de subjetivação e intersubjetivação .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
@@ -578,7 +578,7 @@ const perguntasLocais = [
     {
         id: 49,
         tema: ["Arte no Espaço Público e Arte Urbana", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image50.jpg?raw=true",
         enunciado: "ENADE 2017 - QUESTÃO 30<br><br>O espaço público tem sido ocupado, cada vez mais, por instalações, intervenções artísticas, grafites e performances . Essas manifestações artísticas inscrevem as cidades no circuito da arte e no universo cultural e político . A performance Quando todos calam, registrada na fotografia acima, foi realizada pela artista Berna Reale, na região do mercado Ver-o-Peso, em Belém do Pará .<br><br>A partir das informações apresentadas, avalie as afirmações a seguir.<br><br>I. Intervencionista, a arte urbana pode ser considerada um tipo de ativismo artístico .<br>II. A arte urbana promove a fruição do objeto artístico no âmbito da esfera pública, fomentando uma política de democratização da arte .<br>III. A arte urbana mantém-se como principal forma de resistência cultural .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "III, apenas.",
@@ -686,7 +686,7 @@ const perguntasLocais = [
     {
         id: 58,
         tema: ["Identidade e Representação na Arte Contemporânea", "Arte e Ativismo Político-Social (Artivismo)", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image58.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 12<br><br>O artista deve sempre trabalhar com as coisas que o tocam profundamente . Se lhe toca o azul, trabalhe, pois, com o azul . Se lhe tocam os problemas relacionados com a sua condição no mundo, trabalhe então com esses problemas . No meu caso, tocaram-me sempre as questões referentes à minha condição de mulher e negra . Olhar no espelho e me localizar em um mundo que muitas vezes se mostra preconceituoso e hostil é um desafio diário . Aceitar as regras impostas por um padrão de beleza ou de comportamento que traz muito de preconceito, velado ou não, ou discutir esses padrões, eis a questão .<br><br>Rosana Paulino. Bastidores. Imagem transferida sobre tecido, bastidor e linha de costura. 1997 .<br><br>Com base no texto e nas imagens apresentadas, avalie as afirmações a seguir.<br><br>I. Na série 'Bastidores', a violência simbólica aparece nas linhas que costuram as bocas, gargantas e olhos .<br>II. Os bastidores, essa espécie de armação de madeira circular em que se prega o que se quer bordar, forma a moldura de uma condição: figuras de mulheres negras estampadas .<br>III. Os olhos costurados, fechados para o mundo e, principalmente, para sua condição revelam uma escolha: gritar, mesmo que por outras bocas estampadas no tecido .<br>IV. O fio que torce, puxa, modifica o formato do rosto, produz bocas que não gritam, olhos que não vêem e dão nós na garganta .<br><br>É correto o que se afirma em",
         opcao_A: "I e II, apenas.",
         opcao_B: "I e IV, apenas.",
@@ -782,7 +782,7 @@ const perguntasLocais = [
     {
         id: 66,
         tema: ["Teoria, Historiografia e Crítica da Arte", "Processos de Criação e Pesquisa em Arte"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image39.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 20<br><br>A arte, em suma, não deixa de ser expressiva por colocar em forma visível relações entre as coisas, sem maior indicação das particularidades das relações do que é necessário para compor um todo . Toda a obra de arte se abstrai, em certa medida, dos traços particulares dos objetos expressados . Caso contrário, ela apenas criaria, por meio da imitação exata, uma ilusão da presença das próprias coisas .<br><br>Francis Bacon. Estudo de auto-retrato - Tríptico. Óleo sobre tela, 1985-86 .<br><br>Tomando como referência o tríptico de Bacon e o texto de John Dewey, avalie as afirmações a seguir.<br><br>I. Quanto maior for a relação complexa entre as coisas que servem de referência, ou motivo, para uma pintura, mais uma obra de arte se torna expressiva .<br>II. As pinturas de Bacon chamam a atenção para simples questões de representação e incapacidade técnica manifestada pelo artista .<br>III. A pintura contemporânea busca a ilusão da presença das coisas, pessoas e objetos, por meio da imitação exata daquilo que é pintado .<br>IV. As pinturas dadas como exemplo abstraem-se, isto é, separam-se dos traços concretos do motivo e esse processo aumenta a expressividade da proposta artística, sem se acrescentar mais do que aquilo que o artista achou necessário para compor um todo .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I.",
         opcao_B: "IV.",
@@ -794,7 +794,7 @@ const perguntasLocais = [
     {
         id: 67,
         tema: ["Relações entre Arte, Memória e Sociedade", "Identidade e Representação na Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image24.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 21<br><br>Reconhecer a diversidade do Referencial Cultural não significa que não se possa avaliar, distinguir e hierarquizar o saber produzido . Haverá sempre referências que serão marcadas e/ou significativas, seja pelo valor material, seja pelo valor simbólico envolvido . Por outro lado, bens aparentemente insignificantes podem ser fundamentais para a construção da identidade social de uma comunidade, de uma cidade, de um grupo étnico  .<br>A Festa do Divino Espírito Santo é uma manifestação cultural e religiosa de origem portuguesa, disseminada no período da colonização e ainda hoje presente em todas as regiões do Brasil .<br><br>Considerando as informações apresentadas, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. Referencial Cultural é uma expressão utilizada sobretudo em textos que têm como base uma concepção antropológica de cultura . Essa perspectiva plural norteia as interpretações e as atuações no campo da preservação de bens culturais .<br><br>PORQUE<br><br>II. A ênfase na diversidade da produção imaterial, atribui sentido e valor aos diferentes sujeitos envolvidos nas práticas que se tornam sociais .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.  ",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -818,7 +818,7 @@ const perguntasLocais = [
     {
         id: 69,
         tema: ["Produção Artística Indígena Contemporânea", "Identidade e Representação na Arte Contemporânea", "Políticas Públicas e Gestão em Educação"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image10.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 23<br><br>Os Wajāpi, povos indígenas do grupo linguístico Tupi-Guarani, vivem em cerca de quarenta aldeias agrupadas no estado do Amapá . Eles desenvolveram uma linguagem única, uma mistura de arte gráfica e verbal chamada Arte Kusiwa . Essa arte reflete sua visão de mundo e, por meio dela, esses povos transmitem conhecimento da vida à comunidade  .<br><br>Com base no texto acima, a arte e a cultura indígena dos povos Wajāpi<br><br>I. representam desafios à sociedade brasileira em relação à criação de políticas públicas voltadas para o reconhecimento, respeito, valoração e preservação dessas etnias constitutivas da diversa identidade brasileira .<br>II. constituem um corpo não-diferencial, em que um não existe sem o outro, assim como a proposta, na arte contemporânea, da bodyart. O perigo de sua extinção reside no possível comprometimento da geração mais jovem em valorizar, preservar e conhecer a Kusiwa  .<br>III. são baseadas em crenças arcaicas, por esse motivo eles necessitam de políticas públicas voltadas para seu reconhecimento e para construção de uma história adaptada à nossa sociedade, de modo a se atualizarem e, assim, se incluírem no corpo homogêneo da identidade brasileira .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "III, apenas.",
@@ -878,7 +878,7 @@ const perguntasLocais = [
     {
         id: 74,
         tema: ["Linguagens e Práticas da Arte Contemporânea", "Relações entre Arte, Memória e Sociedade", "Políticas Públicas e Gestão em Educação"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image26.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 28<br><br>A figura a seguir mostra uma obra visual, que faz parte de uma série de trabalhos do artista Cildo Meireles intitulada Inserções em circuitos ideológicos . Nessa série, o artista imprimia mensagens em garrafas de refrigerante e utilizava o sistema de distribuição do refrigerante para fazer circular a sua obra . Alguns exemplares desse trabalho foram recuperados e hoje fazem parte do acervo de museus de arte .<br><br>Considerando a obra apresentada como representante da cultura visual de uma época, avalie as asserções a seguir e a relação proposta entre elas.<br><br>I. As pessoas compravam o refrigerante sem ter consciência de que levavam uma obra de arte, mas hoje sabe-se da importância desse objeto como patrimônio cultural, cujo conhecimento e valorização devem ser abordados pelos professores de artes visuais .<br><br>PORQUE<br><br>II. Atualmente também são valorizados elementos do patrimônio imaterial, que fazem parte da cultura mas não são tangíveis, tais como: as práticas de um povo, seus conhecimentos e suas técnicas .<br><br>A respeito dessas asserções, assinale a opção correta.",
         opcao_A: "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
         opcao_B: "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.  ",
@@ -890,7 +890,7 @@ const perguntasLocais = [
     {
         id: 75,
         tema: ["Arte, Tecnologia e Mídias Digitais", "Pedagogia e Didática em Artes Visuais", "Teoria, Historiografia e Crítica da Arte"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image33.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 29<br><br>O filme de ciência ficção '2001, Odisséia no Espaço', do diretor Stanley Kubrick, é considerado um dos melhores filmes já realizados pela qualidade da imagem e dos efeitos visuais, o realismo científico, o predomínio do som e a imagem sobre a linguagem verbal e, principalmente, por sua trama aberta a múltiplas interpretações . É um épico que conduz, já em 1968, às reflexões em torno das relações entre a humanidade e a tecnologia .<br><br>Considerando o filme como um recurso de aprendizagem na educação em artes visuais para o ensino médio, avalie as afirmações a seguir.<br><br>I. Esse filme apresenta possibilidades de abordagem transdisciplinar para a educação em artes visuais no ensino médio, em virtude das relações que estabelece entre arte, design, ciência, tecnologia, filosofia e linguagem .<br>II. O enredo do filme, que é complexo e conduz a uma situação incerta, compromete a inserção pedagógica desse filme nas escolas, pois é aberto a múltiplas interpretações, favorecendo confusões conceituais .<br>III. Filmes de ficção científica são adequados para a educação em artes visuais no ensino médio, porque permitem um espaço de descontração, diversão e descanso, embora não constituam, em si, obras de arte .<br><br>É correto o que se afirma em",
         opcao_A: "I, apenas.",
         opcao_B: "II, apenas.",
@@ -902,7 +902,7 @@ const perguntasLocais = [
     {
         id: 76,
         tema: ["Arte no Espaço Público e Arte Urbana", "Identidade e Representação na Arte Contemporânea", "Linguagens e Práticas da Arte Contemporânea"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image8.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 30<br><br>Fefe Talavera, artista paulista descendente de mexicanos, cria monstros e criaturas pelo agrupamento de letras recortadas e coladas (lambe-lambe) sobre muros e paredes . O trabalho da artista é inspirado nos famosos alebrijes, bonecos do artesanato mexicano feitos de papel .<br><br>Considerando o texto e a imagem apresentados, avalie as afirmações a seguir.<br><br>I. O trabalho de Talavera possibilita a socialização da arte por meio da interferência urbana, assim como fizeram os muralistas mexicanos José Orozco, Davi Siqueiros e Diego Rivera .<br>II. Por fazer uma referência cultural aos bonecos de papel do artesanato mexicano, o trabalho de Talavera ressignifica uma arte popular quando a toma como tema de seu tempo .<br>III. Ao utilizar o ambiente urbano para se expressar, Talavera denota um gesto conceitual e seu trabalho é reconhecido como arte pelo mercado artístico convencional .<br>IV. A intervenção gráfica de Talavera disputa atenção com as milhares de mensagens panfletárias espalhadas nas grandes cidades .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e III.",
         opcao_B: "II e IV.",
@@ -914,7 +914,7 @@ const perguntasLocais = [
     {
         id: 77,
         tema: ["Políticas Públicas e Gestão em Educação"],
-        imagem_url: "",
+        imagem_url: "https://pservio.github.io/simuladoenade/image23.jpg?raw=true",
         enunciado: "Enade 2014 - QUESTÃO 31<br><br>A gestão democrática pode ser definida como um processo político no qual as pessoas que atuam na e sobre a escola identificam problemas, discutem, deliberam, planejam, encaminham, acompanham, controlam e avaliam o conjunto das ações voltadas ao desenvolvimento da própria escola, na busca da solução daqueles problemas . Esse processo, sustentado no diálogo, na alteridade e no reconhecimento das especificidades técnicas das diversas funções presentes na escola, tem como base a participação efetiva de todos os segmentos da comunidade escolar, o respeito às normas coletivamente construídas para os processos de tomada de decisões e a garantia de amplo acesso às informações aos sujeitos da escola  .<br><br>Com base nos textos apresentados, conclui-se que a gestão democrática da educação<br><br>I. implica colocar as instituições a serviço da formação qualificada dos estudantes, tendo a participação como prática cotidiana de todos os envolvidos  .<br>II. propicia a criação de uma cultura institucional crítico-reflexiva, cujos envolvidos tenham discernimento em relação aos conteúdos que necessitam ou não para tomarem decisões sempre coletivas  .<br>III. pressupõe a existência de líderes capazes de orientar pessoas para o desenvolvimento de ações que visem ao cumprimento de objetivos definidos por eles  .<br>IV. efetiva-se pelo processo de construção coletiva do projeto pedagógico e de seu acompanhamento e avaliação .<br><br>É correto apenas o que se afirma em",
         opcao_A: "I e II.",
         opcao_B: "I e III.",
