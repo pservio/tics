@@ -44,52 +44,17 @@
     <div class="container mx-auto p-4 max-w-2xl w-full">
         <div id="app-container" class="bg-white rounded-xl shadow-lg overflow-hidden">
 
-            <div id="login-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center">Quiz ENADE</h1>
-                <p class="text-center text-gray-600">Artes Visuais</p>
-                <form id="login-form" class="w-full max-w-sm space-y-4">
-                    <input type="email" id="login-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <input type="password" id="login-password" placeholder="Senha" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Entrar</button>
-                    <!-- Botão para "Esqueceu a Senha?" -->
-                    <button type="button" id="forgot-password-btn" class="w-full text-blue-600 font-semibold hover:underline mt-2">Esqueceu a senha?</button>
-                </form>
-                <p class="text-gray-600">Não tem uma conta? <button id="go-to-register-btn" class="text-blue-600 font-semibold hover:underline">Registrar</button></p>
-            </div>
+            <!-- A tela de login, registro e redefinição de senha foram removidas -->
 
-            <div id="register-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Criar Conta</h2>
-                <form id="register-form" class="w-full max-w-sm space-y-4">
-                    <input type="text" id="register-name" placeholder="Nome Completo" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <input type="email" id="register-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <!-- Campos de senha adicionados -->
-                    <input type="password" id="register-password" placeholder="Definir Senha (mín. 6 caracteres)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required minlength="6">
-                    <input type="password" id="register-confirm-password" placeholder="Confirmar Senha" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required minlength="6">
-                    <button type="submit" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Registrar</button>
-                </form>
-                <p class="text-gray-600">Já tem uma conta? <button id="go-to-login-btn" class="text-blue-600 font-semibold hover:underline">Fazer Login</button></p>
-            </div>
-
-            <!-- Nova tela para redefinir senha -->
-            <div id="forgot-password-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Redefinir Senha</h2>
-                <p class="text-center text-gray-600">Informe seu email institucional para redefinir sua senha.</p>
-                <form id="forgot-password-form" class="w-full max-w-sm space-y-4">
-                    <input type="email" id="forgot-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Enviar Link de Redefinição</button>
-                </form>
-                <button id="back-to-login-from-forgot-btn" class="text-blue-600 font-semibold hover:underline">Voltar ao Login</button>
-            </div>
-
-            <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8">
+            <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8 active-screen">
                  <div class="flex justify-between items-start">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display"></span>!</h2>
+                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador!</span></h2>
                         <p class="text-gray-600">Vamos começar?</p>
                     </div>
                     <div class="flex space-x-2">
                         <button id="view-ranking-btn-setup" class="bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">Ver Ranking</button>
-                        <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors">Sair</button>
+                        <!-- O botão de Sair foi removido, pois não há login/logout explícito -->
                     </div>
                 </div>
 
@@ -174,8 +139,7 @@
         // Importações do Firebase Authentication
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged,
-                 createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = window.firebaseConfig || {};
         const appId = window.appId || 'default-quiz-app';
@@ -201,12 +165,9 @@
         let score = 0;
         let correctAnswersCount = 0;
         let quizSize = 0;
-        let currentUserData = null; // Renomeado para evitar conflito com 'user' do Firebase Auth
+        let currentUserData = null; // Para armazenar os dados do usuário autenticado anonimamente
 
         const screens = {
-            login: document.getElementById('login-screen'),
-            register: document.getElementById('register-screen'),
-            forgotPassword: document.getElementById('forgot-password-screen'),
             setup: document.getElementById('setup-screen'),
             quiz: document.getElementById('quiz-screen'),
             results: document.getElementById('results-screen'),
@@ -424,7 +385,7 @@
         const showResults = async () => {
             let finalScore = score;
             let bonusMessage = '';
-            let icon = '�';
+            let icon = '🤔';
 
             if (correctAnswersCount === quizSize && quizSize > 0) {
                 if (quizSize === 3) {
@@ -447,13 +408,23 @@
 
             showScreen('results');
 
-            if (auth.currentUser) { // Use auth.currentUser para verificar se há um usuário autenticado
+            if (auth.currentUser) {
                 showLoading();
-                const userDocRef = doc(db, usersCollectionPath, auth.currentUser.uid); // Usa o UID como ID do documento
-                const newTotalScore = (currentUserData?.score || 0) + finalScore; // Usa currentUserData
+                const userDocRef = doc(db, usersCollectionPath, auth.currentUser.uid);
+                // Busca o documento do usuário para obter o score atualizado
+                const userDocSnap = await getDoc(userDocRef);
+                let currentScoreOnFirestore = 0;
+                if (userDocSnap.exists()) {
+                    currentScoreOnFirestore = userDocSnap.data().score || 0;
+                }
+
+                const newTotalScore = currentScoreOnFirestore + finalScore;
                 try {
-                    await updateDoc(userDocRef, { score: newTotalScore });
-                    currentUserData.score = newTotalScore; // Atualiza o dado local
+                    // Atualiza ou cria o documento do usuário com a nova pontuação
+                    await setDoc(userDocRef, {
+                        name: "Jogador Anônimo", // Nome padrão para usuários anônimos
+                        score: newTotalScore
+                    }, { merge: true }); // Usar merge para não sobrescrever outros campos se existirem
                 } catch (error) {
                     console.error("Erro ao atualizar pontuação:", error);
                     showModal("Erro de Atualização", `Não foi possível salvar sua pontuação. Detalhes: ${error.message}`);
@@ -476,7 +447,7 @@
 
             sortedUsers.forEach((user, index) => {
                 const rankItem = document.createElement('div');
-                rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center ${user.id === auth.currentUser?.uid ? 'bg-blue-50 font-semibold' : ''}`; // Compara com auth.currentUser?.uid
+                rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center ${user.id === auth.currentUser?.uid ? 'bg-blue-50 font-semibold' : ''}`;
                 rankItem.innerHTML = `
                     <div class="col-span-1">${index + 1}</div>
                     <div class="col-span-7 truncate">${user.name}</div>
@@ -500,166 +471,6 @@
             });
         };
 
-        const handleRegister = async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('register-name').value.trim();
-            const email = document.getElementById('register-email').value.trim();
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-
-            if (!name || !email || !password || !confirmPassword) {
-                showModal('Erro de Registro', 'Por favor, preencha todos os campos.');
-                return;
-            }
-
-            if (password.length < 6) {
-                showModal('Senha Fraca', 'A senha deve ter no mínimo 6 caracteres.');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showModal('Senhas Não Conferem', 'As senhas digitadas não são iguais. Por favor, verifique.');
-                return;
-            }
-
-            showLoading();
-
-            try {
-                // Tenta criar o usuário com email e senha usando Firebase Authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Salva os dados adicionais do usuário no Firestore, usando o UID como ID do documento
-                await setDoc(doc(db, usersCollectionPath, user.uid), {
-                    name: name,
-                    email: email,
-                    score: 0 // Pontuação inicial
-                });
-
-                hideLoading();
-                showModal(
-                    'Registro Concluído!',
-                    `Sua conta foi criada com sucesso para ${user.email}! Agora você pode fazer login.`
-                );
-                document.getElementById('register-form').reset();
-                showScreen('login');
-
-            } catch (error) {
-                hideLoading();
-                console.error("Erro no registro: ", error);
-                let errorMessage = 'Ocorreu um erro ao tentar registrar.';
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'Este email já está em uso. Tente fazer login ou redefinir sua senha.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'O formato do email é inválido.';
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'A senha é muito fraca. Escolha uma senha mais forte.';
-                }
-                showModal('Erro no Registro', `${errorMessage}<br><br><small>Detalhes: ${error.message}</small>`);
-            }
-        };
-
-        const handleLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-
-            if (!email || !password) {
-                showModal('Erro', 'Por favor, preencha todos os campos.');
-                return;
-            }
-
-            showLoading();
-
-            try {
-                // Tenta fazer login com email e senha usando Firebase Authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Carrega os dados adicionais do usuário do Firestore
-                const userDocRef = doc(db, usersCollectionPath, user.uid);
-                const userDocSnap = await getDoc(userDocRef);
-
-                if (userDocSnap.exists()) {
-                    currentUserData = { id: user.uid, ...userDocSnap.data() };
-                    document.getElementById('user-name-display').textContent = currentUserData.name.split(' ')[0];
-                    hideLoading();
-                    showScreen('setup');
-                    listenToRanking();
-                } else {
-                    // Isso não deveria acontecer se o registro funcionar corretamente,
-                    // mas é um fallback caso o documento do usuário não exista no Firestore.
-                    console.warn("Documento do usuário não encontrado no Firestore após login com Auth. Criando um novo.");
-                    currentUserData = { id: user.uid, name: user.email.split('@')[0], email: user.email, score: 0 };
-                    await setDoc(userDocRef, currentUserData);
-                    document.getElementById('user-name-display').textContent = currentUserData.name.split(' ')[0];
-                    hideLoading();
-                    showScreen('setup');
-                    listenToRanking();
-                }
-            } catch (error) {
-                hideLoading();
-                console.error("Erro no login:", error);
-                let errorMessage = 'Ocorreu um erro ao tentar fazer login.';
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorMessage = 'Email ou senha incorretos.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'O formato do email é inválido.';
-                }
-                showModal('Erro no Login', `${errorMessage}<br><br><small>Detalhes: ${error.message}</small>`);
-            }
-        };
-
-        const handleForgotPassword = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('forgot-email').value.trim();
-
-            if (!email) {
-                showModal('Erro', 'Por favor, insira seu email.');
-                return;
-            }
-
-            showLoading();
-
-            try {
-                // Envia o email de redefinição de senha usando Firebase Authentication
-                await sendPasswordResetEmail(auth, email);
-                showModal(
-                    'Link Enviado!',
-                    `Um link de redefinição de senha foi enviado para <strong class="text-blue-600">${email}</strong>. Por favor, verifique sua caixa de entrada (e spam).`
-                );
-                document.getElementById('forgot-password-form').reset();
-                showScreen('login');
-            } catch (error) {
-                console.error("Erro ao tentar redefinir senha:", error);
-                let errorMessage = 'Ocorreu um erro ao tentar enviar o link de redefinição de senha.';
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'Não encontramos uma conta com este email.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'O formato do email é inválido.';
-                }
-                showModal('Erro', `${errorMessage}<br><br><small>Detalhes: ${error.message}</small>`);
-            } finally {
-                hideLoading();
-            }
-        };
-
-        const handleLogout = async () => {
-            showLoading();
-            try {
-                await signOut(auth);
-                currentUserData = null;
-                showModal('Sessão Encerrada', 'Você saiu da sua conta.');
-                showScreen('login');
-            } catch (error) {
-                console.error("Erro ao fazer logout:", error);
-                showModal('Erro ao Sair', `Não foi possível sair. Detalhes: ${error.message}`);
-            } finally {
-                hideLoading();
-            }
-        };
-
-
         document.addEventListener('DOMContentLoaded', async () => {
             showLoading();
 
@@ -669,68 +480,52 @@
                 return;
             }
 
-            // O onAuthStateChanged é o observador principal do estado de autenticação do Firebase.
-            // Ele será chamado sempre que o estado de autenticação do usuário mudar (login, logout, etc.).
+            // Realiza o login anônimo imediatamente
+            try {
+                await signInAnonymously(auth);
+            } catch (error) {
+                console.error("Firebase Auth Error:", error);
+                showModal('Erro de Conexão', `Não foi possível autenticar com o Firebase. Detalhes: ${error.message}`);
+                hideLoading();
+                return;
+            }
+
+            // Observador de estado de autenticação para buscar dados e iniciar o app
             onAuthStateChanged(auth, async (user) => {
                 if(user) {
-                    // Usuário autenticado (login, registro bem-sucedido ou sessão persistente)
-                    console.log("Usuário autenticado via Firebase Auth:", user.uid);
-                    
-                    // Buscar dados adicionais do usuário no Firestore
+                    console.log("Usuário autenticado anonimamente:", user.uid);
+                    // Garante que o documento do usuário anônimo exista no Firestore
                     const userDocRef = doc(db, usersCollectionPath, user.uid);
                     const userDocSnap = await getDoc(userDocRef);
 
-                    if (userDocSnap.exists()) {
-                        currentUserData = { id: user.uid, ...userDocSnap.data() };
-                        document.getElementById('user-name-display').textContent = currentUserData.name.split(' ')[0];
-                        showScreen('setup'); // Redireciona para a tela de configuração
-                        listenToRanking(); // Começa a escutar o ranking
-                    } else {
-                        // Se o documento do usuário não existe no Firestore, mas o usuário está autenticado no Auth,
-                        // isso pode significar um novo registro. Crie o documento no Firestore.
-                        console.warn("Documento do usuário não encontrado no Firestore. Criando um novo.");
-                        currentUserData = { id: user.uid, name: user.email.split('@')[0], email: user.email, score: 0 };
-                        await setDoc(userDocRef, currentUserData);
-                        document.getElementById('user-name-display').textContent = currentUserData.name.split('@')[0];
-                        showScreen('setup');
-                        listenToRanking();
+                    if (!userDocSnap.exists()) {
+                        // Cria o documento com um nome padrão para usuários anônimos se não existir
+                        await setDoc(userDocRef, { name: "Jogador Anônimo", score: 0 });
                     }
-
+                    // Atualiza o nome de exibição no cabeçalho
+                    document.getElementById('user-name-display').textContent = "Jogador!";
+                    
+                    fetchQuestions(); // Carrega as perguntas
+                    listenToRanking(); // Começa a escutar o ranking
+                    showScreen('setup'); // Exibe a tela de setup
                 } else {
-                    // Usuário não autenticado (logout ou nenhuma sessão ativa)
-                    console.log("Usuário não autenticado. Exibindo tela de login.");
-                    currentUserData = null;
-                    showScreen('login');
+                    console.log("Nenhum usuário logado. Isso não deveria acontecer após signInAnonymously.");
+                    showModal('Erro de Autenticação', 'Não foi possível autenticar anonimamente. Por favor, recarregue a página.');
                 }
-                hideLoading(); // Esconde o spinner de carregamento após a verificação inicial do Auth
+                hideLoading();
             });
 
-            fetchQuestions(); // Carrega as perguntas independentemente do estado de autenticação inicial
-
             // Event Listeners para navegação entre telas
-            document.getElementById('go-to-register-btn').addEventListener('click', () => showScreen('register'));
-            document.getElementById('go-to-login-btn').addEventListener('click', () => showScreen('login'));
             document.getElementById('play-again-btn').addEventListener('click', () => showScreen('setup'));
             document.getElementById('back-to-setup-btn').addEventListener('click', () => showScreen('setup'));
-            document.getElementById('forgot-password-btn').addEventListener('click', () => showScreen('forgotPassword'));
-            document.getElementById('back-to-login-from-forgot-btn').addEventListener('click', () => showScreen('login'));
-
-            // Event Listener para Logout
-            document.getElementById('logout-btn').addEventListener('click', handleLogout);
-
+            
             const viewRankingButtons = [
                 document.getElementById('view-ranking-btn-setup'),
                 document.getElementById('view-ranking-btn-results')
             ];
             viewRankingButtons.forEach(btn => btn.addEventListener('click', () => showScreen('ranking')));
 
-            // Event Listeners para submissão de formulários
-            document.getElementById('login-form').addEventListener('submit', handleLogin);
-            document.getElementById('register-form').addEventListener('submit', handleRegister);
-            document.getElementById('forgot-password-form').addEventListener('submit', handleForgotPassword);
-
             document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
-
             modalCloseBtn.addEventListener('click', hideModal);
 
             const quizSizeRulesNotification = document.getElementById('quiz-rules-notification');
