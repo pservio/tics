@@ -51,6 +51,8 @@
                     <input type="email" id="login-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     <input type="password" id="login-password" placeholder="Senha" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Entrar</button>
+                    <!-- Botão para "Esqueceu a Senha?" -->
+                    <button type="button" id="forgot-password-btn" class="w-full text-blue-600 font-semibold hover:underline mt-2">Esqueceu a senha?</button>
                 </form>
                 <p class="text-gray-600">Não tem uma conta? <button id="go-to-register-btn" class="text-blue-600 font-semibold hover:underline">Registrar</button></p>
             </div>
@@ -60,9 +62,23 @@
                 <form id="register-form" class="w-full max-w-sm space-y-4">
                     <input type="text" id="register-name" placeholder="Nome Completo" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     <input type="email" id="register-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <!-- Campos de senha adicionados -->
+                    <input type="password" id="register-password" placeholder="Definir Senha (mín. 6 caracteres)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required minlength="6">
+                    <input type="password" id="register-confirm-password" placeholder="Confirmar Senha" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required minlength="6">
                     <button type="submit" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Registrar</button>
                 </form>
                 <p class="text-gray-600">Já tem uma conta? <button id="go-to-login-btn" class="text-blue-600 font-semibold hover:underline">Fazer Login</button></p>
+            </div>
+
+            <!-- Nova tela para redefinir senha -->
+            <div id="forgot-password-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center">Redefinir Senha</h2>
+                <p class="text-center text-gray-600">Informe seu email institucional para tentar redefinir sua senha.</p>
+                <form id="forgot-password-form" class="w-full max-w-sm space-y-4">
+                    <input type="email" id="forgot-email" placeholder="Email Institucional" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Redefinir Senha</button>
+                </form>
+                <button id="back-to-login-from-forgot-btn" class="text-blue-600 font-semibold hover:underline">Voltar ao Login</button>
             </div>
 
             <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8">
@@ -155,6 +171,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, addDoc, getDocs, query, where, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Nota: signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail não são utilizados diretamente
+        // aqui pois a autenticação é customizada via Firestore, não Firebase Authentication.
 
         const firebaseConfig = window.firebaseConfig || {};
         const appId = window.appId || 'default-quiz-app';
@@ -184,6 +202,7 @@
         const screens = {
             login: document.getElementById('login-screen'),
             register: document.getElementById('register-screen'),
+            forgotPassword: document.getElementById('forgot-password-screen'), // New screen for password reset
             setup: document.getElementById('setup-screen'),
             quiz: document.getElementById('quiz-screen'),
             results: document.getElementById('results-screen'),
@@ -479,22 +498,25 @@
             });
         };
 
-        const generatePassword = (length = 8) => {
-            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            let password = "";
-            for (let i = 0, n = charset.length; i < length; ++i) {
-                password += charset.charAt(Math.floor(Math.random() * n));
-            }
-            return password;
-        };
-
         const handleRegister = async (e) => {
             e.preventDefault();
             const name = document.getElementById('register-name').value.trim();
             const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
 
-            if (!name || !email) {
-                showModal('Erro', 'Por favor, preencha todos os campos.');
+            if (!name || !email || !password || !confirmPassword) {
+                showModal('Erro de Registro', 'Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (password.length < 6) {
+                showModal('Senha Fraca', 'A senha deve ter no mínimo 6 caracteres.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showModal('Senhas Não Conferem', 'As senhas digitadas não são iguais. Por favor, verifique.');
                 return;
             }
 
@@ -504,24 +526,22 @@
                 const q = query(usersCollection, where("email", "==", email));
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
-                    showModal('Erro', 'Este email já está cadastrado. Tente fazer login.');
+                    showModal('Email Já Cadastrado', 'Este email já está cadastrado. Tente fazer login ou redefinir sua senha.');
                     hideLoading();
                     return;
                 }
 
-                const password = generatePassword();
-
                 await addDoc(usersCollection, {
                     name: name,
                     email: email,
-                    password: password,
+                    password: password, // Armazenando a senha definida pelo usuário
                     score: 0
                 });
 
                 hideLoading();
                 showModal(
                     'Registro Concluído!',
-                    `Sua conta foi criada. Sua senha de acesso é: <br><strong class="text-lg text-blue-600 my-2 block">${password}</strong><br>Anote-a e guarde em um local seguro.`
+                    `Sua conta foi criada com sucesso! Agora você pode fazer login.`
                 );
                 document.getElementById('register-form').reset();
                 showScreen('login');
@@ -567,6 +587,46 @@
             }
         };
 
+        const handleForgotPassword = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value.trim();
+
+            if (!email) {
+                showModal('Erro', 'Por favor, insira seu email.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const q = query(usersCollection, where("email", "==", email));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    showModal('Email Não Encontrado', 'Não encontramos uma conta com este email.');
+                } else {
+                    // Placeholder para redefinição de senha.
+                    // Para uma redefinição segura via email, seria necessário integrar o Firebase Authentication
+                    // e usar `sendPasswordResetEmail(auth, email)`.
+                    showModal(
+                        'Redefinição de Senha',
+                        `Uma solicitação de redefinição de senha para <strong class="text-blue-600">${email}</strong> foi registrada.
+                        <br><br><strong>Importante:</strong> Este sistema utiliza um banco de dados simples para usuários. Para uma redefinição de senha
+                        segura e funcional (enviando um email de recuperação), seria necessário integrar o
+                        <strong class="text-blue-600">Firebase Authentication</strong>, que gerencia usuários de forma mais robusta.
+                        <br>Por favor, entre em contato com o suporte para assistência na redefinição da sua senha.`
+                    );
+                }
+            } catch (error) {
+                console.error("Erro ao tentar redefinir senha:", error);
+                showModal('Erro', `Ocorreu um erro ao tentar processar sua solicitação.<br><br><small>Detalhes: ${error.message}</small>`);
+            } finally {
+                hideLoading();
+                document.getElementById('forgot-password-form').reset();
+            }
+        };
+
+
         document.addEventListener('DOMContentLoaded', async () => {
             showLoading();
 
@@ -577,6 +637,8 @@
             }
 
             try {
+                // Anonymously sign in only to get a user for Firestore access rules if needed.
+                // Actual user login/registration happens via Firestore document checks.
                 await signInAnonymously(auth);
             } catch (error) {
                 console.error("Firebase Auth Error:", error);
@@ -586,14 +648,14 @@
 
             onAuthStateChanged(auth, (user) => {
                 if(user) {
-                    console.log("Usuário autenticado:", user.uid);
+                    console.log("User authenticated anonymously for Firestore access:", user.uid);
                     fetchQuestions();
                     hideLoading();
                     showScreen('login');
                 } else {
-                    console.log("Usuário não autenticado.");
+                    console.log("User not authenticated.");
                     hideLoading();
-                    showModal('Erro de Autenticação', 'Não foi possível autenticar. Por favor, recarregue a página.');
+                    showModal('Authentication Error', 'Could not authenticate. Please reload the page.');
                 }
             });
 
@@ -601,6 +663,9 @@
             document.getElementById('go-to-login-btn').addEventListener('click', () => showScreen('login'));
             document.getElementById('play-again-btn').addEventListener('click', () => showScreen('setup'));
             document.getElementById('back-to-setup-btn').addEventListener('click', () => showScreen('setup'));
+            document.getElementById('forgot-password-btn').addEventListener('click', () => showScreen('forgotPassword')); // New event listener for forgot password
+            document.getElementById('back-to-login-from-forgot-btn').addEventListener('click', () => showScreen('login')); // New event listener to go back from forgot password
+
 
             const viewRankingButtons = [
                 document.getElementById('view-ranking-btn-setup'),
@@ -610,6 +675,7 @@
 
             document.getElementById('login-form').addEventListener('submit', handleLogin);
             document.getElementById('register-form').addEventListener('submit', handleRegister);
+            document.getElementById('forgot-password-form').addEventListener('submit', handleForgotPassword); // New event listener for forgot password form
 
             // FIX: Adiciona o event listener para o botão Iniciar Quiz
             document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
