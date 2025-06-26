@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dois Banners</title>
+    <!-- Inclui Tailwind CSS via CDN para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte Inter para todo o corpo do documento */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Cor de fundo suave */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Garante que o corpo ocupe toda a altura da viewport */
+            padding: 16px; /* Espaçamento interno geral */
+            box-sizing: border-box; /* Inclui padding e borda no tamanho total */
+        }
+        /* Estilos personalizados para a imagem do banner */
+        .banner-image {
+            width: 100%;
+            height: 200px; /* Altura fixa para as imagens do banner */
+            object-fit: cover; /* Garante que a imagem cubra a área, cortando se necessário */
+            border-top-left-radius: 0.75rem; /* cantos arredondados */
+            border-top-right-radius: 0.75rem; /* cantos arredondados */
+        }
+        /* Estilos para telas maiores (desktop) */
+        @media (min-width: 768px) {
+            .banner-image {
+                height: 250px; /* Aumenta a altura para telas maiores */
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-200 selection:text-blue-900">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-4">
+            Tics para o ensino de artes visuais - UFMA
+        </h1>
+        <!-- Texto descritivo adicionado abaixo do título principal -->
+        <p class="text-center text-lg text-gray-600 mb-12">
+            Aqui você encontra trabalhos desenvolvidos pelo professor Dr. Pablo Sérvio com e para seus alunos na disciplina
+            Tecnologia da Informação e da Comunicação para o Ensino de Artes Visuais da Licenciatura em Artes Visuais UFMA.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Primeiro Banner -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <!-- Imagem atualizada para trilha.png -->
+                <img src="trilha.png"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x250/E9D5FF/5B21B6?text=Imagem+trilha.png+N%C3%A3o+Dispon%C3%ADvel';"
+                     alt="trilha do conhecimento" class="banner-image">
+                <div class="p-6">
+                    <!-- Novo título para o primeiro banner -->
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Trilha do conhecimento: fases do ensino de artes visuais.</h2>
+                    <!-- Nova descrição para o primeiro banner -->
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Jogo de trilha em que seus conhecimentos sobre a história do ensino de artes no Brasil são testados.
+                        Jogue e aprenda sobre as relações entre epistemologia, conceitos de arte e educação.
+                    </p>
+                    <!-- Novo texto do botão para o primeiro banner -->
+                    <a href="trilha.html" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                        abrir
+                    </a>
+                </div>
+            </div>
+
+            <!-- Segundo Banner -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <!-- Imagem atualizada para desafio_enade.png -->
+                <img src="desafio_enade.png"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x250/CCE3DE/006D77?text=Imagem+desafio_enade.png+N%C3%A3o+Dispon%C3%ADvel';"
+                     alt="Desafio ENADE" class="banner-image">
+                <div class="p-6">
+                    <!-- Novo título para o segundo banner -->
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Desafio Enade</h2>
+                    <!-- Nova descrição para o segundo banner -->
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Desafie seus conhecimentos com perguntas dos testes ENADES, selecionadas por temas.
+                        Acumule pontos e suba no ranking. Será que você consegue acertar todas as perguntas do quiz?
+                    </p>
+                    <!-- Novo texto do botão para o segundo banner -->
+                    <a href="enade.html" class="inline-block bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-teal-700 transition-colors duration-200">
+                        abrir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
