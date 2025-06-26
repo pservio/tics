@@ -59,7 +59,7 @@
             <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8 active-screen">
                  <div class="flex justify-between items-start">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador Anônimo!</span></h2>
+                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador!</span></h2>
                         <p class="text-gray-600">Vamos começar?</p>
                     </div>
                     <div class="flex space-x-2">
@@ -113,7 +113,9 @@
                     <div id="options-container" class="grid grid-cols-1 gap-3">
                         </div>
                 </div>
-                 <button id="next-question-btn" class="mt-6 w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors hidden">Próxima Questão</button>
+                <!-- Botão de confirmação adicionado aqui -->
+                <button id="confirm-answer-btn" class="mt-6 w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors hidden">Confirmar Resposta</button>
+                <button id="next-question-btn" class="mt-6 w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors hidden">Próxima Questão</button>
             </div>
 
             <div id="results-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6 text-center">
@@ -194,6 +196,7 @@
         let correctAnswersCount = 0;
         let quizSize = 0;
         let selectedClan = null; // Variável para armazenar o clã selecionado
+        let selectedOptionForConfirmation = null; // Nova variável para armazenar a opção selecionada para confirmação
 
         const screens = {
             setup: document.getElementById('setup-screen'),
@@ -207,6 +210,11 @@
         const modalMessage = document.getElementById('modal-message');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Botões específicos do quiz
+        const confirmAnswerBtn = document.getElementById('confirm-answer-btn');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+
 
         const showScreen = (screenName) => {
             Object.values(screens).forEach(screen => screen.classList.remove('active-screen'));
@@ -388,39 +396,78 @@
                     button.className = 'option-btn w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors';
                     button.innerHTML = `<span class="font-bold mr-2">${opt}.</span> ${question[optionKey]}`;
                     button.dataset.option = opt;
-                    button.addEventListener('click', handleOptionClick);
+                    button.addEventListener('click', handleOptionSelection); // Alterado para handleOptionSelection
                     optionsContainer.appendChild(button);
                 }
             });
 
-            document.getElementById('next-question-btn').classList.add('hidden');
+            // Esconde os botões de confirmação e próxima questão no início de cada pergunta
+            confirmAnswerBtn.classList.add('hidden');
+            nextQuestionBtn.classList.add('hidden');
+
+            // Limpa o estilo de seleção e habilita todos os botões de opção
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('correct', 'incorrect', 'border-blue-500', 'bg-blue-50', 'ring-2');
+                btn.classList.add('border-gray-300'); // Garante que o border padrão está presente
+                btn.disabled = false;
+            });
+
+            selectedOptionForConfirmation = null; // Reinicia a opção selecionada
         };
 
-        const handleOptionClick = (event) => {
+        const handleOptionSelection = (event) => {
             const selectedButton = event.currentTarget;
-            const selectedOption = selectedButton.dataset.option;
+
+            // Remove a classe 'selected' de qualquer botão de opção previamente selecionado
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
+                btn.classList.add('border-gray-300'); // Restaura a borda padrão
+            });
+
+            // Adiciona a classe de seleção ao botão clicado
+            selectedButton.classList.add('border-blue-500', 'bg-blue-50', 'ring-2');
+            selectedButton.classList.remove('border-gray-300'); // Remove a borda padrão para a seleção
+
+            selectedOptionForConfirmation = selectedButton.dataset.option;
+            confirmAnswerBtn.classList.remove('hidden'); // Mostra o botão de confirmar
+        };
+
+        const confirmAnswer = () => {
+            if (!selectedOptionForConfirmation) {
+                showModal('Nenhuma Opção Selecionada', 'Por favor, selecione uma opção antes de confirmar.');
+                return;
+            }
+
             const question = quizQuestions[currentQuestionIndex];
             const correctOption = question.resposta_correta.trim();
 
             const allOptionButtons = document.querySelectorAll('.option-btn');
             allOptionButtons.forEach(btn => {
-                btn.disabled = true;
+                btn.disabled = true; // Desabilita todas as opções após a confirmação
                 if (btn.dataset.option === correctOption) {
                     btn.classList.add('correct');
+                    btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300'); // Garante que o estilo de correto prevaleça
                 }
             });
 
-            if (selectedOption === correctOption) {
+            const selectedButton = document.querySelector(`.option-btn[data-option="${selectedOptionForConfirmation}"]`);
+
+            if (selectedOptionForConfirmation === correctOption) {
                 score += 1;
                 correctAnswersCount += 1;
                 selectedButton.classList.add('correct');
+                selectedButton.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300');
             } else {
                 selectedButton.classList.add('incorrect');
+                selectedButton.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300');
             }
 
             document.getElementById('current-score').textContent = `Pontos: ${score}`;
-            document.getElementById('next-question-btn').classList.remove('hidden');
+            confirmAnswerBtn.classList.add('hidden'); // Esconde o botão de confirmar
+            nextQuestionBtn.classList.remove('hidden'); // Mostra o botão de próxima questão
             document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+
+            selectedOptionForConfirmation = null; // Reinicia a opção selecionada para a próxima pergunta
         };
 
         const showResults = async () => {
@@ -610,9 +657,9 @@
 
                     quizSizeRulesNotification.classList.remove('hidden');
                     if (quizSize === 3) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu clã receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
                     } else if (quizSize === 6) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu clã receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
                     }
                     updateAvailableQuestionsCount(); // Chama para garantir que o botão "Iniciar Quiz" seja habilitado/desabilitado corretamente
                 }
@@ -632,7 +679,10 @@
                 }
             });
 
-            document.getElementById('next-question-btn').addEventListener('click', () => {
+            // Adiciona o event listener para o novo botão de confirmar resposta
+            confirmAnswerBtn.addEventListener('click', confirmAnswer);
+
+            nextQuestionBtn.addEventListener('click', () => {
                 currentQuestionIndex++;
                 displayQuestion();
             });
