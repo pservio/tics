@@ -33,6 +33,18 @@
             color: white !important;
             border-color: #DC2626 !important;
         }
+        /* Estilo para o botão de clã selecionado */
+        .clan-btn.selected {
+            background-color: #4F46E5; /* indigo-600 */
+            color: white;
+            border-color: #4338CA; /* indigo-700 */
+            transform: scale(1.05);
+        }
+        .clan-filter-btn.selected {
+            background-color: #4F46E5; /* indigo-600 */
+            color: white;
+            border-color: #4338CA; /* indigo-700 */
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -44,22 +56,30 @@
     <div class="container mx-auto p-4 max-w-2xl w-full">
         <div id="app-container" class="bg-white rounded-xl shadow-lg overflow-hidden">
 
-            <!-- A tela de login, registro e redefinição de senha foram removidas -->
-
             <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8 active-screen">
                  <div class="flex justify-between items-start">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador!</span></h2>
+                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador Anônimo!</span></h2>
                         <p class="text-gray-600">Vamos começar?</p>
                     </div>
                     <div class="flex space-x-2">
                         <button id="view-ranking-btn-setup" class="bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">Ver Ranking</button>
-                        <!-- O botão de Sair foi removido, pois não há login/logout explícito -->
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha os temas</h3>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha seu Clã</h3>
+                    <p class="text-sm text-gray-500 mb-2">Selecione um clã para registrar seus pontos.</p>
+                    <div id="clan-container" class="flex flex-wrap gap-2">
+                        <button data-clan="Berna Reale" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Berna Reale</button>
+                        <button data-clan="Denilson Baniwa" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Denilson Baniwa</button>
+                        <button data-clan="Rosana Paulino" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Rosana Paulino</button>
+                        <button data-clan="Uýra Sodoma" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Uýra Sodoma</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">2. Escolha os temas</h3>
                     <p class="text-sm text-gray-500 mb-2">Selecione um ou mais temas. Se nenhum for escolhido, todas as questões serão consideradas.</p>
                     <div id="themes-container" class="flex flex-wrap gap-2">
                         </div>
@@ -67,7 +87,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">2. Escolha o tamanho do Quiz</h3>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">3. Escolha o tamanho do Quiz</h3>
                     <div id="quiz-size-container" class="flex flex-col sm:flex-row gap-4">
                         <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
                         <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
@@ -109,12 +129,20 @@
             </div>
 
             <div id="ranking-screen" class="screen p-8 md:p-12 flex-col space-y-6">
-                <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Alunos</h2>
+                <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Clãs</h2>
+                <!-- Filtros de clã adicionados -->
+                <div id="clan-filter-container" class="flex flex-wrap justify-center gap-2 mb-4">
+                    <button data-filter-clan="all" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 selected">Todos</button>
+                    <button data-filter-clan="Berna Reale" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Berna Reale</button>
+                    <button data-filter-clan="Denilson Baniwa" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Denilson Baniwa</button>
+                    <button data-filter-clan="Rosana Paulino" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Rosana Paulino</button>
+                    <button data-filter-clan="Uýra Sodoma" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Uýra Sodoma</button>
+                </div>
                 <div class="w-full bg-white rounded-lg border">
                     <div class="grid grid-cols-12 gap-4 p-3 border-b bg-gray-50 font-bold text-gray-600">
                         <div class="col-span-1">#</div>
-                        <div class="col-span-7">Nome</div>
-                        <div class="col-span-4 text-right">Pontuação</div>
+                        <div class="col-span-8">Clã</div>
+                        <div class="col-span-3 text-right">Pontuação</div>
                     </div>
                     <div id="ranking-list" class="divide-y">
                         </div>
@@ -136,7 +164,6 @@
     <script src="firebase-config.js"></script>
 
     <script type="module">
-        // Importações do Firebase Authentication
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -153,10 +180,11 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Caminho da coleção de usuários no Firestore.
-        // Cada documento nesta coleção terá o UID do Firebase Auth como seu ID.
-        const usersCollectionPath = `/artifacts/${appId}/public/data/users`;
-        const usersCollection = collection(db, usersCollectionPath);
+        // Definindo os clãs disponíveis
+        const clans = ["Berna Reale", "Denilson Baniwa", "Rosana Paulino", "Uýra Sodoma"];
+        // Coleção para armazenar as pontuações dos clãs
+        const clansCollectionPath = `/artifacts/${appId}/public/data/clans`;
+        const clansCollection = collection(db, clansCollectionPath);
 
         let allQuestions = [];
         let uniqueThemes = [];
@@ -165,7 +193,7 @@
         let score = 0;
         let correctAnswersCount = 0;
         let quizSize = 0;
-        let currentUserData = null; // Para armazenar os dados do usuário autenticado anonimamente
+        let selectedClan = null; // Variável para armazenar o clã selecionado
 
         const screens = {
             setup: document.getElementById('setup-screen'),
@@ -200,6 +228,17 @@
         const showLoading = () => loadingSpinner.style.display = 'flex';
         const hideLoading = () => loadingSpinner.style.display = 'none';
 
+        // Função para atualizar o estado do botão "Iniciar Quiz"
+        const updateStartQuizButtonState = () => {
+            const startQuizBtn = document.getElementById('start-quiz-btn');
+            const hasQuizSizeSelected = quizSize > 0;
+            const hasClanSelected = selectedClan !== null;
+            const hasEnoughQuestions = parseInt(document.getElementById('question-count-display').textContent.split(' ')[0]) >= quizSize;
+
+            // Habilita o botão apenas se o tamanho do quiz, o clã e as questões disponíveis forem válidos
+            startQuizBtn.disabled = !(hasQuizSizeSelected && hasClanSelected && hasEnoughQuestions);
+        };
+
         const updateAvailableQuestionsCount = () => {
             const questionCountDisplay = document.getElementById('question-count-display');
             const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
@@ -224,13 +263,9 @@
             if (selectedSizeBtn && selectedSizeBtn.disabled) {
                 selectedSizeBtn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
                 quizSize = 0;
-                document.getElementById('start-quiz-btn').disabled = true;
                 document.getElementById('quiz-rules-notification').classList.add('hidden');
-            } else if (selectedSizeBtn) {
-                document.getElementById('start-quiz-btn').disabled = false;
-            } else {
-                document.getElementById('start-quiz-btn').disabled = true;
             }
+            updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Quiz
         };
 
         const fetchQuestions = () => {
@@ -279,6 +314,12 @@
         };
 
         const startQuiz = () => {
+            // Verifica se um clã foi selecionado antes de iniciar o quiz
+            if (!selectedClan) {
+                showModal('Clã Não Selecionado', 'Por favor, escolha um clã antes de iniciar o quiz.');
+                return;
+            }
+
             const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
             const selectedThemes = Array.from(selectedThemeElements).map(el => el.dataset.theme);
 
@@ -408,66 +449,74 @@
 
             showScreen('results');
 
-            if (auth.currentUser) {
+            if (selectedClan) { // Garante que um clã foi selecionado
                 showLoading();
-                const userDocRef = doc(db, usersCollectionPath, auth.currentUser.uid);
-                // Busca o documento do usuário para obter o score atualizado
-                const userDocSnap = await getDoc(userDocRef);
-                let currentScoreOnFirestore = 0;
-                if (userDocSnap.exists()) {
-                    currentScoreOnFirestore = userDocSnap.data().score || 0;
+                const clanDocRef = doc(db, clansCollectionPath, selectedClan);
+                const clanDocSnap = await getDoc(clanDocRef);
+                let currentClanScore = 0;
+                
+                if (clanDocSnap.exists()) {
+                    currentClanScore = clanDocSnap.data().score || 0;
                 }
 
-                const newTotalScore = currentScoreOnFirestore + finalScore;
+                const newTotalClanScore = currentClanScore + finalScore;
                 try {
-                    // Atualiza ou cria o documento do usuário com a nova pontuação
-                    await setDoc(userDocRef, {
-                        name: "Jogador Anônimo", // Nome padrão para usuários anônimos
-                        score: newTotalScore
-                    }, { merge: true }); // Usar merge para não sobrescrever outros campos se existirem
+                    // Atualiza a pontuação do clã no Firestore
+                    await setDoc(clanDocRef, {
+                        name: selectedClan, // O nome do clã é o ID do documento
+                        score: newTotalClanScore
+                    }, { merge: true });
                 } catch (error) {
-                    console.error("Erro ao atualizar pontuação:", error);
-                    showModal("Erro de Atualização", `Não foi possível salvar sua pontuação. Detalhes: ${error.message}`);
+                    console.error("Erro ao atualizar pontuação do clã:", error);
+                    showModal("Erro de Atualização", `Não foi possível salvar a pontuação do clã. Detalhes: ${error.message}`);
                 } finally {
                     hideLoading();
                 }
+            } else {
+                showModal("Clã Ausente", "Sua pontuação não foi salva no ranking porque nenhum clã foi selecionado.");
             }
         };
 
-        const updateRanking = (users) => {
+        const updateRanking = (clansData, filterClan = 'all') => {
             const rankingList = document.getElementById('ranking-list');
             rankingList.innerHTML = '';
 
-            const sortedUsers = users.sort((a, b) => (b.score || 0) - (a.score || 0));
+            let filteredClans = clansData;
+            if (filterClan !== 'all') {
+                filteredClans = clansData.filter(clan => clan.name === filterClan);
+            }
 
-            if(sortedUsers.length === 0) {
-                rankingList.innerHTML = `<p class="p-4 text-center text-gray-500">Nenhum jogador no ranking ainda.</p>`;
+            const sortedClans = filteredClans.sort((a, b) => (b.score || 0) - (a.score || 0));
+
+            if(sortedClans.length === 0) {
+                rankingList.innerHTML = `<p class="p-4 text-center text-gray-500">Nenhum clã no ranking ainda.</p>`;
                 return;
             }
 
-            sortedUsers.forEach((user, index) => {
+            sortedClans.forEach((clan, index) => {
                 const rankItem = document.createElement('div');
-                rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center ${user.id === auth.currentUser?.uid ? 'bg-blue-50 font-semibold' : ''}`;
+                rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center`; // Remover estilização específica de "currentUser"
                 rankItem.innerHTML = `
                     <div class="col-span-1">${index + 1}</div>
-                    <div class="col-span-7 truncate">${user.name}</div>
-                    <div class="col-span-4 text-right">${user.score || 0}</div>
+                    <div class="col-span-8 truncate">${clan.name}</div>
+                    <div class="col-span-3 text-right">${clan.score || 0}</div>
                 `;
                 rankingList.appendChild(rankItem);
             });
         };
 
         let rankingUnsubscribe = null;
-        const listenToRanking = () => {
+        const listenToRanking = (filterClan = 'all') => {
             if (rankingUnsubscribe) {
                 rankingUnsubscribe();
             }
-            rankingUnsubscribe = onSnapshot(usersCollection, (snapshot) => {
-                const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateRanking(users);
+            // Listener que busca todos os documentos da coleção de clãs
+            rankingUnsubscribe = onSnapshot(clansCollection, (snapshot) => {
+                const clansData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateRanking(clansData, filterClan); // Passa o filtro atual para updateRanking
             }, (error) => {
-                console.error("Erro ao carregar ranking:", error);
-                document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking.</p>`;
+                console.error("Erro ao carregar ranking de clãs:", error);
+                document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking de clãs.</p>`;
             });
         };
 
@@ -480,34 +529,33 @@
                 return;
             }
 
-            // Realiza o login anônimo imediatamente
             try {
+                // Autenticação anônima para permitir acesso ao Firestore
                 await signInAnonymously(auth);
+
+                // Inicializa os documentos dos clãs no Firestore se não existirem
+                for (const clanName of clans) {
+                    const clanDocRef = doc(db, clansCollectionPath, clanName);
+                    const clanDocSnap = await getDoc(clanDocRef);
+                    if (!clanDocSnap.exists()) {
+                        await setDoc(clanDocRef, { name: clanName, score: 0 });
+                    }
+                }
             } catch (error) {
-                console.error("Firebase Auth Error:", error);
-                showModal('Erro de Conexão', `Não foi possível autenticar com o Firebase. Detalhes: ${error.message}`);
+                console.error("Firebase Auth/Firestore Error:", error);
+                showModal('Erro de Conexão', `Não foi possível inicializar o aplicativo. Detalhes: ${error.message}`);
                 hideLoading();
                 return;
             }
 
-            // Observador de estado de autenticação para buscar dados e iniciar o app
             onAuthStateChanged(auth, async (user) => {
                 if(user) {
                     console.log("Usuário autenticado anonimamente:", user.uid);
-                    // Garante que o documento do usuário anônimo exista no Firestore
-                    const userDocRef = doc(db, usersCollectionPath, user.uid);
-                    const userDocSnap = await getDoc(userDocRef);
-
-                    if (!userDocSnap.exists()) {
-                        // Cria o documento com um nome padrão para usuários anônimos se não existir
-                        await setDoc(userDocRef, { name: "Jogador Anônimo", score: 0 });
-                    }
-                    // Atualiza o nome de exibição no cabeçalho
-                    document.getElementById('user-name-display').textContent = "Jogador!";
+                    document.getElementById('user-name-display').textContent = "Jogador Anônimo!";
                     
-                    fetchQuestions(); // Carrega as perguntas
-                    listenToRanking(); // Começa a escutar o ranking
-                    showScreen('setup'); // Exibe a tela de setup
+                    fetchQuestions();
+                    listenToRanking(); // Inicia o listener de ranking com filtro 'all' por padrão
+                    showScreen('setup');
                 } else {
                     console.log("Nenhum usuário logado. Isso não deveria acontecer após signInAnonymously.");
                     showModal('Erro de Autenticação', 'Não foi possível autenticar anonimamente. Por favor, recarregue a página.');
@@ -523,10 +571,31 @@
                 document.getElementById('view-ranking-btn-setup'),
                 document.getElementById('view-ranking-btn-results')
             ];
-            viewRankingButtons.forEach(btn => btn.addEventListener('click', () => showScreen('ranking')));
+            viewRankingButtons.forEach(btn => btn.addEventListener('click', () => {
+                showScreen('ranking');
+                // Garante que o ranking é atualizado quando a tela é exibida,
+                // mantendo o filtro ativo ou mostrando todos se nenhum filtro estiver ativo.
+                const currentFilterBtn = document.querySelector('#clan-filter-container .clan-filter-btn.selected');
+                const filterClan = currentFilterBtn ? currentFilterBtn.dataset.filterClan : 'all';
+                listenToRanking(filterClan);
+            }));
 
             document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
             modalCloseBtn.addEventListener('click', hideModal);
+
+            // Event listener para seleção de clã
+            document.getElementById('clan-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('clan-btn')) {
+                    document.querySelectorAll('.clan-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                        btn.classList.add('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
+                    });
+                    e.target.classList.add('selected');
+                    e.target.classList.remove('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
+                    selectedClan = e.target.dataset.clan;
+                    updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Quiz
+                }
+            });
 
             const quizSizeRulesNotification = document.getElementById('quiz-rules-notification');
             document.getElementById('quiz-size-container').addEventListener('click', (e) => {
@@ -545,7 +614,21 @@
                     } else if (quizSize === 6) {
                         quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
                     }
-                    updateAvailableQuestionsCount();
+                    updateAvailableQuestionsCount(); // Chama para garantir que o botão "Iniciar Quiz" seja habilitado/desabilitado corretamente
+                }
+            });
+
+            // Event listener para filtrar o ranking por clã
+            document.getElementById('clan-filter-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('clan-filter-btn')) {
+                    document.querySelectorAll('.clan-filter-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                        btn.classList.add('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
+                    });
+                    e.target.classList.add('selected');
+                    e.target.classList.remove('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
+                    const filterClan = e.target.dataset.filterClan;
+                    listenToRanking(filterClan); // Atualiza o ranking com o filtro selecionado
                 }
             });
 
