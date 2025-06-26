@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Trilha do Conhecimento - Artes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo inspirado em Mondrian */
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #F0F0F0; /* Fundo branco/cinza claro */
+        }
+        .board-container {
+            border: 5px solid #000;
+            padding: 10px;
+            background-color: #000;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 10px; /* Linhas pretas mais grossas */
+            background-color: #000;
+        }
+        .cell {
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: relative;
+            background-color: #FFFFFF; /* Padrão de célula branca */
+            color: #000;
+            transition: transform 0.3s ease;
+        }
+        .cell:hover {
+            transform: scale(1.05);
+        }
+
+        /* Cores de Mondrian para as casas */
+        .mondrian-red { background-color: #D40C0F; color: white; }
+        .mondrian-blue { background-color: #00329A; color: white; }
+        .mondrian-yellow { background-color: #F2DD00; color: black; }
+        
+        /* Cores para Início e Fim (agora branco) */
+        .start, .end { 
+            background-color: #FFFFFF; 
+            color: #000000; 
+        }
+
+        .pawn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid #000; /* Borda preta nos peões */
+            position: absolute;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        #dice-container {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+        .face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #FFFFFF;
+            border: 4px solid #000;
+            font-size: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+        }
+        .front  { transform: rotateY(  0deg) translateZ(40px); }
+        .back   { transform: rotateY(180deg) translateZ(40px); }
+        .right  { transform: rotateY( 90deg) translateZ(40px); }
+        .left   { transform: rotateY(-90deg) translateZ(40px); }
+        .top    { transform: rotateX( 90deg) translateZ(40px); }
+        .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+        /* Estilo para botões e modais */
+        .mondrian-button {
+            border: 3px solid #000;
+            font-weight: bold;
+            padding: 10px 20px;
+            transition: all 0.2s ease;
+        }
+        .mondrian-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .mondrian-modal {
+            border: 5px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Tela de Configuração Inicial -->
+    <div id="setup-screen" class="mondrian-modal p-8 text-center w-full max-w-lg">
+        <img src="https://i.imgur.com/Ok2LBnX.png" alt="Logo do Jogo Trilha do Conhecimento" class="mx-auto mb-8 w-full max-w-xs" onerror="this.onerror=null;this.src='https://placehold.co/400x400/ffffff/000000?text=Logo';">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="naming-convention" class="block text-lg font-medium text-gray-700 mb-2">Jogar como</label>
+                <select id="naming-convention" class="w-full p-3 border-2 border-black focus:ring-2 focus:ring-blue-500">
+                    <option value="Jogador" selected>Jogadores</option>
+                    <option value="Time">Times</option>
+                </select>
+            </div>
+            <div>
+                <label for="player-count" class="block text-lg font-medium text-gray-700 mb-2">Quantos <span id="player-count-label">jogadores</span>?</label>
+                <select id="player-count" class="w-full p-3 border-2 border-black focus:ring-2 focus:ring-blue-500">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+        </div>
+        <div id="player-names" class="space-y-4 mb-6"></div>
+        <button id="start-game" class="mondrian-button w-full bg-black text-white text-xl">Iniciar Jogo</button>
+    </div>
+
+    <!-- Tela Principal do Jogo -->
+    <div id="game-screen" class="hidden w-full h-full">
+        <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center">
+            
+            <!-- Painel de Controle -->
+            <div class="mondrian-modal p-6 w-full max-w-sm lg:max-w-xs text-center order-1 lg:order-2">
+                <h2 class="text-2xl font-bold mb-4 border-b-4 border-black pb-2">Painel</h2>
+                <div id="current-player-info" class="mb-6 p-4 bg-gray-100 border-2 border-black">
+                    <p class="text-lg">Vez de:</p>
+                    <p id="current-player-name" class="text-2xl font-bold"></p>
+                </div>
+                
+                <div class="flex justify-center mb-6 h-[100px] items-center">
+                    <div id="dice-container">
+                        <div class="face front">1</div>
+                        <div class="face back">6</div>
+                        <div class="face right">4</div>
+                        <div class="face left">3</div>
+                        <div class="face top">2</div>
+                        <div class="face bottom">5</div>
+                    </div>
+                </div>
+
+                <button id="roll-dice" class="mondrian-button w-full bg-black text-white text-xl mb-4">Lançar Dado</button>
+
+                <div id="players-info" class="mt-6 space-y-3 text-left">
+                    <h3 class="text-xl font-semibold text-center mb-2 border-b-4 border-black pb-2">Posições</h3>
+                </div>
+            </div>
+
+            <!-- Tabuleiro -->
+            <div class="order-2 lg:order-1 text-center">
+                 <h1 class="text-2xl font-bold mb-4 text-black">Trilha do Conhecimento: Fases do Ensino de Artes Visuais</h1>
+                <div class="board-container">
+                    <div id="board" class="board"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal de Pergunta -->
+    <div id="question-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="mondrian-modal p-8 w-full max-w-2xl text-center">
+            <h3 id="question-phase" class="text-2xl font-bold mb-4 border-b-4 border-black pb-2"></h3>
+            <p id="question-text" class="text-lg my-8"></p>
+            <div class="flex justify-center gap-4">
+                <button id="true-button" class="mondrian-button bg-black text-white text-lg">Verdadeiro</button>
+                <button id="false-button" class="mondrian-button bg-black text-white text-lg">Falso</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Feedback/Vencedor -->
+    <div id="feedback-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="mondrian-modal p-8 w-full max-w-lg text-center">
+            <h3 id="feedback-title" class="text-3xl font-bold mb-4"></h3>
+            <p id="feedback-text" class="text-base mb-6"></p>
+            <button id="feedback-ok" class="mondrian-button bg-black text-white">OK</button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- BANCO DE DADOS COMPLETO DE PERGUNTAS ---
+        const fullQuestionBank = {
+            'pre-moderna': [
+                { "declaracao": "Na fase pré-modernista do ensino de arte, predominava a busca pelo desenho capaz de representar a verdade empírica ou ideal.", "resposta": true, "feedback": "No período pré-modernista, o ensino de arte estava amplamente devotado ao desenho com o objetivo de representar a verdade, seja ela de natureza naturalista ou platônica." },
+                { "declaracao": "A avaliação dos desenhos no ensino de arte pré-modernista era flexível e não dependia de uma concepção uniforme de verdade.", "resposta": false, "feedback": "Ao contrário, no ensino de arte pré-modernista, a avaliação dos desenhos era rígida e baseava-se em uma concepção uniforme dessa verdade, sem espaço para relativismos." },
+                { "declaracao": "No pré-modernismo, o foco do ensino de arte recaía mais sobre o processo criativo do que no produto final.", "resposta": false, "feedback": "Na concepção pré-moderna de ensino de arte, havia um foco no produto final artístico criado pelo aluno, em contraste com a priorização do processo que viria com o modernismo." },
+                { "declaracao": "A posição racionalista, historicamente ligada a Platão, defendia que o conhecimento era adquirido exclusivamente através da análise rigorosa das informações captadas pelos órgãos do sentido.", "resposta": false, "feedback": "Para os racionalistas, como Platão, o conhecimento era acessado através da razão e de ideias inatas, e não pelos sentidos, que eram vistos com desconfiança. A afirmação descreve a visão empirista." },
+                { "declaracao": "Para os empiristas, os seres humanos nascem com uma \"tábula rasa\", um \"caderno em branco\" que é preenchido pela experiência.", "resposta": true, "feedback": "Os empiristas defendiam que os homens nascem com uma \"tábula rasa\", ou \"caderno em branco\", e que o conhecimento é produzido exclusivamente pela rigorosa análise das informações captadas pelos órgãos do sentido e pela experiência em vida." },
+                { "declaracao": "Empirismo e racionalismo, apesar de suas diferenças, compartilhavam uma concepção de sujeito observador neutro e distanciado, pautada na metáfora da câmara escura.", "resposta": true, "feedback": "Uma importante semelhança entre empirismo e racionalismo era a concepção de sujeito construída pela metáfora da câmara escura, que explicava o observador como neutro, imparcial, apartado e distanciado do mundo externo, capaz de produzir conhecimento objetivo." },
+                { "declaracao": "Tanto o racionalismo quanto o empirismo entendiam que o conhecimento era \"a\" verdade, com validade eterna, buscando encontrar a ordem e a estabilidade do mundo.", "resposta": true, "feedback": "Ambas as vertentes epistemológicas, racionalismo e empirismo, pressupunham que a natureza funcionava a partir de uma ordem e que o conhecimento era \"a\" verdade, algo com validade eterna, buscando a estabilidade do mundo." },
+                { "declaracao": "O racionalismo e o empirismo, no século XIX, foram ideologicamente associados às utopias de modernização e progresso, impulsionando a formação de mão de obra qualificada.", "resposta": true, "feedback": "As duas vertentes epistemológicas, racionalismo e empirismo, que impulsionaram a ciência moderna, associaram-se ideologicamente às utopias de modernização e progresso do século XIX, o que levou à preocupação com uma escola pública voltada para a formação de mão de obra qualificada." },
+                { "declaracao": "O inatismo, derivado do racionalismo, legitimava a desresponsabilização da escola em relação ao desempenho do aluno, pois o sucesso estava amplamente condicionado a um \"dom\" ou \"talento\" inato.", "resposta": true, "feedback": "O inatismo, uma consequência do racionalismo, baseava-se na crença de que as capacidades humanas são inatas, o que, segundo Rego, levava a uma desresponsabilização da escola em relação ao sucesso ou fracasso do aluno, limitando-se a esperar a maturação natural de capacidades inatas." },
+                { "declaracao": "No ambientalismo condutivista, o aluno era visto como um \"receptáculo vazio\", e a memorização de conteúdos desarticulados era uma prática fundamental.", "resposta": true, "feedback": "Para o ambientalismo condutivista, o aluno era considerado um \"receptáculo vazio\" ou um \"caderno em branco\", e a prática de ensino centrava-se na transmissão de informações e na memorização de conteúdos desarticulados, com o professor como figura central." },
+                { "declaracao": "O naturalismo da arte renascentista italiana, com sua lógica objetiva da perspectiva, tinha uma clara relação com a ascensão do empirismo.", "resposta": true, "feedback": "O naturalismo da arte renascentista italiana, exemplificado por Leonardo Da Vinci e sua defesa da observação e experimentação, estava claramente relacionado com a ascensão do empirismo." },
+                { "declaracao": "Leonardo Da Vinci concebia a arte como uma \"ciência da representação da natureza\", devendo o artista imitar a natureza com exatidão, sem tentar melhorá-la.", "resposta": true, "feedback": "Leonardo Da Vinci via a arte como uma \"ciência da representação da natureza\" e um \"caminho de conhecimento\", defendendo que o artista deveria imitar a Natureza com exatidão, sem aprimoramentos que a tornassem \"amaneirada e antinatural\"." },
+                { "declaracao": "Para Winckelmann, a civilização grega era o modelo para a verdadeira arte, por ter conseguido captar a natureza em seu estado de perfeição, a verdade imutável.", "resposta": true, "feedback": "Winckelmann acreditava que apenas a civilização grega havia conseguido captar a natureza em seu estado de perfeição e acessar a verdade eterna, servindo como modelo para a verdadeira arte, o que exemplificava a \"nobre simplicidade e calma grandeza\"." },
+                { "declaracao": "A mimese platonista, defendida por Winckelmann, diferencia-se da mimese naturalista por priorizar a cópia de modelos ideais e cânones, em vez da imitação da aparência.", "resposta": true, "feedback": "A mimese platonista de Winckelmann focava na cópia de modelos ideais e na obediência a cânones e regras de proporção, buscando a ideia ou forma universal (eidos), enquanto a mimese naturalista imitava a aparência visível." },
+                { "declaracao": "No período pré-modernista, a arte foi amplamente obcecada pela noção de representação, seja ela empirista ou racionalista.", "resposta": true, "feedback": "A orientação às verdades objetivas no pré-modernismo, tanto para racionalistas quanto para empiristas, levou a uma ampla obsessão pela noção de representação ou imitação na arte, desde o Renascimento até o Neoclássico." },
+                { "declaracao": "A educação jesuíta, ao contrário do projeto iluminista, priorizava o Barroco na arte por seu foco na emoção e dramaticidade para a catequização.", "resposta": true, "feedback": "Ao contrário do projeto iluminista, que priorizava a ciência e o progresso, os jesuítas focavam na catequização e privilegiavam o Barroco por seus elementos de drama, teatralidade e emoção, que serviam aos seus interesses de persuasão." },
+                { "declaracao": "Na educação jesuíta, os currículos de arte eram unificados para todas as classes sociais.", "resposta": false, "feedback": "A educação jesuíta, assim como a proposta posterior da Academia de Belas Artes, mantinha currículos diferentes para cada classe, evidenciando distinções sociais." },
+                { "declaracao": "A Academia Imperial de Belas Artes, planejada por Lebreton, buscava formar artistas e, simultaneamente, mão de obra para a indústria, unindo as classes sociais através da arte.", "resposta": false, "feedback": "A Academia Imperial de Belas Artes foi criada para formar artistas, enquanto uma Escola Gratuita de Desenho (que não chegou a ser construída) visava à mão de obra industrial. Havia uma clara intenção de separar as classes, considerando as populares como \"má semente\" para as belas artes." },
+                { "declaracao": "Para Lebreton, um bom professor da Academia Imperial de Belas Artes deveria estar vinculado aos princípios neoclássicos, sem relativizar o conceito de arte.", "resposta": true, "feedback": "Lebreton defendia que um bom professor da Academia deveria seguir os princípios neoclássicos, pois o conceito de arte era \"evidente e não relativizável\", e qualquer desvio ameaçaria o projeto pedagógico." },
+                { "declaracao": "O método de ensino na Academia Imperial de Belas Artes priorizava o desenho de observação de modelos vivos desde o início, em detrimento da cópia de obras de mestres.", "resposta": false, "feedback": "O método de ensino da Academia iniciava com o desenho de partes do corpo e bustos de gesso, com treino de luz e sombra, e a cópia de detalhes de obras de grandes mestres era uma estratégia central. Aulas de modelo vivo vinham depois, para aprimorar anatomia." },
+                { "declaracao": "A Academia Imperial de Belas Artes e o Liceu de Artes e Ofícios, apesar de suas diferenças, compartilhavam a prática da cópia de modelos idealizados em seus métodos de ensino.", "resposta": true, "feedback": "Tanto o Liceu de Artes e Ofícios quanto a Academia Imperial de Belas Artes tinham a cópia de modelos idealizados (estampas, cânones clássicos) como parte importante de seus métodos de ensino de desenho e pintura." },
+                { "declaracao": "O Liceu de Artes e Ofícios, fundado em 1856, foi um modelo de ensino técnico profissionalizante no Brasil, oferecendo cursos gratuitos e noturnos para a classe trabalhadora.", "resposta": true, "feedback": "O Liceu de Artes e Ofícios, fundado em 1856 no Rio de Janeiro, é considerado o modelo original do ensino técnico profissionalizante no Brasil, com cursos gratuitos e noturnos para a classe trabalhadora, buscando somar saberes técnicos ao domínio da linguagem artística e estética." },
+                { "declaracao": "A noção de \"vocação artística\" no Liceu de Artes e Ofícios legitimava a distinção de classes, direcionando os \"mais talentosos\" para a Academia Imperial de Belas Artes.", "resposta": true, "feedback": "A noção de \"vocação\", ligada ao inatismo, era evidente no Liceu, consolidando a distinção de classes: os \"mais talentosos\" iriam para a Academia de Belas Artes, enquanto os \"menos talentosos\" (classes populares, \"má semente\") iriam para a escola gratuita de desenho." },
+                { "declaracao": "O método de ensino de desenho no Liceu de Artes e Ofícios incentivava a espontaneidade e os grafismos dos alunos, em oposição à rigidez acadêmica.", "resposta": false, "feedback": "No Liceu, não havia espaço para \"desenhos 'espontâneos' ou grafismos dos alunos\", que deveriam ser substituídos por desenhos acadêmicos, através da cópia de estampas baseadas em cânones clássicos, demonstrando uma postura de rigidez e oposição à espontaneidade." },
+                { "declaracao": "Rui Barbosa era um defensor da memorização de lições e da cópia de estampas, alinhando-se aos métodos educacionais escolásticos de sua época.", "resposta": false, "feedback": "Rui Barbosa criticava os hábitos educacionais escolásticos, centrados na memorização e na fala do professor, e era contra a memorização de lições e desenhos de estampas, defendendo métodos que estimulassem a energia e o potencial dos alunos." },
+                { "declaracao": "Para Rui Barbosa, o desenho na escola tinha uma finalidade prioritariamente artística, desvinculada de interesses industriais ou práticos.", "resposta": false, "feedback": "Para Rui Barbosa, o desenho na escola não tinha uma finalidade prioritariamente artística, mas era antes um meio para outros interesses, como desenvolver a observação e coordenação motora para o trabalho industrial e impulsionar a industrialização nacional." },
+                { "declaracao": "Rui Barbosa se opunha à cópia de \"modelos\" ideais, defendendo que as crianças desenhassem a partir da observação direta da natureza.", "resposta": true, "feedback": "Rui Barbosa posicionava-se contra a cópia de \"modelos\" supostamente representantes de beleza ideal, defendendo a necessidade de que as crianças desenhassem a partir da observação direta da natureza, sem idealizações." },
+                { "declaracao": "Rui Barbosa, influenciado por Pestalozzi, defendia que o ensino deveria partir sempre do geral para o particular, do abstrato para o concreto.", "resposta": false, "feedback": "Influenciado pelo método intuitivo de Pestalozzi, Rui Barbosa defendia o oposto: que o ensino deveria partir \"do particular para o geral, do conhecido para o desconhecido, do concreto para o abstrato\"." },
+                { "declaracao": "A visão de Rui Barbosa para o ensino de desenho, ao estimular um olhar meticuloso, era associada ao modelo objetivo da câmara escura, que não permitia emoções subjetivas.", "resposta": true, "feedback": "A proposta de Rui Barbosa, que estimulava um olhar meticuloso para as minúcias, identificava-se com o modelo objetivo da câmara escura, que pressupunha uma relação neutra e controlada entre sujeito e objeto, não permitindo emoções ou desejos subjetivos que desfocussem a percepção objetiva." },
+                { "declaracao": "A preocupação de Rui Barbosa com a educação integral e a experiência mais ativa dos alunos já demonstrava tendências que seriam ampliadas na fase modernista da Escola Nova.", "resposta": true, "feedback": "A preocupação de Rui Barbosa com a educação integral e com uma experiência mais ativa dos alunos já indicava uma tendência que seria amplificada e fundamental para a Escola Nova e para o ensino de arte em sua fase modernista." },
+                { "declaracao": "Rui Barbosa defendia que a escola deveria ter o maior número possível de estímulos visuais, uma \"obsessão enciclopédica\" por objetos, para exercitar o olhar dos alunos.", "resposta": true, "feedback": "Um aspecto do ambientalismo na proposta de Rui Barbosa era sua preocupação em ter na escola o maior número possível de estímulos visuais, uma \"obsessão enciclopédica, a profusão de objetos oferecidos ao olhar\", para que os alunos exercitassem o olhar." },
+                { "declaracao": "No pré-modernismo, a concepção de arte era compreendida como um conceito evidente e não relativizável, ligado a padrões universais de beleza.", "resposta": true, "feedback": "A concepção de arte no pré-modernismo, especialmente na Academia Imperial de Belas Artes, era evidente e não relativizável, alinhada aos princípios neoclássicos de beleza universal, sem dar espaço para a individualidade ou interpretações divergentes." },
+                { "declaracao": "O pré-modernismo, com suas vertentes inatistas, tendia a ver a criatividade como um potencial universal inerente a todas as crianças.", "resposta": false, "feedback": "O inatismo, presente no pré-modernismo (Academia, Liceu), associava o sucesso ou fracasso ao \"talento\" ou \"dom\", que era visto como um potencial próprio a poucos, contrastando com a noção modernista de criatividade como potencial universal." }
+            ],
+            'moderna': [
+                { "declaracao": "A epistemologia da visão subjetiva, que emergiu no romantismo e consolidou-se no modernismo, defendia que a percepção humana era uma \"janela transparente\" para a realidade objetiva externa.", "resposta": false, "feedback": "A epistemologia da visão subjetiva, que teve suas raízes no romantismo e se consolidou no modernismo, rompeu com a ideia de que a percepção humana era uma \"janela transparente\" para a realidade objetiva externa." },
+                { "declaracao": "A ascensão do modernismo na arte e no ensino de arte está intrinsecamente ligada a uma revolução epistemológica que destacou o aspecto subjetivo da visão.", "resposta": true, "feedback": "As fontes indicam que não é possível entender a ascensão do modernismo na arte e no ensino de arte sem avaliar as mudanças na concepção do sujeito observador que ocorreram a partir do final do século XVIII. Essas mudanças, impulsionadas por pensadores como Kant e os românticos, marcaram o surgimento de uma compreensão da visão como subjetiva, deixando de ser imaginada como uma simples \"janela transparente\" através da qual a alma observa objetivamente o mundo externo." },
+                { "declaracao": "A teoria estética de Kant, precursora do romantismo, defendeu que a beleza era uma propriedade objetiva e inerente aos objetos do mundo externo, acessível a todos de forma universal.", "resposta": false, "feedback": "Em contraste com a ideia de beleza como uma propriedade objetiva, Kant revolucionariamente defendeu que a beleza não é uma propriedade de objetos ou do mundo externo, pois não temos acesso ao mundo em si, apenas a representações. Para Kant, o belo como experiência de prazer é, portanto, algo subjetivo. Ele inclusive se preocupou em descrever o juízo estético como desprovido de interesse, buscando um consenso entre a \"humanidade culta\" de forma intuitiva e irrefletida, mas ainda assim subjetiva em sua origem." },
+                { "declaracao": "Schopenhauer, ao contrário de Kant, acreditava que o sujeito transcendental era uma realidade palpável, e sua teoria da visão desconsiderava completamente a fisiologia do corpo.", "resposta": false, "feedback": "Para Schopenhauer, o sujeito transcendental não passa de uma ilusão. Ele interligou a teoria kantiana aos estudos empíricos sobre a fisiologia do olhar, defendendo que todo debate filosófico precisa ser pensado a partir da fisiologia e das possibilidades do cérebro. A visão, para ele, seria um produto do cérebro de cada um." },
+                { "declaracao": "A metáfora da \"câmara escura\" continuou sendo o principal modelo para explicar a visão no modernismo, reforçando a ideia de um observador neutro e objetivo.", "resposta": false, "feedback": "A ascensão das interrogações sobre a subjetividade e a queda do que Crary denomina de visão segundo a metáfora da \"câmara escura\" fizeram com que o ideal de representação da realidade perdesse força. No modernismo, a percepção passou a ser entendida como subjetiva, em certo grau independente de uma realidade objetiva externa, marcando o abandono do modelo da \"câmara escura\" que predominava no pré-modernismo." },
+                { "declaracao": "O Romantismo e o Modernismo, apesar de suas diferenças, compartilhavam um humanismo que celebrava e buscava proteger impulsos descritos como \"disposições naturais\" dos seres humanos.", "resposta": true, "feedback": "Tanto o Romantismo quanto o Modernismo pautaram-se por um humanismo que celebrava, queria proteger e estimular impulsos descritos como \"disposições naturais\" dos seres humanos. Essa crença se estendeu ao ensino de arte, com a valorização de uma suposta essência humana primordial: os impulsos lúdicos, a imaginação e a criatividade." },
+                { "declaracao": "Na fase modernista, o ensino de arte deixou de priorizar a mímese em favor da expressão da subjetividade.", "resposta": true, "feedback": "A fase modernista marcou uma transição fundamental no ensino de arte, afastando-se da prioridade na mímese (imitação da realidade) para focar na expressão da subjetividade e da imaginação do artista. Essa mudança foi influenciada pela revolução epistemológica que, a partir de Kant, passou a conceber a visão como algo marcado pela subjetividade do observador, e não mais como uma \"janela transparente\" para uma realidade objetiva. A busca pela representação exata perdeu seu fundamento, abrindo espaço para a \"poiesis\", a intenção criativa." },
+                { "declaracao": "O divórcio entre arte e imagem no século XIX, que marcou o modernismo, pode ser confirmado da negação do campo em relação ao status de arte da fotografia, por ser mecânica, objetiva demais.", "resposta": true, "feedback": "A crítica à fotografia, expressa por Baudelaire, refletia a crescente negação da imagem (entendida como representação mimética) em nome da subjetividade, imaginação e alma do artista. A crescente abstração na arte moderna foi uma alternativa encontrada pelos artistas, já que, no século XIX, eles não podiam competir com a rapidez e \"perfeição\" da imagem fotográfica. A arte, para muitos, divorcia-se da imagem (mimética) no século XIX, tornando-se a fotografia um mero instrumento utilitário da ciência ou da indústria." },
+                { "declaracao": "No Modernismo, a arte passou a ter como principal objetivo a expressão da subjetividade psicológica-fisiológica do artista, abandonando o foco na cópia ou representação do real.", "resposta": true, "feedback": "Ao abdicarem do realismo e optarem pela crescente abstração, os artistas modernos tiraram o foco do representado e trouxeram-no para a tela em si, não mais como cópia, mas como expressão da própria subjetividade (psicológica-fisiológica) do artista. A ideia de expressão, neste sentido, ganhou contornos distintos dos anteriores, associando-se à noção de originalidade." },
+                { "declaracao": "A noção de \"talento\" no modernismo foi ampliada para \"criatividade\", sendo esta última considerada um dom natural e inato presente em apenas alguns indivíduos.", "resposta": false, "feedback": "O \"dom natural\" ou \"talento\", que inicialmente era descrito como próprio a poucos, com o modernismo será gradualmente identificado pela palavra \"criatividade\" e descrito não como um dom, mas como um potencial compartilhado por todos. A diferença entre talento e criatividade reside no fato de o primeiro ser distribuído parcialmente, e o segundo, universalmente." },
+                { "declaracao": "O modernismo promoveu a transição da noção de \"talento\" (dom para poucos) para \"criatividade\" (potencial universal), influenciando a valorização da infância na arte-educação.", "resposta": true, "feedback": "No modernismo, houve uma significativa mudança semântica do termo \"talento\", que antes era visto como um \"dom natural\" para poucos, para a palavra \"criatividade\", que passou a ser compreendida \"não como um dom, mas como um potencial compartilhado por todos\". Essa nova ênfase na criatividade como uma potência inerente à subjetividade humana foi \"fundamental para a valorização modernista da infância\", pois reforçava a ideia de que todas as crianças possuíam capacidade criativa a ser estimulada." },
+                { "declaracao": "A valorização modernista da infância e do \"olhar inocente\" estava desvinculada de qualquer interesse em modelar o comportamento ou a visão das crianças.", "resposta": false, "feedback": "A valorização modernista da infância e do \"olhar inocente\", que se relacionava com a ânsia romântica por autenticidade e liberdade, estava ideologicamente ligada à ideia de que as crianças, por ainda não terem sido \"massificadas\" pela sociedade industrial, representavam uma \"pureza pré-puberdade\" e uma criatividade natural imaculada. No entanto, os textos indicam que esse humanismo romântico, embora visasse a proteção de disposições naturais, esteve \"relacionado com estratégias disciplinares próprias desta época\"." },
+                { "declaracao": "O formalismo, incrustado nos princípios do design e um constituinte do modernismo, defendia que os objetos de arte poderiam existir sozinhos e seus valores estéticos eram objetivos e verificáveis.", "resposta": true, "feedback": "O formalismo, um forte constituinte do Modernismo (e influenciado por Kant), assumia que o objeto de arte era independente e que os valores estéticos eram objetivos e inerentes às propriedades formais do objeto, enfatizando que os objetos da arte poderiam existir sozinhos e suas experiências estéticas seriam verificáveis. Assim, o Modernismo separava o espectador e o autor do objeto de arte autônomo." },
+                { "declaracao": "O formalismo, uma vertente importante do modernismo, defendia que o julgamento estético deveria ser feito considerando a história pessoal e as idiossincrasias do observador.", "resposta": false, "feedback": "O formalismo, especialmente influenciado por Clement Greenberg, defendia que o julgamento estético ou os vereditos de gosto não são passíveis de demonstração objetiva, mas deveriam ser feitos de forma impessoal e objetiva, com o observador \"acima de seu tempo, local e idiossincrasias\". A arte deveria ser considerada independentemente de qualquer propósito ou utilidade que não fosse a estética, e a atenção a aspectos como tema, conteúdo narrativo ou usos rituais era considerada uma distração ou prejudicial." },
+                { "declaracao": "As pesquisas da Gestalt, influentes no modernismo, defendiam que a percepção visual era um fenômeno puramente individual e não compartilhado, sem princípios organizadores universais.", "resposta": false, "feedback": "As pesquisas gestaltistas, influenciadas por Kant, deixaram claro que a percepção visual é um fenômeno marcado pela subjetividade do observador, mas buscavam ressaltar não o que há de distinto em cada um de nós, mas o que nossas subjetividades compartilham: os princípios organizadores que marcam a todos universalmente, independentemente da cultura. Para a Gestalt, o subjetivo não se coaduna com o relativismo." },
+                { "declaracao": "A valorização da \"percepção pura\" no modernismo implicava em suspender a linguagem, a memória histórica e a sexualidade para alcançar um olhar desprovido de contaminações sociais.", "resposta": true, "feedback": "A \"percepção pura\", descrita por Ruskin e outros artistas no modernismo, demandava a exclusão ou suspensão da linguagem, da memória histórica e da sexualidade para que o olhar pudesse ver \"manchas lisas de cor, meramente como tal, sem consciência do que significam\", como um cego que recuperasse subitamente a visão." },
+                { "declaracao": "O ensino da linguagem visual, influenciado pela Gestalt, no modernismo, propunha uma \"alfabetização visual\" que buscava o conhecimento dos elementos da linguagem para a compreensão estética, sem considerar aspectos históricos ou culturais.", "resposta": true, "feedback": "Teóricos da comunicação visual, influenciados pela Gestalt, buscaram estabelecer uma \"gramática das formas\" (ponto, linha, superfície, cor, luz e textura) para uma \"alfabetização visual\". Este modelo, difundido pela Bauhaus, visava desenvolver \"competências para a leitura e emissão de textos visuais\". Contudo, Ana Mae Barbosa e Coutinho apontaram que essa abordagem formalista foi questionada por ignorar fatores históricos e culturais, sendo sua exclusão da diversidade cultural proposital, assim como na experiência estética de Greenberg." },
+                { "declaracao": "Para Clement Greenberg, o juízo estético era pessoal e variava de pessoa para pessoa, sem a possibilidade de um consenso universal sobre a \"arte superior\".", "resposta": false, "feedback": "Clement Greenberg, influenciado pelas ideias de Kant, defendia que o juízo estético era objetivo, não pessoal, e não variava de pessoa para pessoa. Para ele, a experiência estética, embora subjetiva em termos de efeitos psicológicos, baseava-se em princípios organizadores intuitivos que eram próprios à humanidade como um todo. Ele acreditava que, ao longo do tempo, haveria um \"consenso sobre o que vem a ser arte superior\" entre a \"humanidade culta\" por intuição." },
+                { "declaracao": "As críticas de Rousseau e Kant, no período modernista, negavam completamente a possibilidade de disciplina ou controle sobre os impulsos humanos, defendendo uma liberdade irrestrita.", "resposta": false, "feedback": "Embora Rousseau receasse a influência do meio social e defendesse a proteção das disposições naturais da criança, ele ainda propunha que o homem se desenvolvesse na sociedade, que, contudo, também poderia ser corruptora. Kant, por sua vez, receava \"o animal em nós\" e acreditava que a \"disciplina converte a animalidade em humanidade\", sendo essencial para modernizar o indivíduo e torná-lo um \"bom cidadão\". Ou seja, ambos, apesar das diferenças, lidavam com a ideia de controle e disciplina." },
+                { "declaracao": "A pedagogia espontaneísta de Rousseau, fundamental para o modernismo no ensino de arte, defendia que a escola deveria transmitir conhecimentos de forma verticalizada, controlando a liberdade e a individualidade do aluno.", "resposta": false, "feedback": "Rousseau defendia que instituições sociais deveriam proteger as disposições naturais da criança. Uma educação baseada na transmissão vertical de conhecimento tolheria a liberdade, a individualidade e a experimentação intuitiva. Ele acreditava que o verdadeiro conhecimento vem do fazer e da experiência com o mundo." },
+                { "declaracao": "A \"educação estética\" proposta por Schiller no período romântico/modernista buscava o desenvolvimento da humanidade exclusivamente por meio da razão, desprezando as emoções.", "resposta": false, "feedback": "Para Schiller, a noção iluminista de sujeito era formal e abstrata demais. Ele defendia que era impossível e perigoso desprezar a existência material do ser humano e as emoções que ele experimenta. A educação estética de Schiller buscava promover a harmonia entre os impulsos sensível e formal, através do impulso lúdico. O fazer artístico, para Schiller, realizava a criatividade ao exteriorizar ideias e dar forma ao mundo exterior." },
+                { "declaracao": "A Educação Estética no Brasil, no final do século XIX, era uma estratégia para \"civilizar\" as classes populares, tornando-as dóceis e resignadas, e estava ligada à formação do sentimento de identidade nacional.", "resposta": true, "feedback": "A Educação Estética tornou-se uma estratégia privilegiada para \"civilizar\" as classes populares e prepará-las para a modernidade, com o objetivo de \"reformar o povo\" e \"unificar as diferenças\" para torná-lo \"dócil e resignado\". A questão da formação do espírito nacional e do sentimento de identidade nacional também esteve associada à preocupação com a educação estética, com atividades artísticas na escola buscando consolidar essa conexão." },
+                { "declaracao": "O humanismo romântico, que influenciou o modernismo, defendeu que a arte era um campo intrinsecamente autônomo e desinteressado, livre de qualquer função política ou social.", "resposta": true, "feedback": "Sim, contudo embora buscasse \"proteger\" a autenticidade humana, o humanismo romântico esteve relacionado a estratégias disciplinares. A questão da formação da sensibilidade no modernismo estava \"intrinsecamente envolvida com as principais transformações sociais da modernidade, extrapolando em muito o supostamente autônomo e desinteressado campo da arte\", sendo esta vista como um meio para muitos fins políticos, como a formação do \"cidadão operário, livre e autônomo por um lado, mas por outro ordeiro e patriota\"." },
+                { "declaracao": "O conceito de \"autoexpressão natural\" no ensino de arte modernista era um mito que, na verdade, servia para ocultar o conteúdo social da expressão e normatizar comportamentos.", "resposta": true, "feedback": "A autoexpressão no ensino da arte era incentivada como o cultivo de características próprias das crianças, mas, na verdade, \"serviu para ocultar o conteúdo social da expressão\". O que se acreditava ser uma \"personalidade natural\" era, de fato, \"uma ideia construída pela sociedade\" e definida por interesses nacionais gerais. Não existe uma subjetividade pura, pois somos sempre produtos das relações sociais e de poder." },
+                { "declaracao": "O Movimento Escolinhas de Arte no Brasil promoveu o \"laissez-faire\" e a livre expressão com o objetivo de que o produto final da fosse menos importante do que o processo e os benefícios psíquicos dos alunos.", "resposta": true, "feedback": "O \"Laissez-faire\" era fundamental nos espaços de criação planejados pelo Movimento Escolinhas de Arte, pois eles \"acreditavam nessas atividades como válvula de escape para liberação de energias, descargas das emoções e meio legal para expressar os sentimentos\". Essa vertente \"busca justificar a importância da arte na educação não pela arte em si, but pelo que ela pode contribuir para a educação integral do ser humano\". O foco estava nos benefícios psíquicos, ao ponto em que o produto final \"em nada importa\"." },
+                { "declaracao": "Viktor Lowenfeld, uma figura influente na arte-educação modernista, defendia que o professor deveria intervir diretamente na expressão natural da criança para guiá-la.", "resposta": false, "feedback": "Viktor Lowenfeld, cuja obra foi muito influente no Brasil, defendia justamente o oposto: o professor não deveria interferir na expressão natural da criança. Ele acreditava que a intervenção direta tolheria a liberdade da criança, levando-a a seguir modelos e, assim, \"corromperia a criatividade\" natural. Para Lowenfeld, forçar a criança a produzir representações realistas ou a seguir métodos pré-determinados seria prejudicial ao seu desenvolvimento criativo e emocional." },
+                { "declaracao": "Anita Malfatti foi uma defensora da preservação da imaginação e criatividade intuitiva das crianças, opondo-se à rigidez da tradição acadêmica.", "resposta": true, "feedback": "Anita Malfatti foi uma voz enfática na defesa da preservação da imaginação e da criatividade natural intuitiva das crianças. Ela se opunha firmemente ao \"efeito repressor e corruptor da tradição acadêmica\" e à crítica excessiva dos professores. Malfatti acreditava que o professor deveria \"nunca contrariá-la na sua inclinação, porém deixá-la manifestar o seu sentimento livremente\", reconhecendo que a liberdade de expressão era essencial para a saúde psíquica e para a liberação emocional." },
+                { "declaracao": "O Movimento Escolinhas de Arte do Brasil, influenciado por pensadores modernistas, priorizava o desenvolvimento de habilidades técnicas e o produto final artístico acima da liberação emocional.", "resposta": false, "feedback": "O Movimento Escolinhas de Arte do Brasil teve como base a \"supervalorização da arte como livre-expressão\". Influenciado por autores como John Dewey, Viktor Lowenfeld e Herbert Read, o movimento enfatizava o \"respeito ao ser humano, à sua capacidade de criar, levando-o a encontrar na arte formas de se realizar e expressar o conhecimento de si mesmo como ser atuante em busca da liberdade\". O foco estava nos \"benefícios psíquicos\" e na liberação emocional que a livre expressão proporcionava, a ponto de o produto final ser considerado irrelevante, o que contrasta diretamente com a priorização de habilidades técnicas." },
+                { "declaracao": "Rudolf Cizek, um proeminente arte-educador, é frequentemente associado ao desenvolvimento de abordagens que valorizam a expressão espontânea da criança na arte-educação modernista.", "resposta": true, "feedback": "Rudolf Cizek é reconhecido por suas abordagens que valorizavam a expressão espontânea da criança. Ele defendia que os arte-educadores não deveriam impor suas próprias imagens, usar desenhos de crianças como modelos para outras, ou permitir que as crianças copiassem qualquer coisa. As lições de Cizek, segundo os documentos, visavam a não interferir no trabalho da criança para que ela pudesse atingir sua própria perfeição e sensibilidade, o que é um pilar da valorização da espontaneidade na arte-educação modernista." },
+                { "declaracao": "O Movimento Escolinhas de Arte no Brasil, fortemente influenciado pelo modernismo, defendia a livre expressão como método principal para garantir a proteção da \"virgindade gráfica\" da criança.", "resposta": true, "feedback": "Uma das principais contribuições modernistas para o ensino das artes foi a prática da livre expressão, difundida pelo trabalho de Viktor Loewenfeld, que se tornou uma \"bíblia\" para arte-educadores de vanguarda no Brasil. O Movimento das Escolinhas de Arte no Brasil, influenciado por Loewenfeld, Herbert Read e John Dewey, defendeu a livre expressão como método para garantir a proteção da \"virgindade gráfica\" da criança, visando à liberação emocional e à expressão de si." },
+                { "declaracao": "Anita Malfatti, uma figura importante no ensino de arte modernista no Brasil, defendia que a interferência do professor na expressão natural da criança corromperia sua criatividade.", "resposta": true, "feedback": "Anita Malfatti foi enfática sobre a necessidade de preservar a imaginação e a criatividade natural intuitiva das crianças, contra o efeito repressor e corruptor da tradição acadêmica e da crítica desmedida dos professores. Para Malfatti, o receio da crítica paralisaria a iniciativa do aluno, e o professor deveria \"nunca contrariá-la na sua inclinação, porém deixá-la manifestar o seu sentimento livremente\"." },
+                { "declaracao": "No modernismo, o ensino de arte tendia a privilegiar a livre expressão e a criatividade em ateliers, com pouca fundamentação teórica ou histórica.", "resposta": true, "feedback": "As formações de professores de arte na fase modernista eram consolidadas por um ideal de educação através da arte, justificadas pelo decreto de 1971 que determinava o lugar da arte na escola não como disciplina, mas como mera atividade. Os professores não estavam teoricamente preparados para a compreensão de abordagens mais complexas, pois sua formação de base modernista dedicava-se a metodologias pautadas na \"livre expressão e na criatividade, e um fazer artístico em atelier com pouca fundamentação\"." },
+                { "declaracao": "O modernismo enfatizou a arte como um \"grito da alma\" e um campo de exploração emocional, sem atentar para a participação da inteligência ou do pensamento reflexivo na produção artística.", "resposta": true, "feedback": "Ana Mae Barbosa questionou em 1975 o preconceito contra a Arte, \"pois designa como um campo de exploração emocional, sem atentar para a igual participação da inteligência, do pensamento reflexivo na produção artística\". Ela afirmava que, se a arte não é tratada como forma de conhecimento, mas \"um grito da alma\", não se estaria fazendo nem educação cognitiva, nem educação emocional." }
+            ],
+            'pos-moderna': [
+                { "declaracao": "Para os estudos sócio-históricos, a concepção de ser humano é pura e prévia à sua relação com o meio social.", "resposta": false, "feedback": "As teorias sócio-históricas contemporâneas, que fundamentam o pós-modernismo, afirmam que não existe uma forma \"pura\" de ser humano prévia à sua relação com o meio. Ao contrário, o sujeito é compreendido como um resultado das experiências que tem em vida e das interações sócio-históricas, com sua plasticidade biológica em potência para a transformação." },
+                { "declaracao": "Na fase pós-modernista, a concepção de sujeito autônomo, livre das exigências do corpo e da alienação social, é amplamente celebrada e protegida.", "resposta": false, "feedback": "A fase pós-modernista, especialmente a partir da crítica foucaultiana, questiona profundamente a noção modernista de sujeito autônomo e autoconsciente. Ela revela que a celebração da subjetividade autônoma foi uma estratégia do poder disciplinar para moldar indivíduos, incentivando a autoanálise e a culpa, e negando a dimensão material do indivíduo." },
+                { "declaracao": "A fase pós-moderna do ensino de arte se filia a uma visão sócio-histórica que questiona o sujeito autônomo e o vê como socialmente construído.", "resposta": true, "feedback": "A fase pós-moderna do ensino de artes visuais, incluindo a Educação da Cultura Visual, descende de uma crítica ao sujeito autônomo e adota uma visão sócio-histórica do conhecimento e da subjetividade, que são vistas como socialmente construídas e intrinsecamente ligadas a relações de poder." },
+                { "declaracao": "Para o pós-estruturalismo, o conhecimento é algo puro, natural e eterno, independente do contexto.", "resposta": false, "feedback": "Para o pós-estruturalismo, o conhecimento é histórico e uma multiplicidade de feitos, não sendo algo puro, natural ou eterno. Ele é visto como uma construção ativa, \"radicalmente dependente da pragmática do contexto\", fruto do discurso e das relações de poder." },
+                { "declaracao": "A teoria pós-crítica defende a ideia de que existe uma forma correta, única e universal de interpretar a existência, alinhando-se a meta-narrativas.", "resposta": false, "feedback": "A teoria pós-crítica questiona a noção de um sujeito centrado e racional, e, consequentemente, nega a possibilidade de uma consciência total ou de uma forma única e universal de interpretar a existência. Ela se opõe às meta-narrativas, buscando desalojá-las do currículo para que \"narrativas alternativas\" se tornem mais visíveis, abraçando o perspectivismo e a multiplicidade de feitos históricos." },
+                { "declaracao": "A crítica pós-estruturalista às meta-narrativas leva à negação da existência de qualquer realidade externa, afirmando que o mundo só existe quando pensamos ou falamos sobre ele.", "resposta": false, "feedback": "O pós-estruturalismo, ao criticar as meta-narrativas e o realismo, não nega a existência de uma realidade externa, mas sim a capacidade da linguagem de descrevê-la ou reproduzi-la de forma neutra e transparente. O foco é em como construímos o sentido do mundo através dos discursos, que são sempre contextuais e não universais." },
+                { "declaracao": "No pós-modernismo, o conceito de cultura se desloca de \"alta cultura\" para \"cultura como significados compartilhados\" ou \"mapas conceituais\".", "resposta": true, "feedback": "O pós-modernismo, influenciado pelos Estudos Culturais, deslocou o conceito de cultura de uma \"alta cultura\" ou \"o melhor que se tenha pensado e dito\" para \"cultura como significados compartilhados\" ou \"mapas conceituais\". Isso enfatiza a produção, circulação e consumo de significação na vida social, reconhecendo que a cultura não é neutra, mas política." },
+                { "declaracao": "O conceito sociosemiótico de cultura, adotado pelos Estudos Culturais e pela Educação da Cultura Visual, entende a cultura como um processo de produção, circulação e consumo de significados, e não apenas como um sistema fixo.", "resposta": true, "feedback": "O conceito sociosemiótico de cultura enfatiza a cultura como práticas de significação, ou seja, processos sociais de produção, circulação e consumo de significado na vida social. Isso se opõe a uma visão de cultura como algo estático ou meramente cognitivo, reforçando a ideia de que o significado é algo construído ativamente no dia a dia." },
+                { "declaracao": "Paulo Freire, em sua pedagogia, destaca a importância de considerar os saberes populares e a necessidade de uma educação criada \"com o povo\", não apenas \"para o povo\".", "resposta": true, "feedback": "Paulo Freire defende a importância de partir dos saberes populares e do repertório dos alunos, argumentando que uma educação efetiva deve ser construída em diálogo \"com o povo\" para atender às suas necessidades e interesses reais, em oposição a uma transmissão vertical de conhecimentos." },
+                { "declaracao": "Vygotsky, ao criticar o espontaneísmo, defende que a criança só pode se desenvolver a partir da interação com o seu meio, especialmente o social, e não de forma isolada.", "resposta": true, "feedback": "Vygotsky se opõe ao espontaneísmo por entender que a criança não é um receptáculo vazio e que a aprendizagem não é uma mera recepção passiva. Para ele, o homem se constitui por meio das interações sociais, transformando e sendo transformado nas relações culturais, com o diálogo e a cooperação sendo essenciais." },
+                { "declaracao": "Para Vygotsky, a plasticidade do cérebro é um fenômeno universal, mas a psicologia não tem poder de especular sobre comportamentos universais, uma vez que os sujeitos se desenvolvem em interação com meios distintos.", "resposta": true, "feedback": "Vygotsky critica o inatismo por prescrever características comportamentais universais e faixas etárias para sua manifestação. Ele argumenta que o único fenômeno universal é a plasticidade do cérebro, e que, como o desenvolvimento dos sujeitos ocorre na interação com meios diversos, a psicologia não pode especular sobre comportamentos universais, enfatizando a constituição sócio-histórica." },
+                { "declaracao": "A pedagogia crítica, na visão de Giroux, busca a emancipação do aluno e se engaja na transformação social, com professores atuando como \"intelectuais transformadores\".", "resposta": true, "feedback": "Henry Giroux, uma figura central na pedagogia crítica, defende que a educação deve se dedicar à emancipação do aluno e à transformação social. Para ele, os professores são \"intelectuais transformadores\" comprometidos não apenas com a transmissão de conhecimento crítico, mas com a capacitação para pensar e agir criticamente em busca de uma sociedade mais justa e democrática." },
+                { "declaracao": "A arte pós-moderna, ao contrário da arte modernista, não se preocupa com o cotidiano visual.", "resposta": false, "feedback": "A arte pós-moderna, ao contrário do modernismo, demonstra uma forte preocupação com o cotidiano visual, explorando fenômenos contemporâneos e debatendo sobre eles. Eleanor Heartney (2002) inicia seu livro sobre a arte pós-moderna descrevendo a relevância de imagens da mídia (Guerra do Golfo), o consumo e a reprodução de realidades (distrito Celebration, cavernas de Lascaux)." },
+                { "declaracao": "Artistas pós-modernos questionaram o status de mercadoria da arte e aplicaram a crítica ao consumo como fetiche também ao mercado de arte.", "resposta": true, "feedback": "Artistas pós-modernos, especialmente os críticos do mercado, argumentaram que a crítica ao consumo como fetiche não deveria ser exclusivamente devotada à cultura de massa, mas também aplicada ao mercado de arte, pois a arte seria mais uma mercadoria, e estilos como o expressionismo abstrato foram promovidos para venda." },
+                { "declaracao": "Artistas pós-modernos abdicam da autoria e questionam a noção de \"eu\" como essência primordial, base do discurso aurático do mercado de arte.", "resposta": true, "feedback": "Artistas pós-modernos, como Cindy Sherman, questionam a própria noção de \"eu\" como essência primordial, uma presença interna separada das contingências históricas, e a mitologia da identidade autêntica, que serve de base para o discurso aurático do mercado de arte, mostrando o eu como uma construção imaginária a partir de estereótipos culturais." },
+                { "declaracao": "A arte pós-moderna é diversa, política e questionadora de conceitos tradicionais, sem uma unidade interna de valores ou política revolucionária única.", "resposta": true, "feedback": "A arte pós-moderna se caracteriza por ser diversa, política e questionadora de conceitos tradicionais como autonomia e originalidade, explorando o cotidiano visual e o mercado de arte. Ela não possui uma unidade interna de valores, nem está vinculada a uma única forma de política revolucionária." },
+                { "declaracao": "Artistas feministas na arte pós-moderna denunciaram como a história da arte era eurocêntrica, masculina e branca, ignorando certos sujeitos.", "resposta": true, "feedback": "Artistas feministas e multiculturalistas, alinhados ao pós-modernismo, denunciaram o modo como a história da arte era eminentemente eurocêntrica, masculina e branca, sub-repticiamente colocando em posições secundárias ou ignorando completamente certos sujeitos e suas contribuições." },
+                { "declaracao": "A crítica feminista à história da arte no pós-modernismo focou apenas na quantidade de mulheres artistas representadas, sem questionar a forma como eram retratadas.", "resposta": false, "feedback": "As artistas feministas e os estudos ligados ao multiculturalismo no período pós-modernista denunciaram que a história da arte era predominantemente eurocêntrica, masculina e branca, e que isso levava à sub-representação ou total ignorância de certos sujeitos. Mais do que a simples quantidade de mulheres artistas, elas questionaram como a maioria das mulheres era representada na forma de nus, o que, segundo elas, reproduzia e reforçava uma cultura machista, posicionando as mulheres como objeto do olhar masculino. Elas foram além da decodificação de imagens, refletindo sobre \"quem tem o direito de ver ou não, quem deve ou não ser visto, quem pode ou não mostrar\"." },
+                { "declaracao": "O pós-modernismo, influenciado pelas discussões feministas, contribuiu para a desconstrução da ideia de \"autoexpressão natural\" no ensino de arte, revelando-a como um mito construído socialmente para ocultar seu conteúdo político e de normatização.", "resposta": true, "feedback": "A crítica pós-modernista, com forte influência feminista e pós-estruturalista, desvendou que a noção modernista de \"autoexpressão natural\" e \"criatividade original\" era, na verdade, um mito. Essa \"autoexpressão saudável\" era exemplificada por formas pré-determinadas, servindo para ocultar o conteúdo social da expressão e para normatizar comportamentos. O foco excessivo no indivíduo desviou a atenção dos problemas das instituições culturais e da política social, perpetuando o mito de que o individualismo como liberdade era universal, quando na verdade, era baseado em ideias de classe, etnia e gênero. Essa crítica revela que não existe uma subjetividade pura, pois somos sempre produtos das relações sociais e de poder, e que a celebração da subjetividade autônoma foi uma estratégia do poder disciplinar para moldar indivíduos e inculcar vigilância e autoculpa." },
+                { "declaracao": "A influência de Paulo Freire na Abordagem Triangular é vista na valorização da pedagogia crítica, que busca desvelar ideologias e promover a emancipação.", "resposta": true, "feedback": "A Abordagem Triangular tem uma explícita dívida com Paulo Freire e a pedagogia crítica, especialmente na busca por desfazer certezas e provocar novos modos de pensar. Freire e Vygotsky, ambos ligados ao materialismo histórico dialético, produziram debates cruciais sobre a constituição sócio-histórica dos sujeitos e a necessidade de uma educação que promova a consciência e a transformação social." },
+                { "declaracao": "Segundo Ana Mae Barbosa, a \"leitura de imagem\" na Abordagem Triangular é um exercício exclusivamente emocional, sem foco na reflexão crítica ou na inteligência.", "resposta": false, "feedback": "Ana Mae Barbosa enfatiza que a \"leitura de imagem\" não é apenas um exercício emocional. Pelo contrário, ela aponta para a inteligência e a reflexão crítica como mecanismos importantes para a compreensão da realidade. O \"fazer\" artístico também deve ter uma intencionalidade crítica e transformadora." },
+                { "declaracao": "A abordagem pós-modernista no ensino de arte, como a Abordagem Triangular de Ana Mae Barbosa, enfatiza a centralidade das imagens e a importância da leitura/interpretação e contextualização, além do fazer artístico.", "resposta": true, "feedback": "A Abordagem Triangular, desenvolvida no final da década de 1980, propõe que o ensino de artes seja conduzido por três ações fundamentais: o fazer, o ler/interpretar e o contextualizar. Essa proposta se distingue pela centralidade que as imagens passam a ocupar no processo educativo, questionando a negligência da apreciação artística e histórica da arte na escola, comum em períodos anteriores." },
+                { "declaracao": "Na abordagem pós-moderna, a aquisição de referências e o estudo de modelos são vistos como prejudiciais à criatividade e à originalidade do aluno.", "resposta": false, "feedback": "Na abordagem pós-moderna, especialmente influenciada pela pesquisa de Brant e Marjorie Wilson, desbanca-se a suposição modernista de que estudar e ter referências acarretaria na perda da criatividade. Pelo contrário, a aquisição de referências tem um papel fundamental no processo criativo, pois \"sem modelos para serem seguidos, haveria pequeno ou nenhum comportamento de realização de signos visuais nas crianças\"." },
+                { "declaracao": "A pesquisa de Brant e Marjorie Wilson revelou que as crianças aprendem a desenhar principalmente por meio da observação de modelos e que a aquisição de referências é fundamental para o processo criativo.", "resposta": true, "feedback": "Contrariando a ideia modernista da \"virgindade gráfica\", Brant e Marjorie Wilson demonstraram que as crianças aprendem a desenhar observando modelos e que sem referências, haveria pouca ou nenhuma produção de signos visuais. Eles defendem que a aquisição de referências é crucial para o desenvolvimento da criatividade e que todos somos influenciados pelos costumes do nosso tempo e lugar." },
+                { "declaracao": "Para Ana Mae Barbosa, a contextualização se refere principalmente à biografia do artista e não ao contexto de produção da obra.", "resposta": false, "feedback": "Ana Mae Barbosa esclarece que contextualizar não se refere à \"mania vulgar de falar da vida do artista\". A contextualização vai além da biografia, abrangendo a história da obra, o contexto de sua produção, o artista e a época, relacionando-os com o contexto atual do aluno, e é impulsionada pelos estudos de Paulo Freire e do Critical Studies." },
+                { "declaracao": "Ana Mae Barbosa afirma que a metodologia é construída pelo próprio professor em sala de aula, articulando leitura, produção e contextualização.", "resposta": true, "feedback": "Em Tópicos utópicos (1998), Ana Mae Barbosa afirma que \"metodologia quem faz é o professor em sala de aula\", propondo que o currículo escolar articule as dimensões de leitura, produção e contextualização, deixando a cargo do professor a construção metodológica de seu ensino, baseada em suas próprias concepções de educação e arte." },
+                { "declaracao": "Na perspectiva pós-moderna, as imagens são vistas como representações passivas da realidade, sem qualquer envolvimento na construção social das formas de percepção.", "resposta": false, "feedback": "Para a perspectiva pós-moderna, as imagens, sejam quais forem, estão intrinsecamente envolvidas na construção social, moldando formas de percepção e formas de estar no mundo, indo além de meras representações fiéis de uma realidade." },
+                { "declaracao": "A Educação da Cultura Visual desafia a arte-educação tradicional ao incluir imagens do cotidiano e questionar hierarquias estéticas.", "resposta": true, "feedback": "A Educação da Cultura Visual (ECV) desafia a arte-educação tradicional ao incluir imagens do cotidiano (publicidade, mídias) e questionar hierarquias estéticas. Ela foca na análise crítica da cultura visual, reconhecendo que a visão é socialmente construída e política, e rejeita a noção de cultura como refinamento pessoal." },
+                { "declaracao": "A Educação da Cultura Visual prioriza o ensino de arte ocidental erudita, excluindo experiências visuais consideradas \"populares\" ou midiáticas.", "resposta": false, "feedback": "A Educação da Cultura Visual recusa-se a dividir as experiências visuais entre as que merecem e as que não merecem ser trabalhadas. Ela defende que qualquer experiência visual pode ser relevante para a reflexão de alunos e professores, incluindo a cultura popular e midiática, e que o ensino deve ser feito \"com os alunos\" e não \"para os alunos\", considerando seus prazeres e questionamentos." },
+                { "declaracao": "A abordagem pós-moderna da arte, ao questionar o campo artístico, defende que a arte é um universo apolítico e universalmente salvador, livre de ideologias.", "resposta": false, "feedback": "Em clara oposição ao modernismo, que buscava recalcar a política e naturalizar a arte como um universo salvador e inquestionável, a arte e a educação pós-modernas, influenciadas por pensadores como Imanol Aguirre, recusam-se a conceber a arte como apolítica ou inerentemente superior." },
+                { "declaracao": "O principal objetivo da Educação da Cultura Visual é formar artistas, assim como a Academia Imperial de Belas Artes fazia.", "resposta": false, "feedback": "O objetivo da Educação da Cultura Visual é a análise crítica da cultura visual, reconhecendo que a visão é socialmente construída e política, e que o conhecimento artístico e estético deve ser amplamente apropriado e experimentado. Isso difere fundamentalmente do foco da Academia Imperial de Belas Artes, que visava formar artistas baseando-se na cópia de modelos ideais." },
+                { "declaracao": "No contexto pós-modernista, a Educação da Cultura Visual, influenciada por perspectivas feministas, propõe que a análise de imagens deve expandir-se para incluir a reflexão sobre como a representação visual contribui para a construção da identidade do próprio observador.", "resposta": true, "feedback": "A Educação da Cultura Visual, que se situa na fase pós-modernista do ensino de arte, propõe uma mudança na forma de abordar as imagens. Em vez de apenas perguntar \"o que você vê nesta imagem?\" ou \"qual história conta esta obra?\", ela expande a questão para uma reflexão sobre a própria subjetividade do aluno: \"o que vejo de mim nesta representação visual? O que esta imagem diz de mim? Como esta representação contribui na minha construção identitária – como modo de ver-me e ver o mundo?\". Essa abordagem é influenciada pelas críticas feministas, que destacaram como as imagens podem introjetar exibicionismo e voyeurismo, e como a cultura pode moldar as formas de ver e de se ver. O objetivo é ir além da lógica objetificadora e questionar como o ensino de arte pode estar envolvido em técnicas de subjetivação através dos modos de ver." },
+                { "declaracao": "Autores como Paulo Freire e Vygotsky, ligados a uma pedagogia crítica são alguns dos fundamentos da pedagogia crítica na Educação da Cultura Visual, apesar de que muitos pensadores da educação da cultura visual se fundamentam em uma pedagogia pós-crítica.", "resposta": true, "feedback": "A Educação da Cultura Visual não renega seu débito com a pedagogia crítica, a qual é fundamentada por autores como Vygotsky e Paulo Freire, ambos ligados ao materialismo histórico dialético. Eles enfatizam o diálogo, a cooperação e a importância do repertório dos alunos como ponto de partida para a emancipação, vendo o sujeito como sócio-histórico e em constante transformação." }
+            ]
+        };
+
+        // --- LÓGICA DO JOGO ---
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const playerCountSelect = document.getElementById('player-count');
+        const playerNamesDiv = document.getElementById('player-names');
+        const startGameButton = document.getElementById('start-game');
+        const namingConventionSelect = document.getElementById('naming-convention');
+        const playerCountLabel = document.getElementById('player-count-label');
+
+        const board = document.getElementById('board');
+        const rollDiceButton = document.getElementById('roll-dice');
+        const diceContainer = document.getElementById('dice-container');
+        const currentPlayerNameEl = document.getElementById('current-player-name');
+        const playersInfoDiv = document.getElementById('players-info');
+        
+        const questionModal = document.getElementById('question-modal');
+        const questionPhaseEl = document.getElementById('question-phase');
+        const questionTextEl = document.getElementById('question-text');
+        const trueButton = document.getElementById('true-button');
+        const falseButton = document.getElementById('false-button');
+
+        const feedbackModal = document.getElementById('feedback-modal');
+        const feedbackTitleEl = document.getElementById('feedback-title');
+        const feedbackTextEl = document.getElementById('feedback-text');
+        const feedbackOkButton = document.getElementById('feedback-ok');
+
+        let gameState = {};
+        // Paleta de cores Mondrian para os jogadores
+        const playerColors = ['#D40C0F', '#00329A', '#F2DD00', '#4A4A4A'];
+
+        // Função para embaralhar um array e selecionar os primeiros 'count' itens.
+        function selectRandomQuestions(sourceArray, count) {
+            const shuffled = sourceArray.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+        
+        function createBoard() {
+            board.innerHTML = '';
+            const path = [
+                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                17, 16, 15, 14, 13, 12, 11, 10, 9,
+                18, 19, 20, 21, 22, 23, 24, 25, 26,
+                35, 34, 33, 32, 31, 30, 29, 28, 27,
+                36, 37, 38, 39, 40, 41, 42, 43, 44
+            ];
+            
+            const cells = [];
+            for (let i = 0; i < 45; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.id = i;
+                
+                if (i === 0) {
+                     cell.classList.add('start');
+                     cell.textContent = 'Início';
+                } else if (i === 44) {
+                    cell.classList.add('end');
+                    cell.textContent = 'Fim';
+                } else {
+                    cell.textContent = i;
+                    // Aplicando cores com base no intervalo
+                    if (i >= 1 && i <= 10) {
+                        cell.classList.add('mondrian-yellow');
+                    } else if (i >= 11 && i <= 25) {
+                        cell.classList.add('mondrian-blue');
+                    } else if (i >= 26 && i <= 43) {
+                        cell.classList.add('mondrian-red');
+                    }
+                }
+                cells.push(cell);
+            }
+            
+            path.forEach(index => {
+                board.appendChild(cells[index]);
+            });
+        }
+
+        function getPhaseForPosition(position) {
+            if (position > 0 && position <= 10) return 'pre-moderna';
+            if (position > 10 && position <= 25) return 'moderna';
+            if (position > 25 && position < 45) return 'pos-moderna';
+            return null;
+        }
+
+        function updateSetupScreenText() {
+            const convention = namingConventionSelect.value;
+            const count = playerCountSelect.value;
+            playerCountLabel.textContent = count > 1 ? convention + 's' : convention;
+            updatePlayerNames();
+        }
+
+        function updatePlayerNames() {
+            const count = parseInt(playerCountSelect.value);
+            const convention = namingConventionSelect.value;
+            playerNamesDiv.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = `player-name-${i}`;
+                input.placeholder = `Nome do ${convention} ${i + 1}`;
+                input.className = 'w-full p-3 border-2 border-black focus:ring-2 focus:ring-blue-500';
+                input.style.borderColor = playerColors[i]; // Usa as cores de Mondrian para a borda
+                playerNamesDiv.appendChild(input);
+            }
+        }
+
+        function initializeGame() {
+            const playerCount = parseInt(playerCountSelect.value);
+            const convention = namingConventionSelect.value;
+            gameState = {
+                players: [],
+                currentPlayerIndex: 0,
+                boardSize: 45,
+                gameActive: true,
+                namingConvention: convention,
+                gameQuestions: {} // Armazena as questões sorteadas para esta partida
+            };
+            
+            gameState.gameQuestions['pre-moderna'] = selectRandomQuestions(fullQuestionBank['pre-moderna'], 10);
+            gameState.gameQuestions['moderna'] = selectRandomQuestions(fullQuestionBank['moderna'], 15);
+            gameState.gameQuestions['pos-moderna'] = selectRandomQuestions(fullQuestionBank['pos-moderna'], 20);
+
+            for (let i = 0; i < playerCount; i++) {
+                const nameInput = document.getElementById(`player-name-${i}`);
+                gameState.players.push({
+                    name: nameInput.value || `${convention} ${i + 1}`,
+                    position: 0,
+                    preRollPosition: 0,
+                    color: playerColors[i]
+                });
+            }
+
+            setupScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            createPawns();
+            updateUI();
+        }
+        
+        function createPawns() {
+            gameState.players.forEach((player, index) => {
+                const pawn = document.createElement('div');
+                pawn.id = `pawn-${index}`;
+                pawn.className = 'pawn';
+                pawn.style.backgroundColor = player.color;
+                const startCell = document.querySelector('.cell[data-id="0"]');
+                startCell.appendChild(pawn);
+                positionPawnsInCell(0);
+            });
+        }
+        
+        function positionPawnsInCell(cellNumber) {
+            const cell = document.querySelector(`.cell[data-id="${cellNumber}"]`);
+            if (!cell) return;
+            const pawnsInCell = Array.from(cell.querySelectorAll('.pawn'));
+            const pawnCount = pawnsInCell.length;
+            if (pawnCount <= 1) {
+                 pawnsInCell.forEach(p => { p.style.transform = `translate(0, 0)`; });
+                return;
+            }
+            const positions = [ {x: -12, y: -12}, {x: 12, y: -12}, {x: -12, y: 12}, {x: 12, y: 12} ];
+            pawnsInCell.forEach((pawn, i) => {
+                pawn.style.transform = `translate(${positions[i % 4].x}px, ${positions[i % 4].y}px)`;
+            });
+        }
+
+        function rollDice() {
+            if (!gameState.gameActive) return;
+            rollDiceButton.disabled = true;
+
+            const result = Math.floor(Math.random() * 6) + 1;
+            
+            let randomX = (Math.floor(Math.random() * 4) + 4) * 360;
+            let randomY = (Math.floor(Math.random() * 4) + 4) * 360;
+
+            switch (result) {
+                case 1: break; // front
+                case 2: randomX -= 90; break; // top
+                case 3: randomY += 90; break; // left
+                case 4: randomY -= 90; break; // right
+                case 5: randomX += 90; break; // bottom
+                case 6: randomY += 180; break; // back
+            }
+            
+            diceContainer.style.transform = `rotateX(${randomX}deg) rotateY(${randomY}deg)`;
+
+            setTimeout(() => { movePlayer(result); }, 1200);
+        }
+
+        async function movePlayer(steps) {
+            const player = gameState.players[gameState.currentPlayerIndex];
+            const oldPosition = player.position;
+            player.preRollPosition = oldPosition;
+
+            let newPosition = Math.min(player.position + steps, gameState.boardSize - 1);
+            player.position = newPosition;
+            
+            const pawn = document.getElementById(`pawn-${gameState.currentPlayerIndex}`);
+            const newCell = document.querySelector(`.cell[data-id="${newPosition}"]`);
+            newCell.appendChild(pawn);
+            
+            positionPawnsInCell(oldPosition);
+            positionPawnsInCell(newPosition);
+            updatePlayersInfo();
+
+            if (newPosition === gameState.boardSize - 1) {
+                const convention = gameState.namingConvention;
+                showFeedback(`${convention} Vencedor(a)!`, `Parabéns, ${player.name}! Você venceu o jogo!`, true);
+                gameState.gameActive = false;
+                return;
+            }
+            
+            const phase = getPhaseForPosition(newPosition);
+            if (phase) {
+                setTimeout(() => askQuestion(phase), 500);
+            } else {
+                nextTurn();
+            }
+        }
+
+        function askQuestion(phase) {
+            const phaseQuestions = gameState.gameQuestions[phase];
+            const question = phaseQuestions[Math.floor(Math.random() * phaseQuestions.length)];
+            
+            gameState.currentQuestion = question;
+            
+            questionPhaseEl.textContent = `Fase: ${phase.charAt(0).toUpperCase() + phase.slice(1).replace('-', ' ')}`;
+            questionTextEl.textContent = question.declaracao;
+            
+            questionModal.classList.remove('hidden');
+        }
+
+        function handleAnswer(userAnswer) {
+            questionModal.classList.add('hidden');
+            const question = gameState.currentQuestion;
+            const player = gameState.players[gameState.currentPlayerIndex];
+
+            if (userAnswer === question.resposta) {
+                showFeedback("Resposta Correta!", question.feedback);
+            } else {
+                const currentCell = player.position;
+                const destinationCell = player.preRollPosition;
+                player.position = destinationCell;
+                
+                const pawn = document.getElementById(`pawn-${gameState.currentPlayerIndex}`);
+                const newCell = document.querySelector(`.cell[data-id="${destinationCell}"]`);
+                newCell.appendChild(pawn);
+                
+                positionPawnsInCell(currentCell);
+                positionPawnsInCell(destinationCell);
+                updatePlayersInfo();
+
+                showFeedback("Resposta Incorreta!", `${question.feedback} Você voltará para a casa ${destinationCell}.`);
+            }
+        }
+        
+        function showFeedback(title, text, isWinner = false) {
+            feedbackTitleEl.textContent = title;
+            feedbackTextEl.textContent = text;
+            feedbackModal.classList.remove('hidden');
+            
+            if (isWinner) {
+                feedbackOkButton.onclick = () => { location.reload(); };
+            } else {
+                 feedbackOkButton.onclick = () => {
+                    feedbackModal.classList.add('hidden');
+                    nextTurn();
+                };
+            }
+        }
+
+        function nextTurn() {
+            gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+            updateUI();
+        }
+
+        function updateUI() {
+            updateCurrentPlayerInfo();
+            updatePlayersInfo();
+            rollDiceButton.disabled = !gameState.gameActive;
+        }
+        
+        function updateCurrentPlayerInfo() {
+             if (!gameState.players || gameState.players.length === 0) return;
+            const player = gameState.players[gameState.currentPlayerIndex];
+            currentPlayerNameEl.textContent = player.name;
+            currentPlayerNameEl.style.color = player.color;
+        }
+
+        function updatePlayersInfo() {
+            if (!gameState.players || gameState.players.length === 0) return;
+            const infoContainer = playersInfoDiv.querySelector('h3').nextElementSibling || document.createElement('div');
+            infoContainer.innerHTML = '';
+            
+            gameState.players.forEach(player => {
+                const playerInfo = document.createElement('div');
+                playerInfo.className = 'flex items-center justify-between p-2';
+                playerInfo.style.borderLeft = `5px solid ${player.color}`;
+                
+                playerInfo.innerHTML = `
+                    <span class="font-semibold" style="color: #000; margin-left: 8px;">${player.name}</span>
+                    <span class="font-bold text-gray-700">Casa: ${player.position}</span>
+                `;
+                infoContainer.appendChild(playerInfo);
+            });
+            
+            if (!playersInfoDiv.querySelector('div')) {
+                playersInfoDiv.appendChild(infoContainer);
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        namingConventionSelect.addEventListener('change', updateSetupScreenText);
+        playerCountSelect.addEventListener('change', updateSetupScreenText);
+        startGameButton.addEventListener('click', initializeGame);
+        rollDiceButton.addEventListener('click', rollDice);
+        
+        trueButton.addEventListener('click', () => handleAnswer(true));
+        falseButton.addEventListener('click', () => handleAnswer(false));
+
+        // Inicialização
+        createBoard();
+        updateSetupScreenText();
+    </script>
+</body>
+</html>
