@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz ENADE - Artes Visuais</title>
+    <title>Desafio ENADE - Artes Visuais</title>
 
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self';">
 
@@ -33,17 +33,25 @@
             color: white !important;
             border-color: #DC2626 !important;
         }
-        /* Estilo para o botão de clã selecionado */
-        .clan-btn.selected {
+        /* Estilo para o botão de time selecionado */
+        .team-btn.selected {
             background-color: #4F46E5; /* indigo-600 */
             color: white;
             border-color: #4338CA; /* indigo-700 */
             transform: scale(1.05);
         }
-        .clan-filter-btn.selected {
+        .team-filter-btn.selected {
             background-color: #4F46E5; /* indigo-600 */
             color: white;
             border-color: #4338CA; /* indigo-700 */
+        }
+        /* Estilo para as imagens dos times */
+        .team-btn img {
+            margin-top: 8px; /* Espaçamento entre o nome e a imagem */
+            width: 64px; /* Tamanho fixo para as imagens */
+            height: 64px;
+            border-radius: 8px; /* Borda arredondada para as imagens */
+            object-fit: cover; /* Garante que a imagem cubra a área sem distorção */
         }
     </style>
 </head>
@@ -68,13 +76,13 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha seu Clã</h3>
-                    <p class="text-sm text-gray-500 mb-2">Selecione um clã para registrar seus pontos.</p>
-                    <div id="clan-container" class="flex flex-wrap gap-2">
-                        <button data-clan="Berna Reale" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Berna Reale</button>
-                        <button data-clan="Denilson Baniwa" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Denilson Baniwa</button>
-                        <button data-clan="Rosana Paulino" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Rosana Paulino</button>
-                        <button data-clan="Uýra Sodoma" class="clan-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">Uýra Sodoma</button>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h3>
+                    <p class="text-sm text-gray-500 mb-2">Selecione um time para registrar seus pontos.</p>
+                    <div id="team-container" class="flex flex-wrap gap-2">
+                        <button data-team="Berna Reale" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Berna Reale<img src="uploaded:berna.png" alt="Berna Reale"></button>
+                        <button data-team="Denilson Baniwa" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Denilson Baniwa<img src="uploaded:denilson.png" alt="Denilson Baniwa"></button>
+                        <button data-team="Rosana Paulino" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Rosana Paulino<img src="uploaded:rosana.png" alt="Rosana Paulino"></button>
+                        <button data-team="Uýra Sodoma" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Uýra Sodoma<img src="uploaded:uyra.png" alt="Uýra Sodoma"></button>
                     </div>
                 </div>
 
@@ -87,7 +95,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">3. Escolha o tamanho do Quiz</h3>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">3. Escolha o tamanho do Desafio</h3>
                     <div id="quiz-size-container" class="flex flex-col sm:flex-row gap-4">
                         <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
                         <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
@@ -95,7 +103,7 @@
                     <div id="quiz-rules-notification" class="mt-4 p-3 bg-blue-50 text-blue-800 rounded-lg text-center text-sm hidden"></div>
                 </div>
 
-                <button id="start-quiz-btn" class="w-full bg-blue-600 text-white p-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Iniciar Quiz</button>
+                <button id="start-quiz-btn" class="w-full bg-blue-600 text-white p-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Iniciar Desafio</button>
             </div>
 
             <div id="quiz-screen" class="screen p-6 md:p-8 flex-col">
@@ -119,7 +127,7 @@
             </div>
 
             <div id="results-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6 text-center">
-                 <h2 class="text-3xl font-bold text-gray-800">Quiz Finalizado!</h2>
+                 <h2 class="text-3xl font-bold text-gray-800">Desafio Finalizado!</h2>
                  <div id="results-icon" class="text-7xl"></div>
                  <p id="results-summary" class="text-xl text-gray-700"></p>
                  <p id="results-bonus" class="text-lg font-semibold text-green-600"></p>
@@ -131,19 +139,19 @@
             </div>
 
             <div id="ranking-screen" class="screen p-8 md:p-12 flex-col space-y-6">
-                <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Clãs</h2>
-                <!-- Filtros de clã adicionados -->
-                <div id="clan-filter-container" class="flex flex-wrap justify-center gap-2 mb-4">
-                    <button data-filter-clan="all" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 selected">Todos</button>
-                    <button data-filter-clan="Berna Reale" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Berna Reale</button>
-                    <button data-filter-clan="Denilson Baniwa" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Denilson Baniwa</button>
-                    <button data-filter-clan="Rosana Paulino" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Rosana Paulino</button>
-                    <button data-filter-clan="Uýra Sodoma" class="clan-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Uýra Sodoma</button>
+                <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Times</h2>
+                <!-- Filtros de time adicionados -->
+                <div id="team-filter-container" class="flex flex-wrap justify-center gap-2 mb-4">
+                    <button data-filter-team="all" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 selected">Todos</button>
+                    <button data-filter-team="Berna Reale" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Berna Reale</button>
+                    <button data-filter-team="Denilson Baniwa" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Denilson Baniwa</button>
+                    <button data-filter-team="Rosana Paulino" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Rosana Paulino</button>
+                    <button data-filter-team="Uýra Sodoma" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Uýra Sodoma</button>
                 </div>
                 <div class="w-full bg-white rounded-lg border">
                     <div class="grid grid-cols-12 gap-4 p-3 border-b bg-gray-50 font-bold text-gray-600">
                         <div class="col-span-1">#</div>
-                        <div class="col-span-8">Clã</div>
+                        <div class="col-span-8">Time</div>
                         <div class="col-span-3 text-right">Pontuação</div>
                     </div>
                     <div id="ranking-list" class="divide-y">
@@ -182,11 +190,11 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Definindo os clãs disponíveis
-        const clans = ["Berna Reale", "Denilson Baniwa", "Rosana Paulino", "Uýra Sodoma"];
-        // Coleção para armazenar as pontuações dos clãs
-        const clansCollectionPath = `/artifacts/${appId}/public/data/clans`;
-        const clansCollection = collection(db, clansCollectionPath);
+        // Definindo os times disponíveis
+        const teams = ["Berna Reale", "Denilson Baniwa", "Rosana Paulino", "Uýra Sodoma"];
+        // Coleção para armazenar as pontuações dos times
+        const teamsCollectionPath = `/artifacts/${appId}/public/data/teams`;
+        const teamsCollection = collection(db, teamsCollectionPath);
 
         let allQuestions = [];
         let uniqueThemes = [];
@@ -195,7 +203,7 @@
         let score = 0;
         let correctAnswersCount = 0;
         let quizSize = 0;
-        let selectedClan = null; // Variável para armazenar o clã selecionado
+        let selectedTeam = null; // Variável para armazenar o time selecionado
         let selectedOptionForConfirmation = null; // Nova variável para armazenar a opção selecionada para confirmação
 
         const screens = {
@@ -236,15 +244,15 @@
         const showLoading = () => loadingSpinner.style.display = 'flex';
         const hideLoading = () => loadingSpinner.style.display = 'none';
 
-        // Função para atualizar o estado do botão "Iniciar Quiz"
+        // Função para atualizar o estado do botão "Iniciar Desafio"
         const updateStartQuizButtonState = () => {
             const startQuizBtn = document.getElementById('start-quiz-btn');
             const hasQuizSizeSelected = quizSize > 0;
-            const hasClanSelected = selectedClan !== null;
+            const hasTeamSelected = selectedTeam !== null;
             const hasEnoughQuestions = parseInt(document.getElementById('question-count-display').textContent.split(' ')[0]) >= quizSize;
 
-            // Habilita o botão apenas se o tamanho do quiz, o clã e as questões disponíveis forem válidos
-            startQuizBtn.disabled = !(hasQuizSizeSelected && hasClanSelected && hasEnoughQuestions);
+            // Habilita o botão apenas se o tamanho do quiz, o time e as questões disponíveis forem válidos
+            startQuizBtn.disabled = !(hasQuizSizeSelected && hasTeamSelected && hasEnoughQuestions);
         };
 
         const updateAvailableQuestionsCount = () => {
@@ -273,7 +281,7 @@
                 quizSize = 0;
                 document.getElementById('quiz-rules-notification').classList.add('hidden');
             }
-            updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Quiz
+            updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Desafio
         };
 
         const fetchQuestions = () => {
@@ -322,9 +330,9 @@
         };
 
         const startQuiz = () => {
-            // Verifica se um clã foi selecionado antes de iniciar o quiz
-            if (!selectedClan) {
-                showModal('Clã Não Selecionado', 'Por favor, escolha um clã antes de iniciar o quiz.');
+            // Verifica se um time foi selecionado antes de iniciar o desafio
+            if (!selectedTeam) {
+                showModal('Time Não Selecionado', 'Por favor, escolha um time antes de iniciar o desafio.');
                 return;
             }
 
@@ -339,7 +347,7 @@
             }
 
             if (filteredQuestions.length < quizSize) {
-                showModal('Poucas Questões', `Não há questões suficientes (${filteredQuestions.length}) para os temas selecionados. Por favor, escolha outros temas ou um quiz menor.`);
+                showModal('Poucas Questões', `Não há questões suficientes (${filteredQuestions.length}) para os temas selecionados. Por favor, escolha outros temas ou um desafio menor.`);
                 return;
             }
 
@@ -496,74 +504,74 @@
 
             showScreen('results');
 
-            if (selectedClan) { // Garante que um clã foi selecionado
+            if (selectedTeam) { // Garante que um time foi selecionado
                 showLoading();
-                const clanDocRef = doc(db, clansCollectionPath, selectedClan);
-                const clanDocSnap = await getDoc(clanDocRef);
-                let currentClanScore = 0;
+                const teamDocRef = doc(db, teamsCollectionPath, selectedTeam);
+                const teamDocSnap = await getDoc(teamDocRef);
+                let currentTeamScore = 0;
                 
-                if (clanDocSnap.exists()) {
-                    currentClanScore = clanDocSnap.data().score || 0;
+                if (teamDocSnap.exists()) {
+                    currentTeamScore = teamDocSnap.data().score || 0;
                 }
 
-                const newTotalClanScore = currentClanScore + finalScore;
+                const newTotalTeamScore = currentTeamScore + finalScore;
                 try {
-                    // Atualiza a pontuação do clã no Firestore
-                    await setDoc(clanDocRef, {
-                        name: selectedClan, // O nome do clã é o ID do documento
-                        score: newTotalClanScore
+                    // Atualiza a pontuação do time no Firestore
+                    await setDoc(teamDocRef, {
+                        name: selectedTeam, // O nome do time é o ID do documento
+                        score: newTotalTeamScore
                     }, { merge: true });
                 } catch (error) {
-                    console.error("Erro ao atualizar pontuação do clã:", error);
-                    showModal("Erro de Atualização", `Não foi possível salvar a pontuação do clã. Detalhes: ${error.message}`);
+                    console.error("Erro ao atualizar pontuação do time:", error);
+                    showModal("Erro de Atualização", `Não foi possível salvar a pontuação do time. Detalhes: ${error.message}`);
                 } finally {
                     hideLoading();
                 }
             } else {
-                showModal("Clã Ausente", "Sua pontuação não foi salva no ranking porque nenhum clã foi selecionado.");
+                showModal("Time Ausente", "Sua pontuação não foi salva no ranking porque nenhum time foi selecionado.");
             }
         };
 
-        const updateRanking = (clansData, filterClan = 'all') => {
+        const updateRanking = (teamsData, filterTeam = 'all') => {
             const rankingList = document.getElementById('ranking-list');
             rankingList.innerHTML = '';
 
-            let filteredClans = clansData;
-            if (filterClan !== 'all') {
-                filteredClans = clansData.filter(clan => clan.name === filterClan);
+            let filteredTeams = teamsData;
+            if (filterTeam !== 'all') {
+                filteredTeams = teamsData.filter(team => team.name === filterTeam);
             }
 
-            const sortedClans = filteredClans.sort((a, b) => (b.score || 0) - (a.score || 0));
+            const sortedTeams = filteredTeams.sort((a, b) => (b.score || 0) - (a.score || 0));
 
-            if(sortedClans.length === 0) {
-                rankingList.innerHTML = `<p class="p-4 text-center text-gray-500">Nenhum clã no ranking ainda.</p>`;
+            if(sortedTeams.length === 0) {
+                rankingList.innerHTML = `<p class="p-4 text-center text-gray-500">Nenhum time no ranking ainda.</p>`;
                 return;
             }
 
-            sortedClans.forEach((clan, index) => {
+            sortedTeams.forEach((team, index) => {
                 const rankItem = document.createElement('div');
                 rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center`; // Remover estilização específica de "currentUser"
                 rankItem.innerHTML = `
                     <div class="col-span-1">${index + 1}</div>
-                    <div class="col-span-8 truncate">${clan.name}</div>
-                    <div class="col-span-3 text-right">${clan.score || 0}</div>
+                    <div class="col-span-8 truncate">${team.name}</div>
+                    <div class="col-span-3 text-right">${team.score || 0}</div>
                 `;
                 rankingList.appendChild(rankItem);
             });
         };
 
         let rankingUnsubscribe = null;
-        const listenToRanking = (filterClan = 'all') => {
+        const listenToRanking = (filterTeam = 'all') => {
             if (rankingUnsubscribe) {
                 rankingUnsubscribe();
             }
-            // Listener que busca todos os documentos da coleção de clãs
-            rankingUnsubscribe = onSnapshot(clansCollection, (snapshot) => {
-                const clansData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateRanking(clansData, filterClan); // Passa o filtro atual para updateRanking
+            // Listener que busca todos os documentos da coleção de times
+            rankingUnsubscribe = onSnapshot(teamsCollection, (snapshot) => {
+                const teamsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateRanking(teamsData, filterTeam); // Passa o filtro atual para updateRanking
             }, (error) => {
-                console.error("Erro ao carregar ranking de clãs:", error);
-                document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking de clãs.</p>`;
+                console.error("Erro ao carregar ranking de times:", error);
+                document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking de times.</p>`;
             });
         };
 
@@ -580,12 +588,12 @@
                 // Autenticação anônima para permitir acesso ao Firestore
                 await signInAnonymously(auth);
 
-                // Inicializa os documentos dos clãs no Firestore se não existirem
-                for (const clanName of clans) {
-                    const clanDocRef = doc(db, clansCollectionPath, clanName);
-                    const clanDocSnap = await getDoc(clanDocRef);
-                    if (!clanDocSnap.exists()) {
-                        await setDoc(clanDocRef, { name: clanName, score: 0 });
+                // Inicializa os documentos dos times no Firestore se não existirem
+                for (const teamName of teams) {
+                    const teamDocRef = doc(db, teamsCollectionPath, teamName);
+                    const teamDocSnap = await getDoc(teamDocRef);
+                    if (!teamDocSnap.exists()) {
+                        await setDoc(teamDocRef, { name: teamName, score: 0 });
                     }
                 }
             } catch (error) {
@@ -622,25 +630,26 @@
                 showScreen('ranking');
                 // Garante que o ranking é atualizado quando a tela é exibida,
                 // mantendo o filtro ativo ou mostrando todos se nenhum filtro estiver ativo.
-                const currentFilterBtn = document.querySelector('#clan-filter-container .clan-filter-btn.selected');
-                const filterClan = currentFilterBtn ? currentFilterBtn.dataset.filterClan : 'all';
-                listenToRanking(filterClan);
+                const currentFilterBtn = document.querySelector('#team-filter-container .team-filter-btn.selected');
+                const filterTeam = currentFilterBtn ? currentFilterBtn.dataset.filterTeam : 'all';
+                listenToRanking(filterTeam);
             }));
 
             document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
             modalCloseBtn.addEventListener('click', hideModal);
 
-            // Event listener para seleção de clã
-            document.getElementById('clan-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('clan-btn')) {
-                    document.querySelectorAll('.clan-btn').forEach(btn => {
+            // Event listener para seleção de time
+            document.getElementById('team-container').addEventListener('click', (e) => {
+                if (e.target.closest('.team-btn')) { // Usar closest para pegar o botão pai mesmo clicando na imagem
+                    const selectedButton = e.target.closest('.team-btn');
+                    document.querySelectorAll('.team-btn').forEach(btn => {
                         btn.classList.remove('selected');
                         btn.classList.add('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
                     });
-                    e.target.classList.add('selected');
-                    e.target.classList.remove('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
-                    selectedClan = e.target.dataset.clan;
-                    updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Quiz
+                    selectedButton.classList.add('selected');
+                    selectedButton.classList.remove('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
+                    selectedTeam = selectedButton.dataset.team;
+                    updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Desafio
                 }
             });
 
@@ -657,25 +666,25 @@
 
                     quizSizeRulesNotification.classList.remove('hidden');
                     if (quizSize === 3) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu clã receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu time receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
                     } else if (quizSize === 6) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu clã receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
+                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu time receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
                     }
-                    updateAvailableQuestionsCount(); // Chama para garantir que o botão "Iniciar Quiz" seja habilitado/desabilitado corretamente
+                    updateAvailableQuestionsCount(); // Chama para garantir que o botão "Iniciar Desafio" seja habilitado/desabilitado corretamente
                 }
             });
 
-            // Event listener para filtrar o ranking por clã
-            document.getElementById('clan-filter-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('clan-filter-btn')) {
-                    document.querySelectorAll('.clan-filter-btn').forEach(btn => {
+            // Event listener para filtrar o ranking por time
+            document.getElementById('team-filter-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('team-filter-btn')) {
+                    document.querySelectorAll('.team-filter-btn').forEach(btn => {
                         btn.classList.remove('selected');
                         btn.classList.add('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
                     });
                     e.target.classList.add('selected');
                     e.target.classList.remove('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
-                    const filterClan = e.target.dataset.filterClan;
-                    listenToRanking(filterClan); // Atualiza o ranking com o filtro selecionado
+                    const filterTeam = e.target.dataset.filterTeam;
+                    listenToRanking(filterTeam); // Atualiza o ranking com o filtro selecionado
                 }
             });
 
