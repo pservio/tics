@@ -35,23 +35,53 @@
         }
         /* Estilo para o botão de time selecionado */
         .team-btn.selected {
-            background-color: #4F46E5; /* indigo-600 */
-            color: white;
-            border-color: #4338CA; /* indigo-700 */
+            border-color: #4F46E5; /* indigo-600 */
             transform: scale(1.05);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.5); /* Adiciona um brilho sutil */
         }
-        .team-filter-btn.selected {
-            background-color: #4F46E5; /* indigo-600 */
-            color: white;
-            border-color: #4338CA; /* indigo-700 */
+        /* Estilo base para os botões de time */
+        .team-btn {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 192px; /* Altura fixa para os botões */
+            text-align: center;
+            transition: all 0.2s ease-in-out;
         }
-        /* Estilo para as imagens dos times */
+        /* Estilo para as imagens dentro dos botões de time */
         .team-btn img {
-            margin-top: 8px; /* Espaçamento entre o nome e a imagem */
-            width: 64px; /* Tamanho fixo para as imagens */
-            height: 64px;
-            border-radius: 8px; /* Borda arredondada para as imagens */
-            object-fit: cover; /* Garante que a imagem cubra a área sem distorção */
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem; /* rounded-lg */
+            z-index: 0;
+        }
+        /* Overlay para legibilidade do texto */
+        .team-image-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4); /* 40% de opacidade */
+            border-radius: 0.5rem; /* rounded-lg */
+            z-index: 1;
+            transition: opacity 0.2s ease-in-out;
+        }
+        /* Efeito de hover no overlay */
+        .team-btn:hover .team-image-overlay {
+            opacity: 0.2; /* Menos opaco no hover */
+        }
+        /* Texto do nome do time */
+        .team-name-text {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Sombra para o texto */
         }
     </style>
 </head>
@@ -78,11 +108,27 @@
                 <div>
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h3>
                     <p class="text-sm text-gray-500 mb-2">Selecione um time para registrar seus pontos.</p>
-                    <div id="team-container" class="flex flex-wrap gap-2">
-                        <button data-team="Berna Reale" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Berna Reale<img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/berna.png?raw=true" alt="Berna Reale"></button>
-                        <button data-team="Denilson Baniwa" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Denilson Baniwa<img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/denilson.png?raw=true" alt="Denilson Baniwa"></button>
-                        <button data-team="Rosana Paulino" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Rosana Paulino<img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/rosana.png?raw=true" alt="Rosana Paulino"></button>
-                        <button data-team="Uýra Sodoma" class="team-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 flex flex-col items-center justify-center">Uýra Sodoma<img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/uyra.png?raw=true" alt="Uýra Sodoma"></button>
+                    <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <button data-team="Berna Reale" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/berna.png?raw=true" alt="Berna Reale">
+                            <div class="team-image-overlay"></div>
+                            <span class="team-name-text">Berna Reale</span>
+                        </button>
+                        <button data-team="Denilson Baniwa" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/denilson.png?raw=true" alt="Denilson Baniwa">
+                            <div class="team-image-overlay"></div>
+                            <span class="team-name-text">Denilson Baniwa</span>
+                        </button>
+                        <button data-team="Rosana Paulino" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/rosana.png?raw=true" alt="Rosana Paulino">
+                            <div class="team-image-overlay"></div>
+                            <span class="team-name-text">Rosana Paulino</span>
+                        </button>
+                        <button data-team="Uýra Sodoma" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/uyra.png?raw=true" alt="Uýra Sodoma">
+                            <div class="team-image-overlay"></div>
+                            <span class="team-name-text">Uýra Sodoma</span>
+                        </button>
                     </div>
                 </div>
 
@@ -644,10 +690,13 @@
                     const selectedButton = e.target.closest('.team-btn');
                     document.querySelectorAll('.team-btn').forEach(btn => {
                         btn.classList.remove('selected');
-                        btn.classList.add('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
+                        // Removendo classes que podem conflitar com o novo estilo de imagem de fundo
+                        btn.classList.add('border-gray-300');
+                        btn.classList.remove('text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
                     });
                     selectedButton.classList.add('selected');
-                    selectedButton.classList.remove('border-gray-300', 'text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
+                    // Removendo classes que podem conflitar com o novo estilo de imagem de fundo
+                    selectedButton.classList.remove('border-gray-300');
                     selectedTeam = selectedButton.dataset.team;
                     updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Desafio
                 }
