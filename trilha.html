@@ -289,7 +289,7 @@
                 { "declaracao": "O pós-modernismo, influenciado pelas discussões feministas, contribuiu para a desconstrução da ideia de \"autoexpressão natural\" no ensino de arte, revelando-a como um mito construído socialmente para ocultar seu conteúdo político e de normatização.", "resposta": true, "feedback": "A crítica pós-modernista, com forte influência feminista e pós-estruturalista, desvendou que a noção modernista de \"autoexpressão natural\" e \"criatividade original\" era, na verdade, um mito. Essa \"autoexpressão saudável\" era exemplificada por formas pré-determinadas, servindo para ocultar o conteúdo social da expressão e para normatizar comportamentos. O foco excessivo no indivíduo desviou a atenção dos problemas das instituições culturais e da política social, perpetuando o mito de que o individualismo como liberdade era universal, quando na verdade, era baseado em ideias de classe, etnia e gênero. Essa crítica revela que não existe uma subjetividade pura, pois somos sempre produtos das relações sociais e de poder, e que a celebração da subjetividade autônoma foi uma estratégia do poder disciplinar para moldar indivíduos e inculcar vigilância e autoculpa." },
                 { "declaracao": "A influência de Paulo Freire na Abordagem Triangular é vista na valorização da pedagogia crítica, que busca desvelar ideologias e promover a emancipação.", "resposta": true, "feedback": "A Abordagem Triangular tem uma explícita dívida com Paulo Freire e a pedagogia crítica, especialmente na busca por desfazer certezas e provocar novos modos de pensar. Freire e Vygotsky, ambos ligados ao materialismo histórico dialético, produziram debates cruciais sobre a constituição sócio-histórica dos sujeitos e a necessidade de uma educação que promova a consciência e a transformação social." },
                 { "declaracao": "Segundo Ana Mae Barbosa, a \"leitura de imagem\" na Abordagem Triangular é um exercício exclusivamente emocional, sem foco na reflexão crítica ou na inteligência.", "resposta": false, "feedback": "Ana Mae Barbosa enfatiza que a \"leitura de imagem\" não é apenas um exercício emocional. Pelo contrário, ela aponta para a inteligência e a reflexão crítica como mecanismos importantes para a compreensão da realidade. O \"fazer\" artístico também deve ter uma intencionalidade crítica e transformadora." },
-                { "declaracao": "A abordagem pós-modernista no ensino de arte, como a Abordagem Triangular de Ana Mae Barbosa, enfatiza a centralidade das imagens e a importância da leitura/interpretação e contextualização, além do fazer artístico.", "resposta": true, "feedback": "A Abordagem Triangular, desenvolvida no final da década de 1980, propõe que o ensino de artes seja conduzido por três ações fundamentais: o fazer, o ler/interpretar e o contextualizar. Essa proposta se distingue pela centralidade que as imagens passam a ocupar no processo educativo, questionando a negligência da apreciação artística e histórica da arte na escola, comum em períodos anteriores." },
+                { "declaracao": "A abordagem pós-moderna no ensino de arte, como a Abordagem Triangular de Ana Mae Barbosa, enfatiza a centralidade das imagens e a importância da leitura/interpretação e contextualização, além do fazer artístico.", "resposta": true, "feedback": "A Abordagem Triangular, desenvolvida no final da década de 1980, propõe que o ensino de artes seja conduzido por três ações fundamentais: o fazer, o ler/interpretar e o contextualizar. Essa proposta se distingue pela centralidade que as imagens passam a ocupar no processo educativo, questionando a negligência da apreciação artística e histórica da arte na escola, comum em períodos anteriores." },
                 { "declaracao": "Na abordagem pós-moderna, a aquisição de referências e o estudo de modelos são vistos como prejudiciais à criatividade e à originalidade do aluno.", "resposta": false, "feedback": "Na abordagem pós-moderna, especialmente influenciada pela pesquisa de Brant e Marjorie Wilson, desbanca-se a suposição modernista de que estudar e ter referências acarretaria na perda da criatividade. Pelo contrário, a aquisição de referências tem um papel fundamental no processo criativo, pois \"sem modelos para serem seguidos, haveria pequeno ou nenhum comportamento de realização de signos visuais nas crianças\"." },
                 { "declaracao": "A pesquisa de Brant e Marjorie Wilson revelou que as crianças aprendem a desenhar principalmente por meio da observação de modelos e que a aquisição de referências é fundamental para o processo criativo.", "resposta": true, "feedback": "Contrariando a ideia modernista da \"virgindade gráfica\", Brant e Marjorie Wilson demonstraram que as crianças aprendem a desenhar observando modelos e que sem referências, haveria pouca ou nenhuma produção de signos visuais. Eles defendem que a aquisição de referências é crucial para o desenvolvimento da criatividade e que todos somos influenciados pelos costumes do nosso tempo e lugar." },
                 { "declaracao": "Para Ana Mae Barbosa, a contextualização se refere principalmente à biografia do artista e não ao contexto de produção da obra.", "resposta": false, "feedback": "Ana Mae Barbosa esclarece que contextualizar não se refere à \"mania vulgar de falar da vida do artista\". A contextualização vai além da biografia, abrangendo a história da obra, o contexto de sua produção, o artista e a época, relacionando-os com o contexto atual do aluno, e é impulsionada pelos estudos de Paulo Freire e do Critical Studies." },
@@ -334,7 +334,7 @@
         // Paleta de cores Mondrian para os jogadores
         const playerColors = ['#D40C0F', '#00329A', '#F2DD00', '#4A4A4A'];
 
-        // Função para embaralhar um array e selecionar os primeiros 'count' itens.
+        // Função para embaralhar um array e selecionar os primeiros 'count' itens. (Não mais usada para seleção inicial, mas pode ser útil para outras lógicas)
         function selectRandomQuestions(sourceArray, count) {
             const shuffled = sourceArray.sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
@@ -419,13 +419,18 @@
                 boardSize: 45,
                 gameActive: true,
                 namingConvention: convention,
-                gameQuestions: {} // Armazena as questões sorteadas para esta partida
+                gameQuestions: { // Armazena todas as questões disponíveis
+                    'pre-moderna': [...fullQuestionBank['pre-moderna']],
+                    'moderna': [...fullQuestionBank['moderna']],
+                    'pos-moderna': [...fullQuestionBank['pos-moderna']]
+                },
+                askedQuestions: { // Armazena as questões já feitas nesta sessão do jogo
+                    'pre-moderna': [],
+                    'moderna': [],
+                    'pos-moderna': []
+                }
             };
             
-            gameState.gameQuestions['pre-moderna'] = selectRandomQuestions(fullQuestionBank['pre-moderna'], 10);
-            gameState.gameQuestions['moderna'] = selectRandomQuestions(fullQuestionBank['moderna'], 15);
-            gameState.gameQuestions['pos-moderna'] = selectRandomQuestions(fullQuestionBank['pos-moderna'], 20);
-
             for (let i = 0; i < playerCount; i++) {
                 const nameInput = document.getElementById(`player-name-${i}`);
                 gameState.players.push({
@@ -464,6 +469,7 @@
                  pawnsInCell.forEach(p => { p.style.transform = `translate(0, 0)`; });
                 return;
             }
+            // Posições para os peões dentro de uma célula para evitar sobreposição
             const positions = [ {x: -12, y: -12}, {x: 12, y: -12}, {x: -12, y: 12}, {x: 12, y: 12} ];
             pawnsInCell.forEach((pawn, i) => {
                 pawn.style.transform = `translate(${positions[i % 4].x}px, ${positions[i % 4].y}px)`;
@@ -476,16 +482,17 @@
 
             const result = Math.floor(Math.random() * 6) + 1;
             
+            // Lógica para rotação do dado 3D
             let randomX = (Math.floor(Math.random() * 4) + 4) * 360;
             let randomY = (Math.floor(Math.random() * 4) + 4) * 360;
 
             switch (result) {
-                case 1: break; // front
-                case 2: randomX -= 90; break; // top
-                case 3: randomY += 90; break; // left
-                case 4: randomY -= 90; break; // right
-                case 5: randomX += 90; break; // bottom
-                case 6: randomY += 180; break; // back
+                case 1: break; // face frontal
+                case 2: randomX -= 90; break; // face superior
+                case 3: randomY += 90; break; // face esquerda
+                case 4: randomY -= 90; break; // face direita
+                case 5: randomX += 90; break; // face inferior
+                case 6: randomY += 180; break; // face traseira
             }
             
             diceContainer.style.transform = `rotateX(${randomX}deg) rotateY(${randomY}deg)`;
@@ -496,7 +503,7 @@
         async function movePlayer(steps) {
             const player = gameState.players[gameState.currentPlayerIndex];
             const oldPosition = player.position;
-            player.preRollPosition = oldPosition;
+            player.preRollPosition = oldPosition; // Salva a posição antes do movimento para retorno em caso de erro
 
             let newPosition = Math.min(player.position + steps, gameState.boardSize - 1);
             player.position = newPosition;
@@ -505,8 +512,8 @@
             const newCell = document.querySelector(`.cell[data-id="${newPosition}"]`);
             newCell.appendChild(pawn);
             
-            positionPawnsInCell(oldPosition);
-            positionPawnsInCell(newPosition);
+            positionPawnsInCell(oldPosition); // Reposiciona peões na célula antiga se houver outros
+            positionPawnsInCell(newPosition); // Reposiciona peões na nova célula se houver outros
             updatePlayersInfo();
 
             if (newPosition === gameState.boardSize - 1) {
@@ -525,11 +532,23 @@
         }
 
         function askQuestion(phase) {
-            const phaseQuestions = gameState.gameQuestions[phase];
-            const question = phaseQuestions[Math.floor(Math.random() * phaseQuestions.length)];
+            const allPhaseQuestions = gameState.gameQuestions[phase];
+            // Filtra as perguntas que ainda não foram feitas nesta fase
+            let availableQuestions = allPhaseQuestions.filter(q => !gameState.askedQuestions[phase].includes(q));
+
+            // Se todas as perguntas desta fase já foram feitas, reseta a lista de perguntas feitas para esta fase
+            if (availableQuestions.length === 0) {
+                gameState.askedQuestions[phase] = [];
+                availableQuestions = allPhaseQuestions; // Todas as perguntas ficam disponíveis novamente
+            }
+
+            // Seleciona uma pergunta aleatória entre as disponíveis
+            const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
             
             gameState.currentQuestion = question;
-            
+            // Adiciona a pergunta selecionada à lista de perguntas já feitas para esta fase
+            gameState.askedQuestions[phase].push(question); 
+
             questionPhaseEl.textContent = `Fase: ${phase.charAt(0).toUpperCase() + phase.slice(1).replace('-', ' ')}`;
             questionTextEl.textContent = question.declaracao;
             
@@ -552,8 +571,8 @@
                 const newCell = document.querySelector(`.cell[data-id="${destinationCell}"]`);
                 newCell.appendChild(pawn);
                 
-                positionPawnsInCell(currentCell);
-                positionPawnsInCell(destinationCell);
+                positionPawnsInCell(currentCell); // Reposiciona peões na célula atual
+                positionPawnsInCell(destinationCell); // Reposiciona peões na célula de destino
                 updatePlayersInfo();
 
                 showFeedback("Resposta Incorreta!", `${question.feedback} Você voltará para a casa ${destinationCell}.`);
@@ -566,8 +585,10 @@
             feedbackModal.classList.remove('hidden');
             
             if (isWinner) {
+                // Se for vencedor, o botão OK recarrega a página para reiniciar o jogo
                 feedbackOkButton.onclick = () => { location.reload(); };
             } else {
+                // Caso contrário, o botão OK apenas esconde o modal e passa para o próximo turno
                  feedbackOkButton.onclick = () => {
                     feedbackModal.classList.add('hidden');
                     nextTurn();
@@ -576,13 +597,16 @@
         }
 
         function nextTurn() {
+            // Passa para o próximo jogador
             gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
             updateUI();
         }
 
         function updateUI() {
+            // Atualiza as informações do jogador atual e as posições de todos os jogadores
             updateCurrentPlayerInfo();
             updatePlayersInfo();
+            // Habilita/desabilita o botão de lançar dado com base no estado do jogo
             rollDiceButton.disabled = !gameState.gameActive;
         }
         
@@ -595,9 +619,11 @@
 
         function updatePlayersInfo() {
             if (!gameState.players || gameState.players.length === 0) return;
+            // Encontra o contêiner de informações dos jogadores ou cria um novo se não existir
             const infoContainer = playersInfoDiv.querySelector('h3').nextElementSibling || document.createElement('div');
             infoContainer.innerHTML = '';
             
+            // Adiciona as informações de cada jogador ao contêiner
             gameState.players.forEach(player => {
                 const playerInfo = document.createElement('div');
                 playerInfo.className = 'flex items-center justify-between p-2';
@@ -610,21 +636,24 @@
                 infoContainer.appendChild(playerInfo);
             });
             
+            // Adiciona o contêiner de informações dos jogadores ao DOM se ainda não estiver lá
             if (!playersInfoDiv.querySelector('div')) {
                 playersInfoDiv.appendChild(infoContainer);
             }
         }
 
         // --- EVENT LISTENERS ---
+        // Adiciona listeners para os elementos da tela de configuração e do jogo
         namingConventionSelect.addEventListener('change', updateSetupScreenText);
         playerCountSelect.addEventListener('change', updateSetupScreenText);
         startGameButton.addEventListener('click', initializeGame);
         rollDiceButton.addEventListener('click', rollDice);
         
+        // Listeners para os botões de resposta do modal de pergunta
         trueButton.addEventListener('click', () => handleAnswer(true));
         falseButton.addEventListener('click', () => handleAnswer(false));
 
-        // Inicialização
+        // Inicialização do tabuleiro e da tela de configuração ao carregar a página
         createBoard();
         updateSetupScreenText();
     </script>
