@@ -1,751 +1,539 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desafio ENADE - Artes Visuais</title>
-
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://cdn.tailwindcss.com; object-src 'none'; base-uri 'self';">
-
+    <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .screen { display: none; }
-        .active-screen { display: flex; }
-        .theme-tag {
-            transition: all 0.2s ease-in-out;
-        }
-        .theme-tag.selected {
-            background-color: #10B981; /* green-500 */
-            color: white;
-            transform: scale(1.05);
-        }
-        .option-btn.correct {
-            background-color: #10B981 !important; /* green-500 */
-            color: white !important;
-            border-color: #059669 !important;
-        }
-        .option-btn.incorrect {
-            background-color: #EF4444 !important; /* red-500 */
-            color: white !important;
-            border-color: #DC2626 !important;
-        }
-        /* Estilo para o botão de time selecionado */
-        .team-btn.selected {
-            border-color: #4F46E5; /* indigo-600 */
-            transform: scale(1.05);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.5); /* Adiciona um brilho sutil */
-        }
-        /* Estilo base para os botões de time */
-        .team-btn {
-            position: relative;
-            overflow: hidden;
+            background-color: #f0f2f5;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 192px; /* Altura fixa para os botões */
-            text-align: center;
-            transition: all 0.2s ease-in-out;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        /* Estilo para as imagens dentro dos botões de time */
-        .team-btn img {
-            position: absolute;
-            inset: 0;
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        .team-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .team-card.selected {
+            border: 3px solid #3b82f6; /* Cor de destaque para seleção */
+            box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
+        }
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 0.5rem; /* rounded-lg */
-            z-index: 0;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
         }
-        /* Overlay para legibilidade do texto */
-        .team-image-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.4); /* 40% de opacidade */
-            border-radius: 0.5rem; /* rounded-lg */
-            z-index: 1;
-            transition: opacity 0.2s ease-in-out;
-        }
-        /* Efeito de hover no overlay */
-        .team-btn:hover .team-image-overlay {
-            opacity: 0.2; /* Menos opaco no hover */
-        }
-        /* Texto do nome do time */
-        .team-name-text {
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 500px;
+            text-align: center;
             position: relative;
-            z-index: 2;
-            color: white;
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 700; /* font-bold */
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Sombra para o texto */
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
-    <div id="loading-spinner" class="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
+    <div class="container bg-white rounded-xl shadow-lg p-8 md:p-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Desafio ENADE - Artes Visuais</h1>
 
-    <div class="container mx-auto p-4 max-w-2xl w-full">
-        <div id="app-container" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Seção de Autenticação (Adicionada) -->
+        <div class="bg-blue-50 p-4 rounded-lg mb-6 shadow-sm">
+            <h2 class="text-xl font-semibold text-blue-800 mb-2">Status de Autenticação</h2>
+            <p id="auth-status" class="text-blue-700">Carregando...</p>
+            <p id="user-uid" class="text-blue-600 text-sm break-all">UID: N/A</p>
+            <button id="sign-out-button" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                Sair
+            </button>
+        </div>
+        <!-- Fim da Seção de Autenticação -->
 
-            <div id="setup-screen" class="screen p-8 md:p-12 flex-col space-y-8 active-screen">
-                 <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Olá, <span id="user-name-display">Jogador!</span></h2>
-                        <p class="text-gray-600">Vamos começar?</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button id="view-ranking-btn-setup" class="bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">Ver Ranking</button>
-                    </div>
+        <!-- Seção 1: Escolha do Time -->
+        <div id="section-team-selection" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div id="team-berna" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Berna Reale">
+                    <img src="https://placehold.co/100x100/A78BFA/ffffff?text=Berna" alt="Berna Reale" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">Berna Reale</span>
                 </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h3>
-                    <p class="text-sm text-gray-500 mb-2">Selecione um time para registrar seus pontos.</p>
-                    <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <button data-team="Berna Reale" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/berna.png?raw=true" alt="Berna Reale">
-                            <div class="team-image-overlay"></div>
-                            <span class="team-name-text">Berna Reale</span>
-                        </button>
-                        <button data-team="Denilson Baniwa" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/denilson.png?raw=true" alt="Denilson Baniwa">
-                            <div class="team-image-overlay"></div>
-                            <span class="team-name-text">Denilson Baniwa</span>
-                        </button>
-                        <button data-team="Rosana Paulino" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/rosana.png?raw=true" alt="Rosana Paulino">
-                            <div class="team-image-overlay"></div>
-                            <span class="team-name-text">Rosana Paulino</span>
-                        </button>
-                        <button data-team="Uýra Sodoma" class="team-btn border-2 border-gray-300 rounded-lg text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <img src="https://github.com/pservio/simuladoenade/blob/c20b12397566e0fe1c1bccd69107abdfe2c26724/uyra.png?raw=true" alt="Uýra Sodoma">
-                            <div class="team-image-overlay"></div>
-                            <span class="team-name-text">Uýra Sodoma</span>
-                        </button>
-                    </div>
+                <div id="team-denilson" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Denilson Baniwa">
+                    <img src="https://placehold.co/100x100/60A5FA/ffffff?text=Denilson" alt="Denilson Baniwa" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">Denilson Baniwa</span>
                 </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">2. Escolha os temas</h3>
-                    <p class="text-sm text-gray-500 mb-2">Selecione um ou mais temas. Se nenhum for escolhido, todas as questões serão consideradas.</p>
-                    <div id="themes-container" class="flex flex-wrap gap-2">
-                        </div>
-                    <p id="question-count-display" class="text-sm text-gray-600 mt-4 text-center font-medium"></p>
+                <div id="team-rosana" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Rosana Paulino">
+                    <img src="https://placehold.co/100x100/F87171/ffffff?text=Rosana" alt="Rosana Paulino" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">Rosana Paulino</span>
                 </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">3. Escolha o tamanho do Desafio</h3>
-                    <div id="quiz-size-container" class="flex flex-col sm:flex-row gap-4">
-                        <button data-size="3" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">3 Questões</button>
-                        <button data-size="6" class="quiz-size-btn flex-1 p-4 border-2 border-gray-300 rounded-lg text-lg font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-300">6 Questões</button>
-                    </div>
-                    <div id="quiz-rules-notification" class="mt-4 p-3 bg-blue-50 text-blue-800 rounded-lg text-center text-sm hidden"></div>
+                <div id="team-uyra" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Uýra Sodoma">
+                    <img src="https://placehold.co/100x100/4ADE80/ffffff?text=Uýra" alt="Uýra Sodoma" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">Uýra Sodoma</span>
                 </div>
-
-                <button id="start-quiz-btn" class="w-full bg-blue-600 text-white p-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Iniciar Desafio</button>
             </div>
+            <p id="selected-team-display" class="mt-4 text-lg font-semibold text-gray-600">Time Selecionado: Nenhum</p>
+        </div>
 
-            <div id="quiz-screen" class="screen p-6 md:p-8 flex-col">
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-sm font-medium text-gray-600 mb-6">
-                    <span id="question-counter"></span>
-                    <span id="current-score">Pontos: 0</span>
-                </div>
-                <div id="question-container" class="space-y-4 flex-grow">
-                    <div id="question-theme-container" class="flex flex-wrap gap-2 mb-2"></div>
-                    <img id="question-image" src="" alt="Imagem da questão" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
-                    <h3 id="question-enunciado" class="text-lg md:text-xl font-medium text-gray-800 leading-relaxed"></h3>
-                    <div id="options-container" class="grid grid-cols-1 gap-3">
-                        </div>
-                </div>
-                <!-- Botão de confirmação adicionado aqui -->
-                <button id="confirm-answer-btn" class="mt-6 w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors hidden">Confirmar Resposta</button>
-                <button id="next-question-btn" class="mt-6 w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition-colors hidden">Próxima Questão</button>
-            </div>
-
-            <div id="results-screen" class="screen p-8 md:p-12 flex-col items-center justify-center space-y-6 text-center">
-                 <h2 class="text-3xl font-bold text-gray-800">Desafio Finalizado!</h2>
-                 <div id="results-icon" class="text-7xl"></div>
-                 <p id="results-summary" class="text-xl text-gray-700"></p>
-                 <p id="results-bonus" class="text-lg font-semibold text-green-600"></p>
-                 <p id="results-total-score" class="text-2xl font-bold text-blue-600"></p>
-                 <div class="flex flex-col sm:flex-row gap-4 w-full max-w-sm mt-6">
-                     <button id="play-again-btn" class="flex-1 bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Jogar Novamente</button>
-                     <button id="view-ranking-btn-results" class="flex-1 bg-yellow-500 text-white p-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">Ver Ranking</button>
-                 </div>
-            </div>
-
-            <div id="ranking-screen" class="screen p-8 md:p-12 flex-col space-y-6">
-                <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Ranking de Times</h2>
-                <!-- Filtros de time adicionados -->
-                <div id="team-filter-container" class="flex flex-wrap justify-center gap-2 mb-4">
-                    <button data-filter-team="all" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 selected">Todos</button>
-                    <button data-filter-team="Berna Reale" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Berna Reale</button>
-                    <button data-filter-team="Denilson Baniwa" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Denilson Baniwa</button>
-                    <button data-filter-team="Rosana Paulino" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Rosana Paulino</button>
-                    <button data-filter-team="Uýra Sodoma" class="team-filter-btn px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Uýra Sodoma</button>
-                </div>
-                <div class="w-full bg-white rounded-lg border">
-                    <div class="grid grid-cols-12 gap-4 p-3 border-b bg-gray-50 font-bold text-gray-600">
-                        <div class="col-span-1">#</div>
-                        <div class="col-span-8">Time</div>
-                        <div class="col-span-3 text-right">Pontuação</div>
-                    </div>
-                    <div id="ranking-list" class="divide-y">
-                        </div>
-                </div>
-                <button id="back-to-setup-btn" class="w-full max-w-sm mx-auto bg-gray-600 text-white p-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">Voltar</button>
+        <!-- Seção 2: Escolha dos Temas -->
+        <div id="section-themes" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">2. Escolha os Temas (Opcional)</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox text-blue-600 rounded" value="Fotografia">
+                    <span class="ml-2 text-gray-700">Fotografia</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox text-blue-600 rounded" value="Pintura">
+                    <span class="ml-2 text-gray-700">Pintura</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox text-blue-600 rounded" value="Escultura">
+                    <span class="ml-2 text-gray-700">Escultura</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox text-blue-600 rounded" value="Performance">
+                    <span class="ml-2 text-gray-700">Performance</span>
+                </label>
             </div>
         </div>
-    </div>
 
-    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center space-y-4">
-            <h3 id="modal-title" class="text-2xl font-bold text-gray-800"></h3>
-            <p id="modal-message" class="text-gray-600"></p>
-            <button id="modal-close-btn" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">OK</button>
+        <!-- Seção 3: Escolha do Tamanho do Desafio -->
+        <div id="section-challenge-size" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">3. Quantas Questões?</h2>
+            <div class="flex justify-center gap-6">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="3" checked>
+                    <span class="ml-2 text-gray-700">3 Questões</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="6">
+                    <span class="ml-2 text-gray-700">6 Questões</span>
+                </label>
+            </div>
         </div>
+
+        <button id="start-challenge-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+            Iniciar Desafio
+        </button>
+
+        <!-- Seção de Questões (Exemplo Básico) -->
+        <div id="section-question" class="hidden mt-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Questão <span id="current-question-number">1</span></h2>
+            <p id="current-question-text" class="text-lg text-gray-800 mb-6">Esta é a pergunta de exemplo.</p>
+            <img id="question-image" src="https://placehold.co/400x250/E0E0E0/000000?text=Imagem+da+Questão" alt="Imagem da Questão" class="mx-auto rounded-lg shadow-md mb-6">
+            <div class="flex justify-center gap-4">
+                <button id="confirm-answer-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Confirmar Resposta</button>
+                <button id="next-question-button" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Próxima Questão</button>
+            </div>
+            <p class="mt-4 text-xl font-bold text-gray-800">Pontuação: <span id="current-score">0</span></p>
+        </div>
+
+        <!-- Seção de Desafio Finalizado -->
+        <div id="section-challenge-finished" class="hidden mt-8">
+            <h2 class="text-3xl font-bold text-green-600 mb-4">Desafio Finalizado!</h2>
+            <p class="text-xl text-gray-700 mb-6">Parabéns! Sua pontuação final é: <span id="final-score" class="font-bold">0</span></p>
+            <div class="flex justify-center gap-4">
+                <button id="play-again-button" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Jogar Novamente</button>
+                <button id="view-ranking-button" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Ver Ranking</button>
+            </div>
+        </div>
+
+        <!-- Seção de Ranking -->
+        <div id="section-ranking" class="hidden mt-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Ranking de Times</h2>
+            <div class="flex justify-center gap-4 mb-4">
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="all">Todos</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Berna Reale">Berna Reale</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Denilson Baniwa">Denilson Baniwa</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Rosana Paulino">Rosana Paulino</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Uýra Sodoma">Uýra Sodoma</button>
+            </div>
+            <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 text-left text-gray-600 font-semibold">Time</th>
+                        <th class="py-2 px-4 text-left text-gray-600 font-semibold">Pontuação</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-table-body">
+                    <!-- Linhas do ranking serão inseridas aqui por JS -->
+                </tbody>
+            </table>
+            <button id="back-to-home-button" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Voltar</button>
+        </div>
+
+        <!-- Modal de Mensagem (para substituir alert()) -->
+        <div id="message-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-modal-button">&times;</span>
+                <p id="modal-message" class="text-lg text-gray-800"></p>
+                <button id="modal-ok-button" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">OK</button>
+            </div>
+        </div>
+
     </div>
 
-    <script src="perguntas.js"></script>
-    <script src="firebase-config.js"></script>
-
+    <!-- Seu arquivo de configuração do Firebase -->
+    <script type="module" src="firebase-config.js"></script>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importa a instância de autenticação do seu arquivo de configuração
+        import { auth, db } from './firebase-config.js';
+        import { signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const firebaseConfig = window.firebaseConfig || {};
-        const appId = window.appId || 'default-quiz-app';
+        // Elementos UI para o status de autenticação
+        const authStatusElement = document.getElementById('auth-status');
+        const userUidElement = document.getElementById('user-uid');
+        const signOutButton = document.getElementById('sign-out-button');
 
-        if (!firebaseConfig.apiKey) {
-            showModal("Erro", "Erro: Configuração do Firebase não encontrada.");
-            hideLoading();
+        // Referências aos elementos do jogo
+        const teamCards = document.querySelectorAll('.team-card');
+        const selectedTeamDisplay = document.getElementById('selected-team-display');
+        const startChallengeButton = document.getElementById('start-challenge-button');
+        const sectionTeamSelection = document.getElementById('section-team-selection');
+        const sectionQuestion = document.getElementById('section-question');
+        const sectionChallengeFinished = document.getElementById('section-challenge-finished');
+        const sectionRanking = document.getElementById('section-ranking');
+        const confirmAnswerButton = document.getElementById('confirm-answer-button');
+        const nextQuestionButton = document.getElementById('next-question-button');
+        const playAgainButton = document.getElementById('play-again-button');
+        const viewRankingButton = document.getElementById('view-ranking-button');
+        const backToHomeButton = document.getElementById('back-to-home-button');
+        const rankingTableBody = document.getElementById('ranking-table-body');
+        const filterRankingButtons = document.querySelectorAll('.filter-ranking-button');
+        const currentScoreElement = document.getElementById('current-score');
+        const finalScoreElement = document.getElementById('final-score');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const currentQuestionTextElement = document.getElementById('current-question-text');
+        const questionImageElement = document.getElementById('question-image');
+
+        // Modal de Mensagem
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const modalOkButton = document.getElementById('modal-ok-button');
+
+        let selectedTeam = null;
+        let currentScore = 0;
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let totalQuestions = 3; // Padrão
+
+        // Função para exibir o modal de mensagem
+        function showModal(message) {
+            modalMessage.textContent = message;
+            messageModal.style.display = 'flex'; // Usa flex para centralizar
         }
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        // Definindo os times disponíveis
-        const teams = ["Berna Reale", "Denilson Baniwa", "Rosana Paulino", "Uýra Sodoma"];
-        // Coleção para armazenar as pontuações dos times
-        const teamsCollectionPath = `/artifacts/${appId}/public/data/teams`;
-        const teamsCollection = collection(db, teamsCollectionPath);
-
-        let allQuestions = [];
-        let uniqueThemes = [];
-        let quizQuestions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let correctAnswersCount = 0;
-        let quizSize = 0;
-        let selectedTeam = null; // Variável para armazenar o time selecionado
-        let selectedOptionForConfirmation = null; // Nova variável para armazenar a opção selecionada para confirmação
-
-        const screens = {
-            setup: document.getElementById('setup-screen'),
-            quiz: document.getElementById('quiz-screen'),
-            results: document.getElementById('results-screen'),
-            ranking: document.getElementById('ranking-screen'),
-        };
-
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-        const loadingSpinner = document.getElementById('loading-spinner');
-
-        // Botões específicos do quiz
-        const confirmAnswerBtn = document.getElementById('confirm-answer-btn');
-        const nextQuestionBtn = document.getElementById('next-question-btn');
-
-
-        const showScreen = (screenName) => {
-            Object.values(screens).forEach(screen => screen.classList.remove('active-screen'));
-            if(screens[screenName]) {
-                screens[screenName].classList.add('active-screen');
+        // Event listeners para o modal
+        closeModalButton.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+        });
+        modalOkButton.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target == messageModal) {
+                messageModal.style.display = 'none';
             }
-        };
+        });
 
-        const showModal = (title, message) => {
-            modalTitle.textContent = title;
-            modalMessage.innerHTML = message;
-            modal.style.display = 'flex';
-        };
+        // --- Lógica de Autenticação Firebase ---
+        let currentUserUid = null; // Variável para armazenar o UID do usuário logado
 
-        const hideModal = () => {
-            modal.style.display = 'none';
-        };
-
-        const showLoading = () => loadingSpinner.style.display = 'flex';
-        const hideLoading = () => loadingSpinner.style.display = 'none';
-
-        // Função para atualizar o estado do botão "Iniciar Desafio"
-        const updateStartQuizButtonState = () => {
-            const startQuizBtn = document.getElementById('start-quiz-btn');
-            const hasQuizSizeSelected = quizSize > 0;
-            const hasTeamSelected = selectedTeam !== null;
-            const hasEnoughQuestions = parseInt(document.getElementById('question-count-display').textContent.split(' ')[0]) >= quizSize;
-
-            // Habilita o botão apenas se o tamanho do quiz, o time e as questões disponíveis forem válidos
-            startQuizBtn.disabled = !(hasQuizSizeSelected && hasTeamSelected && hasEnoughQuestions);
-        };
-
-        const updateAvailableQuestionsCount = () => {
-            const questionCountDisplay = document.getElementById('question-count-display');
-            const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
-            const selectedThemes = Array.from(selectedThemeElements).map(el => el.dataset.theme);
-
-            let filteredQuestions = allQuestions;
-            if (selectedThemes.length > 0) {
-                filteredQuestions = allQuestions.filter(q =>
-                    selectedThemes.some(selectedTheme => q.tema.includes(selectedTheme))
-                );
-            }
-
-            const count = filteredQuestions.length;
-            questionCountDisplay.textContent = `${count} questões disponíveis com os temas selecionados.`;
-
-            document.querySelectorAll('.quiz-size-btn').forEach(btn => {
-                const size = parseInt(btn.dataset.size);
-                btn.disabled = count < size;
-            });
-
-            const selectedSizeBtn = document.querySelector('.quiz-size-btn.border-blue-500');
-            if (selectedSizeBtn && selectedSizeBtn.disabled) {
-                selectedSizeBtn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
-                quizSize = 0;
-                document.getElementById('quiz-rules-notification').classList.add('hidden');
-            }
-            updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Desafio
-        };
-
-        const fetchQuestions = () => {
-            if (typeof perguntasLocais === 'undefined') {
-                console.error("Erro Fatal: 'perguntas.js' não foi carregado.");
-                showModal('Erro Crítico', "O ficheiro de perguntas ('perguntas.js') não foi encontrado ou carregado corretamente.");
-                hideLoading();
-                return;
-            }
-
-            try {
-                allQuestions = perguntasLocais
-                    .filter(q => q.enunciado && q.resposta_correta && q.tema)
-                    .map(q => {
-                        const themes = (typeof q.tema === 'string')
-                            ? q.tema.split(',').map(t => t.trim())
-                            : q.tema;
-                        return { ...q, tema: themes.filter(Boolean) };
+        // Listener para mudanças no estado de autenticação
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado
+                currentUserUid = user.uid;
+                authStatusElement.textContent = 'Logado';
+                userUidElement.textContent = `UID: ${user.uid}`;
+                console.log('Usuário logado:', user.uid);
+            } else {
+                // Usuário está deslogado
+                currentUserUid = null;
+                authStatusElement.textContent = 'Deslogado';
+                userUidElement.textContent = 'UID: N/A';
+                console.log('Usuário deslogado. Tentando login anônimo...');
+                // Tenta fazer login anonimamente se não houver usuário
+                signInAnonymously(auth)
+                    .then(() => {
+                        console.log('Login anônimo bem-sucedido!');
+                        // onAuthStateChanged será chamado novamente com o usuário anônimo
+                    })
+                    .catch((error) => {
+                        console.error('Erro no login anônimo:', error);
+                        showModal(`Erro ao fazer login anônimo: ${error.message}`);
                     });
-
-                const allThemes = allQuestions.flatMap(q => q.tema);
-                uniqueThemes = [...new Set(allThemes)].filter(Boolean).sort();
-                populateThemes();
-                updateAvailableQuestionsCount();
-            } catch (err) {
-                 console.error("Erro ao processar 'perguntas.js':", err);
-                 showModal('Erro Crítico', 'Verifique a sintaxe do seu ficheiro `perguntas.js`.');
-                 hideLoading();
             }
-        };
+        });
 
-        const populateThemes = () => {
-            const container = document.getElementById('themes-container');
-            container.innerHTML = '';
-            uniqueThemes.forEach(theme => {
-                const button = document.createElement('button');
-                button.className = 'theme-tag px-3 py-1.5 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100';
-                button.textContent = theme;
-                button.dataset.theme = theme;
-                button.addEventListener('click', () => {
-                    button.classList.toggle('selected');
-                    updateAvailableQuestionsCount();
+        // Botão de Sair
+        signOutButton.addEventListener('click', () => {
+            signOut(auth)
+                .then(() => {
+                    console.log('Usuário saiu com sucesso.');
+                    showModal('Você saiu do jogo.');
+                })
+                .catch((error) => {
+                    console.error('Erro ao sair:', error);
+                    showModal(`Erro ao sair: ${error.message}`);
                 });
-                container.appendChild(button);
-            });
-        };
+        });
 
-        const startQuiz = () => {
-            // Verifica se um time foi selecionado antes de iniciar o desafio
+        // --- Lógica do Jogo (Mantida do seu site original, com pequenas adaptações) ---
+
+        // Seleção de Time
+        teamCards.forEach(card => {
+            card.addEventListener('click', () => {
+                teamCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedTeam = card.dataset.team;
+                selectedTeamDisplay.textContent = `Time Selecionado: ${selectedTeam}`;
+            });
+        });
+
+        // Iniciar Desafio
+        startChallengeButton.addEventListener('click', () => {
             if (!selectedTeam) {
-                showModal('Time Não Selecionado', 'Por favor, escolha um time antes de iniciar o desafio.');
+                showModal('Por favor, selecione um time antes de iniciar o desafio.');
+                return;
+            }
+            if (!currentUserUid) {
+                showModal('Aguarde, o sistema de autenticação está carregando. Tente novamente em instantes.');
                 return;
             }
 
-            const selectedThemeElements = document.querySelectorAll('.theme-tag.selected');
-            const selectedThemes = Array.from(selectedThemeElements).map(el => el.dataset.theme);
+            // Define o número total de questões
+            totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
 
-            let filteredQuestions = allQuestions;
-            if (selectedThemes.length > 0) {
-                filteredQuestions = allQuestions.filter(q =>
-                    selectedThemes.some(selectedTheme => q.tema.includes(selectedTheme))
-                );
-            }
-
-            if (filteredQuestions.length < quizSize) {
-                showModal('Poucas Questões', `Não há questões suficientes (${filteredQuestions.length}) para os temas selecionados. Por favor, escolha outros temas ou um desafio menor.`);
-                return;
-            }
-
-            quizQuestions = filteredQuestions.sort(() => 0.5 - Math.random()).slice(0, quizSize);
-
+            // Simula o carregamento de questões (em um cenário real, viriam do Firestore)
+            questions = generateMockQuestions(totalQuestions);
+            currentScore = 0;
             currentQuestionIndex = 0;
-            score = 0;
-            correctAnswersCount = 0;
+            updateQuestionDisplay();
 
-            displayQuestion();
-            showScreen('quiz');
-        };
+            sectionTeamSelection.classList.add('hidden');
+            document.getElementById('section-themes').classList.add('hidden');
+            document.getElementById('section-challenge-size').classList.add('hidden');
+            startChallengeButton.classList.add('hidden');
+            sectionQuestion.classList.remove('hidden');
+            currentScoreElement.textContent = currentScore;
+        });
 
-        const displayQuestion = () => {
-            if (currentQuestionIndex >= quizQuestions.length) {
-                showResults();
-                return;
-            }
+        // Função para gerar questões mock (apenas para demonstração)
+        function generateMockQuestions(num) {
+            const mockQuestions = [
+                {
+                    text: "Qual artista é conhecido por suas performances que exploram questões de gênero e sexualidade, muitas vezes utilizando o próprio corpo como suporte?",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+1",
+                    answer: "Performance Artist" // Resposta correta para simulação
+                },
+                {
+                    text: "Cite um movimento artístico do século XX que utilizou a fotografia como principal meio de expressão, explorando a objetividade e a documentação do cotidiano.",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+2",
+                    answer: "Nova Objetividade"
+                },
+                {
+                    text: "Qual técnica de gravura envolve o uso de ácidos para corroer uma placa de metal, criando linhas que retêm a tinta?",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+3",
+                    answer: "Água-forte"
+                },
+                {
+                    text: "Descreva brevemente a importância da cor na obra de Henri Matisse.",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+4",
+                    answer: "Cor"
+                },
+                {
+                    text: "Quem é o artista brasileiro que criou a obra 'Bandeira Branca', que questiona o conceito de nação e identidade?",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+5",
+                    answer: "Cildo Meireles"
+                },
+                {
+                    text: "Qual o nome da artista que utiliza cabelos e unhas em suas instalações, explorando temas de ancestralidade e memória?",
+                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+6",
+                    answer: "Rosana Paulino"
+                }
+            ];
+            // Embaralha as questões e pega o número necessário
+            return mockQuestions.sort(() => 0.5 - Math.random()).slice(0, num);
+        }
 
-            const question = quizQuestions[currentQuestionIndex];
-            document.getElementById('question-counter').textContent = `Questão ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
-            document.getElementById('current-score').textContent = `Pontos: ${score}`;
-            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex) / quizQuestions.length) * 100}%`;
-
-            const questionThemeContainer = document.getElementById('question-theme-container');
-            questionThemeContainer.innerHTML = '';
-            if (question.tema && question.tema.length > 0) {
-                question.tema.forEach(theme => {
-                    const themeTag = document.createElement('span');
-                    themeTag.className = 'bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full';
-                    themeTag.textContent = theme;
-                    questionThemeContainer.appendChild(themeTag);
-                });
-            }
-
-            document.getElementById('question-enunciado').innerHTML = question.enunciado;
-
-            const img = document.getElementById('question-image');
-            if (question.imagem_url && question.imagem_url.trim() !== '') {
-                img.src = question.imagem_url;
-                img.classList.remove('hidden');
-                img.onerror = () => { img.classList.add('hidden'); console.warn('Imagem não carregada:', question.imagem_url); };
+        function updateQuestionDisplay() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+                currentQuestionTextElement.textContent = question.text;
+                questionImageElement.src = question.image;
+                currentScoreElement.textContent = currentScore;
+                confirmAnswerButton.classList.remove('hidden');
+                nextQuestionButton.classList.add('hidden');
             } else {
-                img.classList.add('hidden');
+                endChallenge();
             }
+        }
 
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            const options = ['A', 'B', 'C', 'D', 'E'];
-            options.forEach(opt => {
-                const optionKey = `opcao_${opt}`;
-                if (question[optionKey] && question[optionKey].trim() !== '') {
-                    const button = document.createElement('button');
-                    button.className = 'option-btn w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors';
-                    button.innerHTML = `<span class="font-bold mr-2">${opt}.</span> ${question[optionKey]}`;
-                    button.dataset.option = opt;
-                    button.addEventListener('click', handleOptionSelection); // Alterado para handleOptionSelection
-                    optionsContainer.appendChild(button);
-                }
-            });
-
-            // Esconde os botões de confirmação e próxima questão no início de cada pergunta
-            confirmAnswerBtn.classList.add('hidden');
-            nextQuestionBtn.classList.add('hidden');
-
-            // Limpa o estilo de seleção e habilita todos os botões de opção
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                btn.classList.remove('correct', 'incorrect', 'border-blue-500', 'bg-blue-50', 'ring-2');
-                btn.classList.add('border-gray-300'); // Garante que o border padrão está presente
-                btn.disabled = false;
-            });
-
-            selectedOptionForConfirmation = null; // Reinicia a opção selecionada
-        };
-
-        const handleOptionSelection = (event) => {
-            const selectedButton = event.currentTarget;
-
-            // Remove a classe 'selected' de qualquer botão de opção previamente selecionado
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
-                btn.classList.add('border-gray-300'); // Restaura a borda padrão
-            });
-
-            // Adiciona a classe de seleção ao botão clicado
-            selectedButton.classList.add('border-blue-500', 'bg-blue-50', 'ring-2');
-            selectedButton.classList.remove('border-gray-300'); // Remove a borda padrão para a seleção
-
-            selectedOptionForConfirmation = selectedButton.dataset.option;
-            confirmAnswerBtn.classList.remove('hidden'); // Mostra o botão de confirmar
-        };
-
-        const confirmAnswer = () => {
-            if (!selectedOptionForConfirmation) {
-                showModal('Nenhuma Opção Selecionada', 'Por favor, selecione uma opção antes de confirmar.');
-                return;
-            }
-
-            const question = quizQuestions[currentQuestionIndex];
-            const correctOption = question.resposta_correta.trim();
-
-            const allOptionButtons = document.querySelectorAll('.option-btn');
-            allOptionButtons.forEach(btn => {
-                btn.disabled = true; // Desabilita todas as opções após a confirmação
-                if (btn.dataset.option === correctOption) {
-                    btn.classList.add('correct');
-                    btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300'); // Garante que o estilo de correto prevaleça
-                }
-            });
-
-            const selectedButton = document.querySelector(`.option-btn[data-option="${selectedOptionForConfirmation}"]`);
-
-            if (selectedOptionForConfirmation === correctOption) {
-                score += 1;
-                correctAnswersCount += 1;
-                selectedButton.classList.add('correct');
-                selectedButton.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300');
+        confirmAnswerButton.addEventListener('click', () => {
+            // Lógica de verificação de resposta (simulada)
+            const isCorrect = Math.random() > 0.5; // Simula uma resposta correta/incorreta
+            if (isCorrect) {
+                currentScore += 10; // Adiciona pontos
+                showModal('Resposta Correta! +10 pontos.');
             } else {
-                selectedButton.classList.add('incorrect');
-                selectedButton.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'border-gray-300');
+                showModal('Resposta Incorreta. Tente novamente na próxima!');
             }
+            currentScoreElement.textContent = currentScore;
+            confirmAnswerButton.classList.add('hidden');
+            nextQuestionButton.classList.remove('hidden');
+        });
 
-            document.getElementById('current-score').textContent = `Pontos: ${score}`;
-            confirmAnswerBtn.classList.add('hidden'); // Esconde o botão de confirmar
-            nextQuestionBtn.classList.remove('hidden'); // Mostra o botão de próxima questão
-            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+        nextQuestionButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            updateQuestionDisplay();
+        });
 
-            selectedOptionForConfirmation = null; // Reinicia a opção selecionada para a próxima pergunta
-        };
+        async function endChallenge() {
+            sectionQuestion.classList.add('hidden');
+            sectionChallengeFinished.classList.remove('hidden');
+            finalScoreElement.textContent = currentScore;
 
-        const showResults = async () => {
-            let finalScore = score;
-            let bonusMessage = '';
-            let icon = '🤔';
-
-            if (correctAnswersCount === quizSize && quizSize > 0) {
-                if (quizSize === 3) {
-                    finalScore *= 2;
-                    bonusMessage = 'Parabéns! Você acertou todas e seus pontos duplicaram!';
-                    icon = '🎉';
-                } else if (quizSize === 6) {
-                    finalScore *= 3;
-                    bonusMessage = 'Incrível! Você acertou todas e seus pontos triplicaram!';
-                    icon = '�';
-                }
-            } else if (correctAnswersCount > quizSize / 2) {
-                icon = '👍';
-            }
-
-            document.getElementById('results-icon').textContent = icon;
-            document.getElementById('results-summary').textContent = `Você acertou ${correctAnswersCount} de ${quizSize} questões.`;
-            document.getElementById('results-bonus').textContent = bonusMessage;
-            document.getElementById('results-total-score').textContent = `Pontuação Final: ${finalScore} pontos`;
-
-            showScreen('results');
-
-            if (selectedTeam) { // Garante que um time foi selecionado
-                showLoading();
-                const teamDocRef = doc(db, teamsCollectionPath, selectedTeam);
-                const teamDocSnap = await getDoc(teamDocRef);
-                let currentTeamScore = 0;
-                
-                if (teamDocSnap.exists()) {
-                    currentTeamScore = teamDocSnap.data().score || 0;
-                }
-
-                const newTotalTeamScore = currentTeamScore + finalScore;
+            // Salvar pontuação no Firestore
+            if (currentUserUid && selectedTeam) {
                 try {
-                    // Atualiza a pontuação do time no Firestore
-                    await setDoc(teamDocRef, {
-                        name: selectedTeam, // O nome do time é o ID do documento
-                        score: newTotalTeamScore
-                    }, { merge: true });
-                } catch (error) {
-                    console.error("Erro ao atualizar pontuação do time:", error);
-                    showModal("Erro de Atualização", `Não foi possível salvar a pontuação do time. Detalhes: ${error.message}`);
-                } finally {
-                    hideLoading();
+                    await addDoc(collection(db, "ranking"), {
+                        userId: currentUserUid,
+                        team: selectedTeam,
+                        score: currentScore,
+                        timestamp: new Date()
+                    });
+                    console.log("Pontuação salva no Firestore!");
+                    showModal(`Desafio Finalizado! Sua pontuação de ${currentScore} foi registrada para o time ${selectedTeam}.`);
+                } catch (e) {
+                    console.error("Erro ao adicionar documento: ", e);
+                    showModal(`Desafio Finalizado! Erro ao registrar sua pontuação: ${e.message}`);
                 }
             } else {
-                showModal("Time Ausente", "Sua pontuação não foi salva no ranking porque nenhum time foi selecionado.");
+                showModal("Desafio Finalizado! Não foi possível registrar a pontuação (usuário ou time não definidos).");
             }
-        };
+        }
 
-        const updateRanking = (teamsData, filterTeam = 'all') => {
-            const rankingList = document.getElementById('ranking-list');
-            rankingList.innerHTML = '';
+        playAgainButton.addEventListener('click', () => {
+            // Reinicia o jogo
+            sectionChallengeFinished.classList.add('hidden');
+            sectionTeamSelection.classList.remove('hidden');
+            document.getElementById('section-themes').classList.remove('hidden');
+            document.getElementById('section-challenge-size').classList.remove('hidden');
+            startChallengeButton.classList.remove('hidden');
+            selectedTeam = null;
+            selectedTeamDisplay.textContent = 'Time Selecionado: Nenhum';
+            teamCards.forEach(c => c.classList.remove('selected'));
+        });
 
-            let filteredTeams = teamsData;
-            if (filterTeam !== 'all') {
-                filteredTeams = teamsData.filter(team => team.name === filterTeam);
-            }
+        viewRankingButton.addEventListener('click', async () => {
+            sectionChallengeFinished.classList.add('hidden');
+            sectionRanking.classList.remove('hidden');
+            await loadRanking();
+        });
 
-            const sortedTeams = filteredTeams.sort((a, b) => (b.score || 0) - (a.score || 0));
+        backToHomeButton.addEventListener('click', () => {
+            sectionRanking.classList.add('hidden');
+            sectionTeamSelection.classList.remove('hidden');
+            document.getElementById('section-themes').classList.remove('hidden');
+            document.getElementById('section-challenge-size').classList.remove('hidden');
+            startChallengeButton.classList.remove('hidden');
+        });
 
-            if(sortedTeams.length === 0) {
-                rankingList.innerHTML = `<p class="p-4 text-center text-gray-500">Nenhum time no ranking ainda.</p>`;
-                return;
-            }
-
-            sortedTeams.forEach((team, index) => {
-                const rankItem = document.createElement('div');
-                rankItem.className = `grid grid-cols-12 gap-4 p-3 items-center`; // Remover estilização específica de "currentUser"
-                rankItem.innerHTML = `
-                    <div class="col-span-1">${index + 1}</div>
-                    <div class="col-span-8 truncate">${team.name}</div>
-                    <div class="col-span-3 text-right">${team.score || 0}</div>
-                `;
-                rankingList.appendChild(rankItem);
-            });
-        };
-
-        let rankingUnsubscribe = null;
-        const listenToRanking = (filterTeam = 'all') => {
-            if (rankingUnsubscribe) {
-                rankingUnsubscribe();
-            }
-            // Listener que busca todos os documentos da coleção de times
-            rankingUnsubscribe = onSnapshot(teamsCollection, (snapshot) => {
-                const teamsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateRanking(teamsData, filterTeam); // Passa o filtro atual para updateRanking
-            }, (error) => {
-                console.error("Erro ao carregar ranking de times:", error);
-                document.getElementById('ranking-list').innerHTML = `<p class="p-4 text-center text-red-500">Erro ao carregar o ranking de times.</p>`;
-            });
-        };
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            showLoading();
-
-            if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
-                hideLoading();
-                showModal('Erro de Conexão', 'Configuração do Firebase não encontrada. Recarregue a página.');
-                return;
+        async function loadRanking(filter = 'all') {
+            rankingTableBody.innerHTML = ''; // Limpa a tabela
+            let q;
+            if (filter === 'all') {
+                q = collection(db, "ranking");
+            } else {
+                q = query(collection(db, "ranking"), where("team", "==", filter));
             }
 
             try {
-                // Autenticação anônima para permitir acesso ao Firestore
-                await signInAnonymously(auth);
+                const querySnapshot = await getDocs(q);
+                let rankingData = [];
+                querySnapshot.forEach((doc) => {
+                    rankingData.push(doc.data());
+                });
 
-                // Inicializa os documentos dos times no Firestore se não existirem
-                for (const teamName of teams) {
-                    const teamDocRef = doc(db, teamsCollectionPath, teamName);
-                    const teamDocSnap = await getDoc(teamDocRef);
-                    if (!teamDocSnap.exists()) {
-                        await setDoc(teamDocRef, { name: teamName, score: 0 });
-                    }
-                }
-            } catch (error) {
-                console.error("Firebase Auth/Firestore Error:", error);
-                showModal('Erro de Conexão', `Não foi possível inicializar o aplicativo. Detalhes: ${error.message}`);
-                hideLoading();
-                return;
+                // Ordena por pontuação (maior para menor)
+                rankingData.sort((a, b) => b.score - a.score);
+
+                rankingData.forEach(item => {
+                    const row = rankingTableBody.insertRow();
+                    row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-50');
+                    const teamCell = row.insertCell();
+                    teamCell.classList.add('py-2', 'px-4', 'text-gray-700');
+                    teamCell.textContent = item.team;
+                    const scoreCell = row.insertCell();
+                    scoreCell.classList.add('py-2', 'px-4', 'text-gray-700');
+                    scoreCell.textContent = item.score;
+                });
+            } catch (e) {
+                console.error("Erro ao carregar ranking: ", e);
+                showModal(`Erro ao carregar ranking: ${e.message}`);
             }
+        }
 
-            onAuthStateChanged(auth, async (user) => {
-                if(user) {
-                    console.log("Usuário autenticado anonimamente:", user.uid);
-                    document.getElementById('user-name-display').textContent = "Jogador Anônimo!";
-                    
-                    fetchQuestions();
-                    listenToRanking(); // Inicia o listener de ranking com filtro 'all' por padrão
-                    showScreen('setup');
-                } else {
-                    console.log("Nenhum usuário logado. Isso não deveria acontecer após signInAnonymously.");
-                    showModal('Erro de Autenticação', 'Não foi possível autenticar anonimamente. Por favor, recarregue a página.');
-                }
-                hideLoading();
+        filterRankingButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const filter = button.dataset.filter;
+                filterRankingButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+                button.classList.add('bg-blue-500', 'text-white');
+                await loadRanking(filter);
             });
+        });
 
-            // Event Listeners para navegação entre telas
-            document.getElementById('play-again-btn').addEventListener('click', () => showScreen('setup'));
-            document.getElementById('back-to-setup-btn').addEventListener('click', () => showScreen('setup'));
-            
-            const viewRankingButtons = [
-                document.getElementById('view-ranking-btn-setup'),
-                document.getElementById('view-ranking-btn-results')
-            ];
-            viewRankingButtons.forEach(btn => btn.addEventListener('click', () => {
-                showScreen('ranking');
-                // Garante que o ranking é atualizado quando a tela é exibida,
-                // mantendo o filtro ativo ou mostrando todos se nenhum filtro estiver ativo.
-                const currentFilterBtn = document.querySelector('#team-filter-container .team-filter-btn.selected');
-                const filterTeam = currentFilterBtn ? currentFilterBtn.dataset.filterTeam : 'all';
-                listenToRanking(filterTeam);
-            }));
-
-            document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
-            modalCloseBtn.addEventListener('click', hideModal);
-
-            // Event listener para seleção de time
-            document.getElementById('team-container').addEventListener('click', (e) => {
-                if (e.target.closest('.team-btn')) { // Usar closest para pegar o botão pai mesmo clicando na imagem
-                    const selectedButton = e.target.closest('.team-btn');
-                    document.querySelectorAll('.team-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                        // Removendo classes que podem conflitar com o novo estilo de imagem de fundo
-                        btn.classList.add('border-gray-300');
-                        btn.classList.remove('text-gray-700', 'hover:border-indigo-500', 'hover:bg-indigo-50', 'focus:ring-indigo-500');
-                    });
-                    selectedButton.classList.add('selected');
-                    // Removendo classes que podem conflitar com o novo estilo de imagem de fundo
-                    selectedButton.classList.remove('border-gray-300');
-                    selectedTeam = selectedButton.dataset.team;
-                    updateStartQuizButtonState(); // Atualiza o estado do botão Iniciar Desafio
-                }
-            });
-
-            const quizSizeRulesNotification = document.getElementById('quiz-rules-notification');
-            document.getElementById('quiz-size-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('quiz-size-btn') && !e.target.disabled) {
-                    document.querySelectorAll('.quiz-size-btn').forEach(btn => {
-                        btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2');
-                        btn.classList.add('border-gray-300');
-                    });
-                    e.target.classList.add('border-blue-500', 'bg-blue-50', 'ring-2');
-                    e.target.classList.remove('border-gray-300');
-                    quizSize = parseInt(e.target.dataset.size);
-
-                    quizSizeRulesNotification.classList.remove('hidden');
-                    if (quizSize === 3) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu time receberá um ponto. Caso acerte as três, <strong>receberá a pontuação em dobro</strong>.';
-                    } else if (quizSize === 6) {
-                        quizSizeRulesNotification.innerHTML = 'Para cada pergunta que responder corretamente seu time receberá um ponto. Caso acerte as seis, <strong>receberá a pontuação em triplo</strong>.';
-                    }
-                    updateAvailableQuestionsCount(); // Chama para garantir que o botão "Iniciar Desafio" seja habilitado/desabilitado corretamente
-                }
-            });
-
-            // Event listener para filtrar o ranking por time
-            document.getElementById('team-filter-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('team-filter-btn')) {
-                    document.querySelectorAll('.team-filter-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                        btn.classList.add('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
-                    });
-                    e.target.classList.add('selected');
-                    e.target.classList.remove('border-gray-300', 'text-gray-600', 'hover:bg-gray-100');
-                    const filterTeam = e.target.dataset.filterTeam;
-                    listenToRanking(filterTeam); // Atualiza o ranking com o filtro selecionado
-                }
-            });
-
-            // Adiciona o event listener para o novo botão de confirmar resposta
-            confirmAnswerBtn.addEventListener('click', confirmAnswer);
-
-            nextQuestionBtn.addEventListener('click', () => {
-                currentQuestionIndex++;
-                displayQuestion();
-            });
-        }); // Fim de DOMContentLoaded
+        // Inicializa o ranking ao carregar a página (opcional)
+        // loadRanking(); // Pode chamar aqui se quiser que o ranking seja carregado na inicialização
     </script>
 </body>
 </html>
-�
