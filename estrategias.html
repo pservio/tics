@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estratégias de Ensino-Aprendizagem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .strategy-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #2c5282; /* Azul escuro para títulos de seção */
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .section-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="header-bg text-white p-6 shadow-lg rounded-b-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-2">Estratégias de Ensino-Aprendizagem</h1>
+            <p class="text-lg opacity-90">Um guia detalhado para metodologias inovadoras</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6">
+        <section id="strategies-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <!-- As estratégias serão carregadas aqui pelo JavaScript -->
+        </section>
+    </main>
+
+    <!-- Modal para exibir detalhes da estratégia -->
+    <div id="strategyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalTitle" class="text-3xl font-bold text-gray-800 mb-4"></h2>
+            <div class="mb-4">
+                <p class="section-title">Definição e Objetivo:</p>
+                <p id="modalDefinition" class="section-content text-gray-700"></p>
+            </div>
+            <div class="mb-4">
+                <p class="section-title">Quando Usar:</p>
+                <p id="modalWhenToUse" class="section-content text-gray-700"></p>
+            </div>
+            <div class="mb-4">
+                <p class="section-title">Passo a Passo:</p>
+                <div id="modalStepByStep" class="section-content text-gray-700"></div>
+            </div>
+            <div class="mb-4">
+                <p class="section-title">Possíveis Perigos:</p>
+                <p id="modalDangers" class="section-content text-gray-700"></p>
+            </div>
+            <div class="mb-4">
+                <p class="section-title">Dicas/Variações:</p>
+                <p id="modalTips" class="section-content text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das estratégias de ensino-aprendizagem
+        const strategies = [
+            {
+                name: "Aprendizagem por Times (TBL - Team-Based Learning)",
+                definition: "Uma metodologia adaptada para uma estratégia de ensino focada na resolução de problemas, discussão de conceitos e aplicação prática de conhecimento em equipe. Não é apenas trabalho em grupo, possui um formato específico.",
+                whenToUse: "Aliado em turmas grandes ou pequenas, para trabalhar conceitos práticos, resolução de problemas e colaboração. É útil quando se deseja que os alunos desenvolvam soluções em sala de aula. Também é muito bom para treinamento corporativo e workshops.",
+                stepByStep: [
+                    "Atividade Individual: Alunos realizam a atividade sozinhos (ler um texto, resolver problemas) por no máximo 10-15 minutos, anotando suas ideias.",
+                    "Coleta de Respostas: O professor recolhe as respostas individuais para que os alunos não se apeguem à primeira ideia no grupo.",
+                    "Atividade em Grupo: Em equipes, os alunos desenvolvem soluções, discutindo o problema. É crucial que todos os membros participem ativamente e que o professor avalie essa participação.",
+                    "Assembleia: Uma discussão de até 15 minutos onde os alunos debatem as ideias do grupo, o que funcionou ou não, e chegam a uma conclusão. Não é uma palestra, mas uma conversa com poder de decisão compartilhado."
+                ],
+                dangers: "Conflitos e dificuldades de comunicação. Alunos que tentam se sobressair ou impor suas respostas. Usar o TBL sem um contexto claro para a turma.",
+                tips: "Usar com problemas mais complexos e desafiadores. O professor deve andar pela sala avaliando o tempo todo. Pode ser usado para fazer os alunos aprenderem e socializarem fora do horário de aula, ao ensinarem uns aos outros."
+            },
+            {
+                name: "Ask3B4Me (Pergunte para 3 antes de mim)",
+                definition: "Dinâmica onde o aluno deve consultar três fontes diferentes (colega, livro, mural, etc.) antes de fazer uma pergunta ao professor. O objetivo é desenvolver o pensamento autêntico, a capacidade de reflexão e horizontalizar a busca por conhecimento.",
+                whenToUse: "Pode ser usado antes ou durante a aula. Muito comum na educação básica para pesquisa de temas ou exercícios.",
+                stepByStep: [
+                    "Planejamento: Definir quais fontes os alunos podem e devem utilizar (ex: não usar internet).",
+                    "Atividade: Propor uma atividade onde os alunos precisarão buscar informações.",
+                    "Interação Professor-Aluno: Quando o aluno for fazer uma pergunta, o professor questiona se ele já buscou três fontes.",
+                    "Conversa Final: Explicar a importância das fontes e do processo de aprendizagem."
+                ],
+                dangers: "Não engajamento dos alunos, levando-os a copiar respostas. O professor não observar e participar ativamente do processo.",
+                tips: "As fontes podem incluir reler a pergunta, buscar um livro/nota, perguntar a um colega, ou fazer uma pergunta de esclarecimento a si mesmo. O professor deve andar pela sala observando e escutando. É importante amarrar o processo à avaliação para reforçar a importância."
+            },
+            {
+                name: "Brain Breaks (Pausas para o cérebro)",
+                definition: "Recomendações de pausas curtas e atividades de 'refresh' durante a aula para refrescar a mente e reengajar a concentração dos alunos. Baseia-se na constatação de que ninguém mantém 100% de concentração por 40-100 minutos. O tempo de concentração varia com a idade (ex: 5 anos: 10-15 min; 10 anos: 20-30 min).",
+                whenToUse: "A cada 20-30 minutos de aula. Para crianças menores, atividades físicas são mais indicadas. Para adolescentes e adultos, atividades lúdicas, jogos ou puzzles, relacionados ou não à disciplina.",
+                stepByStep: [
+                    "Estabelecer Rotina: Explicar aos alunos o conceito e a importância dos Brain Breaks, criando um 'contrato' de rotina na aula.",
+                    "Atividade: Inserir uma atividade divertida e curta entre os conteúdos.",
+                    "Retorno: Reintegrar os alunos ao conteúdo principal após a pausa."
+                ],
+                dangers: "Atividades que se estendem por muitos minutos (mais de 5-10) podem acabar perdendo o foco do conteúdo principal.",
+                tips: "Desafios de Lógica: Quebra-cabeças ou jogos dos sete erros. Conversa Livre: 5 minutos para conversar com um colega sobre algo não relacionado à matéria. Deslocamento: Pedir para os alunos levantarem e se deslocarem para outro ponto da sala ou até um corredor. Quebra-gelo: Usar cartas ou objetos (ex: bolinhas de tênis) para iniciar uma conversa ou atividade lúdica quebra-gelo. Introdução Pessoal: O professor pode usar Brain Breaks para se apresentar gradualmente aos alunos com curiosidades. Adaptação Online: Pode ser aplicado em aulas online."
+            },
+            {
+                name: "Gallery Walk (Passeio na Galeria)",
+                definition: "Estratégia de apresentar um assunto por meio de estações de trabalho, pôsteres ou problemas expostos pela sala, onde os alunos caminham em pequenos grupos, observando e fazendo anotações.",
+                whenToUse: "Em qualquer área do conhecimento, inclusive matemática. É muito visual e permite exploração espacial.",
+                stepByStep: [
+                    "Identificar Tópicos e Preparar Material: Definir os tópicos a serem abordados e preparar o material para cada estação. Os materiais devem ser diferentes para cada tópico. Os alunos também podem preparar os materiais.",
+                    "Organizar Alunos e Roteiro: Dividir os alunos em pequenos grupos e fornecer um roteiro do que observar em cada estação. As estações devem ser independentes e não sequenciais.",
+                    "Circulação e Anotações: Os alunos circulam pelas estações, fazendo anotações. O professor acompanha, observa e dá feedback.",
+                    "Reunião e Discussão: Ao final, reunir os grupos para discutir as observações e fechar os conceitos."
+                ],
+                dangers: "Dificuldade em controlar os alunos e desorganização, especialmente em espaços maiores. Tempo insuficiente para observações profundas. Falta de profundidade no conteúdo, tornando a atividade superficial.",
+                tips: "Diversidade de Atividades: Evitar o mesmo tipo de atividade em todas as estações (ex: apenas leitura). Exploração Fora da Sala: Usar espaços abertos ou externos à sala de aula. Exposição de Trabalhos: Alunos podem expor seus próprios trabalhos (parciais ou finais), e outros alunos deixam post-its com 'gostei', 'não entendi' e 'próximos passos'. Alunos Especialistas: Um aluno de cada grupo fica na estação como 'especialista' para explicar o material, enquanto os outros circulam. Ferramentas Digitais: Usar QR Codes com informações em diferentes locais."
+            },
+            {
+                name: "Método 300",
+                definition: "Método de recuperação criado por Ricardo Fragelli, baseado no princípio de que somos 'tão fortes quanto o nosso mais fraco soldado'. Foca na aprendizagem coletiva e na troca de conhecimento entre os alunos.",
+                whenToUse: "Após uma prova tradicional, como um momento de fechamento de conteúdo. A prova deve ser elaborada pensando no método.",
+                stepByStep: [
+                    "Elaborar Prova: Criar uma prova aberta que permita visualizar as dificuldades dos alunos e ter notas variadas.",
+                    "Planilha 300: Inserir as notas dos alunos em uma planilha Excel específica (disponível no site do método 300), que organiza os alunos do maior para o menor e reagrupa-os misturando os que foram bem com os que tiveram dificuldade.",
+                    "Ajudantes e Ajudados: A planilha define 'ajudantes' (quem ensinará) e 'ajudados' (quem terá direito a refazer a prova).",
+                    "Refazer a Prova: Os 'ajudados' refazem uma prova equivalente após 1-2 semanas.",
+                    "Melhoria Mútua: Se os 'ajudados' melhorarem suas notas, os 'ajudantes' também terão a nota melhorada.",
+                    "Avaliação de Ajuda: Os 'ajudantes' avaliam o quanto conseguiram ajudar, e os 'ajudados' avaliam o quanto foram ajudados, com percentual de melhora calculado automaticamente.",
+                    "Assembleia Final: Discussão sobre o processo e os resultados, promovendo a honestidade sobre as dificuldades e os esforços."
+                ],
+                dangers: "Prova que não permite boa diferenciação de notas entre os alunos. Turmas com dificuldade de socialização ou alunos relutantes em ajudar/ser ajudados. Ocorre de alunos se sentirem culpados ou focados excessivamente na nota. O professor criar uma prova onde todos vão mal, inviabilizando a ajuda mútua.",
+                tips: "Requer organização do calendário, pois dura cerca de duas semanas. Pode gerar aprendizado fora do horário de aula e desenvolver habilidades de socialização e divisão de conhecimento. Os 'ajudantes' podem criar e corrigir trabalhos para os 'ajudados'. Aplicável a qualquer conteúdo, não apenas matemática."
+            },
+            {
+                name: "Método dos Tutores",
+                definition: "Dinâmica onde alunos assumem uma responsabilidade de 'professor' (tutor), auxiliando os colegas. O foco principal é a aprendizagem do aluno que atua como tutor.",
+                whenToUse: "Ao final de cada aula, seleciona-se tutores para a próxima sessão. Ideal para atividades em grupo ou introdução de matéria nova.",
+                stepByStep: [
+                    "Escolha do Tema: Iniciar com um trabalho em grupo para facilitar a transição dos alunos para a função de tutor.",
+                    "Sorteio Aleatório: Sortear aleatoriamente 3-5 alunos (ou cerca de 10% da turma) para serem tutores. Isso inclui alunos que podem ter dificuldades ou timidez, garantindo que todos tenham a experiência.",
+                    "Preparação dos Tutores: Fornecer aos tutores o conteúdo da próxima aula com antecedência e um canal de comunicação para dúvidas. É fundamental reafirmar a confiança ('eu confio em você, estou com você').",
+                    "Atuação dos Tutores: Na aula, os tutores auxiliam os grupos ou explicam o material. Eles não devem dar respostas diretas, mas indicar estratégias. O professor deve circular pela sala, observando.",
+                    "Feedback: Ao final, coletar feedback da turma sobre a atuação dos tutores e vice-versa."
+                ],
+                dangers: "Tutores darem respostas diretas em vez de guiar. Alunos (tutores e tutorados) relutantes ou com vergonha de participar.",
+                tips: "Tutores podem ser isentos da nota do trabalho que estão ajudando. Tutores anteriores podem ajudar os novos tutores a se prepararem. Para alunos muito inseguros, pode-se oferecer um papel de 'sombra de tutor' para que acompanhem um tutor experiente antes de assumirem o papel sozinhos. A verbalização do conteúdo pelo tutor é uma forma poderosa de aprendizado para ele. Funciona em qualquer área de conhecimento."
+            },
+            {
+                name: "Painel",
+                definition: "Uma discussão moderada com a participação de especialistas sobre um tema específico. Cada especialista traz opiniões e pontos de vista diferentes. O objetivo é dar aos alunos a oportunidade de vivenciar diferentes perspectivas que não teriam com apenas o professor. Não é um debate polarizado.",
+                whenToUse: "Quando o professor percebe que não consegue abordar a complexidade ou a diversidade de perspectivas de um tema sozinho (ex: sustentabilidade, IA na educação, racismo). Pode ser realizado em uma única aula.",
+                stepByStep: [
+                    "Definir Tema: Escolher um tema relevante e conectado ao que está sendo estudado nas aulas, programando-o com antecedência.",
+                    "Convidar Painelistas: Convidar especialistas (que podem ser externos ou até alunos com conhecimento aprofundado). É útil que enviem um pequeno vídeo/áudio prévio para garantir que se mantenham no tempo e tema.",
+                    "Ter um Bom Moderador: O moderador (professor ou aluno) é essencial para conduzir a mesa, garantir que a conversa atinja o objetivo de aprendizagem, fazer perguntas e conectar os pontos de vista.",
+                    "Preparar o Ambiente: Organizar o espaço físico para estimular a conversa (ex: cadeiras em círculo, evitar projetores desnecessários).",
+                    "Promover Discussão e Participação dos Alunos: Pelo menos 30% do tempo deve ser dedicado a perguntas dos alunos. O ambiente deve ser confortável para que os alunos se sintam à vontade para perguntar.",
+                    "Feedback: Ao final, ter um momento de feedback e garantir que os alunos saibam como o conteúdo do painel será usado (ex: em um projeto)."
+                ],
+                dangers: "Virar uma série de mini-palestras sem interação. Painelistas fugirem do tema ou estourarem o tempo. Falta de preparo dos participantes. Polarização, transformando-se em um debate em vez de uma discussão moderada.",
+                tips: "Um aluno pode atuar como painelista, representando a visão da turma, o que incentiva a participação dos colegas. Buscar espaços mais aconchegantes fora da sala de aula. Enviar materiais prévios aos alunos para que cheguem preparados para o diálogo."
+            },
+            {
+                name: "Urna da Sorte",
+                definition: "Estratégia para consolidar, aprofundar, repetir ou estruturar conhecimentos, especialmente termos técnicos, vocabulários ou conceitos específicos.",
+                whenToUse: "Ideal para áreas técnicas, línguas estrangeiras (ex: inglês) ou qualquer disciplina onde o entendimento de termos e definições é crucial.",
+                stepByStep: [
+                    "Definir Termos e Fontes: O professor seleciona os termos chave. Os alunos recebem um material (texto, vídeo, áudio) para identificar o que consideram mais importante.",
+                    "Trabalho em Grupo e Criação da Urna: Em pequenos grupos, os alunos escrevem os termos chave encontrados e os depositam em uma 'urna' (ou saco plástico, caixa).",
+                    "Rotação das Urnas: As urnas são trocadas entre os grupos. Cada grupo sorteia um termo da urna recebida e deve explicá-lo.",
+                    "Discussão e Feedback: Os colegas de grupo debatem se a explicação está correta. Isso pode ocorrer simultaneamente ou em um formato de 'aquário'.",
+                    "Assembleia Final: Ao final, reunir a turma para resumir os termos mais importantes e tirar dúvidas remanescentes."
+                ],
+                dangers: "A atividade pode se tornar repetitiva se não houver variedade suficiente nos termos ou métodos de explicação.",
+                tips: "Pode ser utilizada em capacitações de professores para que expliquem diferentes dinâmicas. Os 'termos' podem ser desde palavras simples a conceitos mais robustos ou datas. Pode ser gamificada."
+            },
+            {
+                name: "Fishbowl (Aquário)",
+                definition: "Pequeno grupo de alunos debate um tema no centro da sala, enquanto o restante da turma observa e pode interagir pontualmente. Promove a escuta ativa, a observação atenta e a habilidade de argumentação.",
+                whenToUse: "Para permitir que um grupo debata sem interrupção direta do professor. Útil para revisar um assunto ou quando alunos mais aplicados podem compartilhar conhecimento com os demais.",
+                stepByStep: [
+                    "Escolha do Tópico e Grupo: Selecionar um tópico e formar um grupo de 3-7 alunos para debater no centro da sala.",
+                    "Cadeira Vazia: Deixar uma cadeira vazia no círculo central.",
+                    "Discussão e Observação: O grupo interno discute, e o grupo externo observa e faz anotações.",
+                    "Interação: Quem está fora e deseja contribuir senta na cadeira vazia, fala, e sai para que outro possa ocupar o lugar.",
+                    "Mediação do Professor: O professor pode intervir com perguntas ou provocações se a discussão diminuir.",
+                    "Conclusão: Finalizar a atividade ao término do tempo ou da energia da discussão."
+                ],
+                dangers: "Alunos se sobrepondo ou falando muito baixo. Falta de engajamento do grupo externo. Dificuldade de ouvir em ambientes grandes. Falta de clareza nos argumentos.",
+                tips: "O professor deve incentivar alunos tímidos a falarem mais alto. Uma regra é não tolerar conversas paralelas fora do círculo, incentivando que se um aluno quer falar, ele deve ir para o centro. Promove a autonomia e a responsabilidade política de assumir seu espaço. Pode ser usado para sessões de feedback."
+            },
+            {
+                name: "Jigsaw Classroom (Quebra-cabeças)",
+                definition: "Estratégia de aprendizagem cooperativa onde os alunos se tornam 'especialistas' em uma parte de um conteúdo e, em seguida, ensinam essa parte aos seus grupos originais, montando um 'quebra-cabeça' do conhecimento.",
+                whenToUse: "Quando se deseja aprofundar diferentes aspectos de um tema. Ideal para desenvolver competências de colaboração, responsabilidade e autonomia na pesquisa. Pode ser usado para revisão de conteúdo antes de uma prova.",
+                stepByStep: [
+                    "Grupos Originais: Dividir a turma em grupos originais (ex: 5 pessoas). Dentro de cada grupo, cada aluno se responsabiliza por se tornar especialista em um aspecto diferente do tema.",
+                    "Grupos de Especialistas: Alunos de diferentes grupos originais que são especialistas no mesmo tópico se reúnem. Eles estudam, cooperam e desenvolvem uma síntese sobre o assunto.",
+                    "Retorno aos Grupos Originais: Os especialistas retornam aos seus grupos originais e compartilham o que aprenderam com seus colegas, montando o 'quebra-cabeça' do conhecimento.",
+                    "Fechamento (Debriefing): Reunir toda a turma para discutir as experiências, tirar dúvidas e consolidar o aprendizado."
+                ],
+                dangers: "Alunos não atingirem os objetivos de aprendizagem devido a material ou direcionamento insuficientes. Tempo insuficiente para o compartilhamento nos grupos originais, o que pode comprometer a dinâmica.",
+                tips: "Enfatizar a responsabilidade individual: o aprendizado do grupo original depende do especialista. O professor pode dar mais ou menos material para estimular a autonomia na pesquisa. Pode ser usado para uma 'semana de carreiras' trazendo profissionais como 'especialistas'. Alunos monitores podem auxiliar os grupos. Aplicável a exercícios (ex: cada aluno especialista em um exercício do Enem)."
+            },
+            {
+                name: "KWL (Sei-Quero-Aprendi)",
+                definition: "Tabela com três colunas (K: Know/Sei, W: Want to Know/Quero Saber, L: Learned/Aprendi) para organizar a aula com base no conhecimento prévio, nas expectativas e no aprendizado dos alunos. Ajuda o professor a identificar o ponto de partida cognitivo dos alunos.",
+                whenToUse: "Ao introduzir um assunto novo, para revisar um tema ou para organizar uma pesquisa/projeto. Útil para ganhar a confiança da turma.",
+                stepByStep: [
+                    "Preparar Tabela KWL: Desenhar a tabela no quadro ou projetor.",
+                    "Coluna 'K' (Sei): Introduzir o tema. Os alunos fazem um brainstorm ou verbalizam o que já sabem sobre o assunto. O professor deve valorizar as contribuições para construir confiança.",
+                    "Coluna 'W' (Quero Saber): Os alunos formulam perguntas sobre o que desejam aprender no tema.",
+                    "Coluna 'L' (Aprendi): Durante a aula, os alunos anotam o que aprenderam. Ao final, a turma volta a essa coluna para consolidar o aprendizado."
+                ],
+                dangers: "A aula ficar 'travada' no conhecimento prévio dos alunos se o professor não aprofundar o conteúdo. A atividade se tornar automática e perder o sentido se usada em excesso sem variação.",
+                tips: "Pode ser usado em conjunto com o One Minute Paper. É eficaz para entender onde os alunos estão cognitivamente e convidá-los para novos lugares de conhecimento. Aplicável em matemática (para revisar conceitos de geometria) e física (para alinhar termos e evitar confusões). O professor pode intervir na coluna 'W' para conduzir as perguntas dos alunos."
+            },
+            {
+                name: "One Minute Paper (Minutinho de Papel)",
+                definition: "Técnica rápida de avaliação e feedback onde os alunos respondem a duas perguntas em um minuto, geralmente ao final de uma aula ou atividade. Fornece reflexão para o aluno e feedback para o professor.",
+                whenToUse: "No final de uma atividade ou aula para consolidar o aprendizado, obter feedback ou estimular a reflexão.",
+                stepByStep: [
+                    "Planejamento e Comunicação: Planejar a atividade com antecedência e avisar os alunos no início da aula.",
+                    "Perguntas: Apresentar duas perguntas: 'Qual foi o ponto mais importante abordado na aula hoje?' e 'Que pergunta você ainda está sem resposta?'.",
+                    "Tempo: Conceder um minuto para responder a cada pergunta.",
+                    "Coleta e Feedback: Recolher os papéis. O professor pode ler individualmente ou discutir as respostas em plenária na próxima aula. Pode-se usar post-its (para visualização comum das dificuldades) ou softwares como Mentimeter (para anonimato) e Google Forms (para feedback individual)."
+                ],
+                dangers: "O professor apressar a atividade, banalizando-a. Alunos não levarem a sério se não houver um feedback posterior. O nome 'um minuto' pode enganar; é preciso dar tempo para o aluno acalmar e refletir antes de escrever.",
+                tips: "O feedback do professor é crucial para construir a confiança dos alunos e validar o propósito da atividade. Se estabelecida como rotina, os alunos podem assistir à aula já marcando possíveis dúvidas. Ótima estratégia para começar a inovar em sala, abrindo um espaço de conversa estruturada."
+            },
+            {
+                name: "Ponto de Melhoria",
+                definition: "Uma forma simples de avaliação onde os alunos são solicitados a escrever um 'ponto fraco' ou algo que não gostaram em uma aula, curso ou atividade. O objetivo é que o aluno seja obrigado a olhar para o processo/método e identificar problemas que não são de sua culpa, gerando um feedback sincero.",
+                whenToUse: "Após uma aula, um curso completo ou uma atividade. Especialmente quando o professor percebe que o engajamento está baixo e precisa de um feedback direto para melhorar. Deve ser usado apenas se o professor estiver preparado para ouvir críticas.",
+                stepByStep: [
+                    "Definir Objetivo do Feedback: Decidir qual aspecto específico se busca melhorar (processo da sala, conteúdo, atividade, metodologia).",
+                    "Planejar Tempo e Formato: Destinar tempo suficiente para a reflexão e escrita (ex: 5 minutos). Usar papel (para garantir que todos escrevam) ou formulários digitais.",
+                    "Orientar os Alunos: Distribuir o papel e pedir que apontem um ponto fraco, guiando-os para que não se culpem. Manter o silêncio durante a reflexão e escrita.",
+                    "Coletar e Dar Feedback: Recolher as respostas e dar um feedback o mais rápido possível. O feedback deve ser construtivo, sem defensiva ou vingança."
+                ],
+                dangers: "O professor ficar zangado ou defensivo com o feedback. Falta de ambiente seguro, levando a feedback não genuíno.",
+                tips: "O feedback legal (não punitivo) é fundamental, principalmente nas primeiras vezes, para construir confiança. Um exemplo de aplicação levou à modificação de tempos de intervalo e abordagens de conteúdo, refletindo as necessidades reais dos alunos. A estratégia induz fortemente o feedback que o professor deseja no momento."
+            },
+            {
+                name: "Rotação por Estações",
+                definition: "Divisão da turma em grupos que circulam por estações físicas na sala de aula, cada uma com uma atividade diferente. O objetivo é desenvolver diferentes competências, abordar um assunto por múltiplos pontos de vista, ou otimizar o uso de recursos.",
+                whenToUse: "Quando uma atividade não comporta todos os alunos ao mesmo tempo (ex: laboratórios com capacidade limitada). Para aproveitar espaços diferentes da escola (laboratórios, biblioteca, pátio). Para oferecer perspectivas diversas sobre um mesmo assunto (ex: Segunda Guerra Mundial sob diferentes óticas). Quando um recurso (ex: especialista, equipamento) é escasso.",
+                stepByStep: [
+                    "Planejar Atividades e Estações: Criar atividades diferentes para cada estação, garantindo que não sejam interdependentes. Definir o tempo que os alunos ficarão em cada uma.",
+                    "Dividir Alunos em Grupos: Formar grupos equivalentes de alunos.",
+                    "Definir Rotação: Os grupos rodam pelas estações, podendo começar em qualquer uma. Todas as estações devem ter tempos equivalentes.",
+                    "Fechamento (Debriefing): Após a rotação, reunir os alunos para uma discussão sobre suas experiências e aprendizados. Pode-se usar outras estratégias (ex: Kahoot, One Minute Paper) para o fechamento."
+                ],
+                dangers: "A atividade virar uma 'festa' e perder o foco nos objetivos de aprendizagem. Demanda mais planejamento que uma aula normal. Não ter uma conexão clara antes e depois da dinâmica. Tempo insuficiente para concluir as atividades em cada estação.",
+                tips: "As estações não precisam acontecer no mesmo dia; podem ser distribuídas ao longo de uma semana ou até um mês. É uma das características do ensino híbrido. Pode ser utilizada em formação de professores, focando em diferentes aspectos de uma metodologia ou projeto."
+            },
+            {
+                name: "Simpósio",
+                definition: "Apresentação formal (individual ou em grupo) dos resultados de uma pesquisa ou estudo aprofundado sobre um tema relacionado. O 'holofote' está em quem apresenta, que se torna um 'especialista' naquele assunto. As perguntas da audiência visam clarificar pontos e não testar o apresentador.",
+                whenToUse: "Para que os alunos se aprofundem em um tema de modo autônomo e incentivem a pesquisa e a reflexão. Útil para temas emergentes que não estão na ementa tradicional. No ensino superior, é uma forma de fazer os alunos atuarem como profissionais do tema.",
+                stepByStep: [
+                    "Definir Tema: O professor pode definir o tema ou deixar os alunos escolherem um aspecto específico dentro de um tópico mais amplo, para que haja relevância.",
+                    "Dividir Alunos (ou Não): Decidir se as apresentações serão individuais ou em grupo.",
+                    "Estabelecer Regras: Definir tempo de apresentação (ex: 10-15 min) e de perguntas (ex: 5-10 min), tipo de vestimenta, e formato da apresentação (ex: se pode ou não usar slides). Recomenda-se o envio de material prévio por todos os alunos para a turma.",
+                    "Realizar Simpósio: Conduzir as apresentações. Não apressar o processo; se precisar de mais dias, use.",
+                    "Fechamento: Discutir como tudo funcionou e garantir que as perguntas sejam feitas, pois são tão importantes quanto as apresentações."
+                ],
+                dangers: "Alunos não se prepararem adequadamente, transformando a atividade em uma 'tarefinha'. Estourar o tempo. Alunos desviarem do tema principal.",
+                tips: "Vestir-se formalmente pode mudar a percepção da atividade. Incentivar que a apresentação não seja apenas uma leitura de slides, mas uma conversa com a audiência. Enviar um resumo prévio de uma página sobre cada tema pode alinhar a turma. Muito útil em projetos, onde cada grupo aprofunda um aspecto relevante para os demais projetos."
+            },
+            {
+                name: "Snowball (Bola de Neve)",
+                definition: "Dinâmica que começa com uma ideia individual, que vai se acumulando e se transformando através de discussões progressivas em grupos maiores (individual > dupla > grupo de 4 > grupo de 8). O objetivo é fazer com que todos os alunos falem e manifestem sua opinião, desenvolvendo a colaboração e a construção de consenso.",
+                whenToUse: "Quando se deseja ouvir a opinião de todos, especialmente alunos tímidos. Para desenvolver a capacidade de argumentação e trabalho em grupo. Ideal para questões abertas que permitem opiniões diversas ou múltiplas soluções.",
+                stepByStep: [
+                    "Ideia Individual: O professor apresenta uma pergunta ou problema. Cada aluno anota sua ideia individualmente. É importante avisar que as respostas serão lidas por outros.",
+                    "Discussão em Dupla: Alunos se juntam em duplas. Cada dupla deve construir uma nova resposta consolidada, combinando as ideias individuais. Usar o papel físico ajuda a manter o compromisso com a ideia inicial.",
+                    "Grupos Maiores: As duplas se juntam com outras duplas para formar grupos de 4, depois de 8, e assim por diante. Cada vez, o grupo cria uma nova resposta que sintetiza as anteriores.",
+                    "Porta-Voz (para grupos grandes): A partir de grupos de 16, escolher um porta-voz para apresentar o relatório final.",
+                    "Assembleia Final: Ao final, a turma se reúne para discutir a resposta final da classe, que é um consenso construído coletivamente."
+                ],
+                dangers: "A nomeação do porta-voz pode ser problemática se não for consensual. Muitas rodadas podem cansar os alunos e fazer a atividade perder a graça.",
+                tips: "A pergunta inicial deve permitir múltiplas respostas ou pontos de vista. Pode ser usado para discutir o conceito de 'ciência' ou 'aprendizagem', levando os alunos a construir uma definição coletiva. É uma forma de incentivar professores a falarem mais sobre seus pensamentos e a lidarem com a insegurança de errar. É interessante ver como as definições começam amplas e se tornam mais concisas ao convergir."
+            },
+            {
+                name: "The World Café (Café do Mundo)",
+                definition: "Formato de discussão interativa com mesas dispostas como um café, onde cada mesa aborda um tema ou perspectiva específica. Os participantes rotacionam entre as mesas, enquanto um 'host' (anfitrião) permanece fixo em cada mesa, sintetizando as discussões anteriores para os novos grupos e estimulando a reflexão crítica.",
+                whenToUse: "Para estimular a reflexão crítica sobre um tema complexo ou polêmico que possui múltiplas perspectivas (ex: aborto, sustentabilidade). Ideal para debates profundos e acúmulo de pontos de vista.",
+                stepByStep: [
+                    "Definir Temas e Objetivos das Mesas: Cada mesa terá um tema que se conecte de alguma forma com os demais.",
+                    "Preparar o Ambiente Físico: Organizar mesas (preferencialmente redondas) e cadeiras de forma a promover a conversa fluida. Evitar materiais como livros ou cadernos sobre as mesas, para focar no diálogo. O host pode ter uma folha em branco para anotações.",
+                    "Explicar a Dinâmica aos Alunos: Deixar claro que o objetivo é a discussão e reflexão, não a avaliação de conhecimento técnico.",
+                    "Designar e Orientar Anfitriões (Hosts): Escolher alunos ou professores para serem os hosts de cada mesa. Eles devem facilitar a conversa, sintetizar discussões anteriores para novos grupos, e fazer perguntas sem palestrar ou impor opiniões.",
+                    "Iniciar Discussão e Rotação: Os grupos iniciam a discussão na primeira mesa e, a cada 5-10 minutos, rotacionam para a próxima. O host atualiza o novo grupo sobre o andamento da conversa.",
+                    "Debriefing/Reflexão Final: Ao final das rotações, reunir toda a turma para uma discussão e reflexão sobre a experiência."
+                ],
+                dangers: "Gestão do tempo, pois as discussões precisam ser relevantes sem se estender demais. Alunos se sentirem desconfortáveis em interagir ou ansiosos para falar. Hosts não estarem adequadamente preparados para sintetizar e facilitar.",
+                tips: "O host é crucial para a 'herança' da conversa, sintetizando o que já foi discutido. Pode ser usado para revisão de conteúdos específicos de uma disciplina, com cada host responsável por um método ou tipo de pesquisa. O professor pode observar as discussões para identificar lacunas no conhecimento dos alunos e planejar aulas futuras."
+            }
+        ];
+
+        // Obter elementos do DOM
+        const strategiesGrid = document.getElementById('strategies-grid');
+        const strategyModal = document.getElementById('strategyModal');
+        const closeButton = document.querySelector('.close-button');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDefinition = document.getElementById('modalDefinition');
+        const modalWhenToUse = document.getElementById('modalWhenToUse');
+        const modalStepByStep = document.getElementById('modalStepByStep');
+        const modalDangers = document.getElementById('modalDangers');
+        const modalTips = document.getElementById('modalTips');
+
+        // Função para criar um card de estratégia
+        function createStrategyCard(strategy) {
+            const card = document.createElement('div');
+            card.className = 'strategy-card p-6 rounded-xl shadow-md hover:shadow-lg flex flex-col items-center text-center transition-all duration-300 ease-in-out';
+            card.innerHTML = `
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">${strategy.name}</h3>
+                <p class="text-gray-600 text-sm">${strategy.definition.substring(0, 100)}...</p>
+            `;
+            card.addEventListener('click', () => openModal(strategy));
+            return card;
+        }
+
+        // Função para abrir o modal com os detalhes da estratégia
+        function openModal(strategy) {
+            modalTitle.textContent = strategy.name;
+            modalDefinition.textContent = strategy.definition;
+            modalWhenToUse.textContent = strategy.whenToUse;
+
+            // Limpar e preencher o passo a passo
+            modalStepByStep.innerHTML = '';
+            if (strategy.stepByStep && strategy.stepByStep.length > 0) {
+                const ul = document.createElement('ul');
+                ul.className = 'list-disc list-inside';
+                strategy.stepByStep.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    ul.appendChild(li);
+                });
+                modalStepByStep.appendChild(ul);
+            } else {
+                modalStepByStep.textContent = 'Nenhum passo a passo detalhado disponível.';
+            }
+
+            modalDangers.textContent = strategy.dangers;
+            modalTips.textContent = strategy.tips;
+            strategyModal.style.display = 'flex'; // Exibir o modal
+        }
+
+        // Função para fechar o modal
+        function closeModal() {
+            strategyModal.style.display = 'none';
+        }
+
+        // Event listener para o botão de fechar o modal
+        closeButton.addEventListener('click', closeModal);
+
+        // Fechar o modal se clicar fora do conteúdo
+        window.addEventListener('click', (event) => {
+            if (event.target == strategyModal) {
+                closeModal();
+            }
+        });
+
+        // Carregar as estratégias na grade quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            strategies.forEach(strategy => {
+                const card = createStrategyCard(strategy);
+                strategiesGrid.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>
