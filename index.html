@@ -24,70 +24,102 @@
             height: 200px; /* Altura fixa para as imagens do banner */
             object-fit: cover; /* Garante que a imagem cubra a área, cortando se necessário */
             border-top-left-radius: 0.75rem; /* cantos arredondados */
-            border-top-right-radius: 0.75rem; /* cantos arredondados */
+            border-top-right-radius: 0.75rem;
         }
-        /* Estilos para telas maiores (desktop) */
-        @media (min-width: 768px) {
-            .banner-image {
-                height: 250px; /* Aumenta a altura para telas maiores */
-            }
+        /* Estilos para o contêiner principal */
+        .main-container {
+            background-color: #ffffff; /* Fundo branco para o contêiner */
+            border-radius: 1rem; /* Cantos mais arredondados */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+            padding: 2rem; /* Espaçamento interno */
+            max-width: 1200px; /* Largura máxima do contêiner */
+            width: 100%; /* Ocupa toda a largura disponível */
+            text-align: center; /* Centraliza o texto */
+        }
+        /* Estilos para os banners individuais */
+        .banner-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Garante que o card ocupe a altura total da coluna */
+        }
+        .banner-card .p-6 {
+            flex-grow: 1; /* Permite que o conteúdo se expanda para preencher o espaço */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Espaça o conteúdo e o botão */
         }
     </style>
 </head>
-<body class="selection:bg-blue-200 selection:text-blue-900">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-4">
-            Tics para o ensino de artes visuais - UFMA
-        </h1>
-        <!-- Texto descritivo adicionado abaixo do título principal -->
-        <p class="text-center text-lg text-gray-600 mb-12">
-            Aqui você encontra trabalhos desenvolvidos pelo professor Dr. Pablo Sérvio com e para seus alunos na disciplina
-            Tecnologia da Informação e da Comunicação para o Ensino de Artes Visuais da Licenciatura em Artes Visuais UFMA.
-        </p>
+<body class="antialiased">
+    <div class="main-container">
+        <!-- Cabeçalho principal com título e descrição -->
+        <header class="mb-8">
+            <h1 class="text-5xl font-extrabold text-gray-900 mb-4">TICs para o ensino de artes visuais</h1>
+            <p class="text-xl text-gray-700 leading-relaxed">
+                Bem-vindo ao nosso portal de ferramentas e desafios para aprimorar o ensino de artes visuais.
+                Explore as opções abaixo e descubra novas formas de engajar seus alunos.
+            </p>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Seção de banners com layout responsivo em grade -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Primeiro Banner -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
-                <!-- Imagem atualizada para trilha.png -->
-                <img src="trilha.png"
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x250/E9D5FF/5B21B6?text=Imagem+trilha.png+N%C3%A3o+Dispon%C3%ADvel';"
-                     alt="trilha do conhecimento" class="banner-image">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 banner-card">
+                <!-- Imagem atualizada para arte_visual.png -->
+                <img src="arte_visual.png"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x250/E0FBFC/006D77?text=Imagem+arte_visual.png+N%C3%A3o+Dispon%C3%ADvel';"
+                     alt="Arte Visual" class="banner-image">
                 <div class="p-6">
-                    <!-- Novo título para o primeiro banner -->
-                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Trilha do conhecimento: fases do ensino de artes visuais.</h2>
-                    <!-- Nova descrição para o primeiro banner -->
+                    <!-- Título original corrigido para o primeiro banner -->
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Trilha do conhecimento: fases do ensino de artes visuais</h2>
+                    <!-- Descrição original corrigida para o primeiro banner -->
                     <p class="text-gray-700 leading-relaxed mb-4">
-                        Jogo de trilha em que seus conhecimentos sobre a história do ensino de artes no Brasil são testados.
-                        Jogue e aprenda sobre as relações entre epistemologia, conceitos de arte e educação. (CONFIGURADO PARA TELA DE COMPUTADOR).
+                        Jogo de trilha em que seus conhecimentos sobre a história do ensino de artes no Brasil são testados. Jogue e aprenda sobre as relações entre epistemologia, conceitos de arte e educação. (CONFIGURADO PARA TELA DE COMPUTADOR).
                     </p>
-                    <!-- Novo texto do botão para o primeiro banner -->
-                    <a href="trilha.html" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                    <!-- Botão original para o primeiro banner -->
+                    <a href="arte_visual.html" class="inline-block bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200">
                         abrir
                     </a>
                 </div>
             </div>
 
             <!-- Segundo Banner -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 banner-card">
                 <!-- Imagem atualizada para desafio_enade.png -->
                 <img src="desafio_enade.png"
                      onerror="this.onerror=null;this.src='https://placehold.co/600x250/CCE3DE/006D77?text=Imagem+desafio_enade.png+N%C3%A3o+Dispon%C3%ADvel';"
                      alt="Desafio ENADE" class="banner-image">
                 <div class="p-6">
-                    <!-- Novo título para o segundo banner -->
+                    <!-- Título original para o segundo banner -->
                     <h2 class="text-2xl font-bold text-gray-900 mb-3">Desafio Enade</h2>
-                    <!-- Nova descrição para o segundo banner -->
+                    <!-- Descrição original para o segundo banner -->
                     <p class="text-gray-700 leading-relaxed mb-4">
                         Desafie seus conhecimentos com perguntas dos testes ENADES, selecionadas por temas.
                         Acumule pontos e suba no ranking. Será que você consegue acertar todas as perguntas do quiz?
                     </p>
-                    <!-- Novo texto do botão para o segundo banner -->
+                    <!-- Botão original para o segundo banner -->
                     <a href="enade.html" class="inline-block bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-teal-700 transition-colors duration-200">
                         abrir
                     </a>
                 </div>
             </div>
-        </div>
+
+            <!-- Terceiro Banner - Estratégias de Ensino-Aprendizagem -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 banner-card">
+                <!-- Imagem placeholder para a nova seção -->
+                <img src="https://placehold.co/600x250/D1C4E9/4527A0?text=Estrategias+de+Ensino"
+                     alt="Estratégias de Ensino-Aprendizagem" class="banner-image">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Estratégias de Ensino</h2>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Explore diversas metodologias e abordagens para enriquecer suas práticas pedagógicas e engajar seus alunos.
+                    </p>
+                    <a href="estrategias.html" class="inline-block bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-200">
+                        abrir
+                    </a>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 </html>
