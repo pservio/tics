@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE 7 - Artes Visuais</title>
+    <title>Desafio ENADE 8 - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -404,7 +404,7 @@
                 label.appendChild(span);
                 themesContainer.appendChild(label);
                 // Atualize a contagem ao mudar
-                checkbox.addEventListener('change', updateThemeCountInfo);
+                checkbox.addEventListener('change', () => { updateThemeCountInfo(); });
             });
             updateThemeCountInfo();
         }
@@ -1068,9 +1068,9 @@
             return p;
         }
 
-        function updateThemeCountInfo() {
+        async function updateThemeCountInfo() {
             const temasSelecionados = getSelectedThemes();
-            const todasPerguntas = perguntasLocais;
+            const todasPerguntas = await fetchPerguntas();
             const filtradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
             if (temasSelecionados.length === 0) {
                 themeCountInfo.textContent = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
