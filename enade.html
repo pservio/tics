@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE 2.0 - Artes Visuais</title>
+    <title>Desafio ENADE 3.0 - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -557,7 +557,20 @@
         onAuthStateChanged(auth, (user) => {
             authLoading = false;
             setAuthStatus(false, user);
-            // onAuthStateChanged será chamado novamente com o usuário anônimo
+            if (user) {
+                currentUserUid = user.uid;
+            } else {
+                currentUserUid = null;
+                // Tenta login anônimo se não houver usuário
+                signInAnonymously(auth)
+                    .then(() => {
+                        // onAuthStateChanged será chamado novamente
+                    })
+                    .catch((error) => {
+                        console.error('Erro no login anônimo:', error);
+                        showModal(`Erro ao fazer login anônimo: ${error.message}`);
+                    });
+            }
         });
 
         // Timer (cronômetro)
@@ -611,13 +624,10 @@
                 showModal('Não foi possível autenticar. Recarregue a página.');
                 return;
             }
-
-            // Define o número total de questões
             totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
-
-            // Filtro de perguntas por tema
             const temasSelecionados = getSelectedThemes();
-            let perguntasFiltradas = filterQuestionsByThemes(perguntasLocais, temasSelecionados);
+            const todasPerguntas = await fetchPerguntas();
+            let perguntasFiltradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
             if (perguntasFiltradas.length < totalQuestions) {
                 showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
             }
@@ -626,7 +636,6 @@
             currentQuestionIndex = 0;
             userAnswers = [];
             updateQuestionDisplay();
-
             sectionTeamSelection.classList.add('hidden');
             document.getElementById('section-themes').classList.add('hidden');
             document.getElementById('section-challenge-size').classList.add('hidden');
@@ -1018,4 +1027,3 @@
     </script>
 </body>
 </html>
-
