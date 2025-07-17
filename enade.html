@@ -77,11 +77,66 @@
             text-decoration: none;
             cursor: pointer;
         }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                border-radius: 0;
+                max-width: 100vw;
+                min-width: 0;
+            }
+            h1, h2 {
+                font-size: 1.2rem !important;
+            }
+            .team-card {
+                padding: 8px !important;
+            }
+            .flex, .grid {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            .rounded-lg, .rounded-xl {
+                border-radius: 8px !important;
+            }
+            .py-2, .py-3, .py-4, .py-6, .py-8, .py-10 {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .px-4, .px-6, .px-8, .px-10 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            .text-2xl, .text-3xl, .text-4xl, .text-xl, .text-lg {
+                font-size: 1rem !important;
+            }
+            .min-w-full, .w-1\/2, .w-full {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+            .mx-auto {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            .mb-6, .mb-8, .mb-4 {
+                margin-bottom: 0.5rem !important;
+            }
+        }
+        .fade {
+            opacity: 1;
+            transition: opacity 0.4s;
+        }
+        .fade.hide {
+            opacity: 0;
+        }
+        /* Modal Política de Privacidade */
+        #privacy-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        #privacy-modal .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; position: relative; }
+        #privacy-modal .close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        #privacy-modal .close-button:hover { color: #000; }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
-    <div class="container bg-white rounded-xl shadow-lg p-8 md:p-10">
+    <div class="container bg-white rounded-xl shadow-lg p-8 md:p-10" role="main" aria-label="Quiz ENADE Artes Visuais">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Desafio ENADE - Artes Visuais</h1>
 
         <!-- Seção de Autenticação (Adicionada) -->
@@ -89,29 +144,29 @@
             <h2 class="text-xl font-semibold text-blue-800 mb-2">Status de Autenticação</h2>
             <p id="auth-status" class="text-blue-700">Carregando...</p>
             <p id="user-uid" class="text-blue-600 text-sm break-all">UID: N/A</p>
-            <button id="sign-out-button" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+            <button id="sign-out-button" aria-label="Sair da conta" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
                 Sair
             </button>
         </div>
         <!-- Fim da Seção de Autenticação -->
 
         <!-- Seção 1: Escolha do Time -->
-        <div id="section-team-selection" class="mb-8">
+        <div id="section-team-selection" class="mb-8" role="region" aria-label="Escolha de Time">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div id="team-berna" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Berna Reale">
+                <div id="team-berna" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Berna Reale" tabindex="0" aria-label="Selecionar time Berna Reale" role="button">
                     <img src="https://placehold.co/100x100/A78BFA/ffffff?text=Berna" alt="Berna Reale" class="rounded-full mb-3">
                     <span class="font-medium text-gray-700">Berna Reale</span>
                 </div>
-                <div id="team-denilson" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Denilson Baniwa">
+                <div id="team-denilson" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Denilson Baniwa" tabindex="0" aria-label="Selecionar time Denilson Baniwa" role="button">
                     <img src="https://placehold.co/100x100/60A5FA/ffffff?text=Denilson" alt="Denilson Baniwa" class="rounded-full mb-3">
                     <span class="font-medium text-gray-700">Denilson Baniwa</span>
                 </div>
-                <div id="team-rosana" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Rosana Paulino">
+                <div id="team-rosana" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Rosana Paulino" tabindex="0" aria-label="Selecionar time Rosana Paulino" role="button">
                     <img src="https://placehold.co/100x100/F87171/ffffff?text=Rosana" alt="Rosana Paulino" class="rounded-full mb-3">
                     <span class="font-medium text-gray-700">Rosana Paulino</span>
                 </div>
-                <div id="team-uyra" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Uýra Sodoma">
+                <div id="team-uyra" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Uýra Sodoma" tabindex="0" aria-label="Selecionar time Uýra Sodoma" role="button">
                     <img src="https://placehold.co/100x100/4ADE80/ffffff?text=Uýra" alt="Uýra Sodoma" class="rounded-full mb-3">
                     <span class="font-medium text-gray-700">Uýra Sodoma</span>
                 </div>
@@ -120,41 +175,45 @@
         </div>
 
         <!-- Seção 2: Escolha dos Temas -->
-        <div id="section-themes" class="mb-8">
+        <div id="section-themes" class="mb-8" role="region" aria-label="Escolha de Temas">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">2. Escolha os Temas (Opcional)</h2>
             <div class="flex flex-wrap justify-center gap-4"></div>
         </div>
 
         <!-- Seção 3: Escolha do Tamanho do Desafio -->
-        <div id="section-challenge-size" class="mb-8">
+        <div id="section-challenge-size" class="mb-8" role="region" aria-label="Escolha do Número de Questões">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">3. Quantas Questões?</h2>
             <div class="flex justify-center gap-6">
                 <label class="inline-flex items-center">
-                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="3" checked>
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="3" checked aria-label="Selecionar 3 questões">
                     <span class="ml-2 text-gray-700">3 Questões</span>
                 </label>
                 <label class="inline-flex items-center">
-                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="6">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="6" aria-label="Selecionar 6 questões">
                     <span class="ml-2 text-gray-700">6 Questões</span>
                 </label>
             </div>
         </div>
 
-        <button id="start-challenge-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+        <button id="start-challenge-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" aria-label="Iniciar Desafio">
             Iniciar Desafio
         </button>
 
         <!-- Seção de Questões (Exemplo Básico) -->
-        <div id="section-question" class="hidden mt-8">
+        <div id="section-question" class="hidden mt-8" role="region" aria-label="Questão do Quiz">
+            <div class="flex justify-between items-center mb-2">
+                <div id="progress-bar" class="text-lg font-semibold text-blue-700"></div>
+                <div id="timer" class="text-lg font-semibold text-pink-700"></div>
+            </div>
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Questão <span id="current-question-number">1</span></h2>
             <p id="current-question-text" class="text-lg text-gray-800 mb-6">Esta é a pergunta de exemplo.</p>
             <img id="question-image" src="https://placehold.co/400x250/E0E0E0/000000?text=Imagem+da+Questão" alt="Imagem da Questão" class="mx-auto rounded-lg shadow-md mb-6">
-            <div class="flex justify-center gap-4">
-                <input id="answer-input" type="text" aria-label="Digite sua resposta" placeholder="Digite sua resposta aqui" class="border border-gray-300 rounded-lg px-4 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off">
-            </div>
+            <!-- Opções de múltipla escolha são renderizadas dinamicamente -->
+            <div id="options-container" role="radiogroup" aria-label="Alternativas da Questão"></div>
+            <div id="explanation-container" class="hidden mt-4 p-4 rounded-lg bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 text-base" aria-live="polite"></div>
             <div class="flex justify-center gap-4 mt-4">
-                <button id="confirm-answer-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Confirmar resposta">Confirmar Resposta</button>
-                <button id="next-question-button" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Próxima questão">Próxima Questão</button>
+                <button id="confirm-answer-button" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50" aria-label="Confirmar resposta">Confirmar Resposta</button>
+                <button id="next-question-button" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Próxima questão">Próxima Questão</button>
             </div>
             <p class="mt-4 text-xl font-bold text-gray-800">Pontuação: <span id="current-score">0</span></p>
         </div>
@@ -164,9 +223,17 @@
             <h2 class="text-3xl font-bold text-green-600 mb-4">Desafio Finalizado!</h2>
             <p class="text-xl text-gray-700 mb-6">Parabéns! Sua pontuação final é: <span id="final-score" class="font-bold">0</span></p>
             <div class="flex justify-center gap-4">
-                <button id="play-again-button" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Jogar Novamente</button>
-                <button id="view-ranking-button" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Ver Ranking</button>
+                <button id="play-again-button" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-700 focus:ring-opacity-50" aria-label="Jogar Novamente">Jogar Novamente</button>
+                <button id="review-button" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50" aria-label="Revisar Respostas">Revisar Respostas</button>
+                <button id="view-ranking-button" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50" aria-label="Ver Ranking">Ver Ranking</button>
             </div>
+        </div>
+
+        <!-- Seção de Revisão -->
+        <div id="section-review" class="hidden mt-8 text-left">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Revisão das Respostas</h2>
+            <div id="review-list"></div>
+            <button id="review-back-button" class="mt-6 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Voltar para início">Voltar</button>
         </div>
 
         <!-- Seção de Ranking -->
@@ -191,7 +258,7 @@
                 </tbody>
             </table>
             <div id="ranking-empty-message" class="text-gray-500 mt-4 hidden">Nenhum resultado encontrado para este filtro.</div>
-            <button id="back-to-home-button" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Voltar para início">Voltar</button>
+            <button id="back-to-home-button" class="mt-6 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Voltar para início">Voltar</button>
         </div>
 
         <!-- Modal de Mensagem (para substituir alert()) -->
@@ -202,14 +269,51 @@
                 <button id="modal-ok-button" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">OK</button>
             </div>
         </div>
-
+        <footer class="mt-10 text-center text-gray-500 text-sm">
+            <a href="#" id="privacy-link" class="underline hover:text-blue-700">Política de Privacidade</a>
+        </footer>
+    </div>
+    <!-- Modal Política de Privacidade -->
+    <div id="privacy-modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-privacy-modal">&times;</span>
+            <h2 class="text-xl font-bold mb-2">Política de Privacidade</h2>
+            <p class="text-gray-700 text-sm mb-2">Este site utiliza Firebase para autenticação e ranking. Nenhum dado pessoal sensível é coletado. O ranking armazena apenas time, pontuação e um identificador anônimo. Cookies podem ser usados para melhorar a experiência. Ao usar o site, você concorda com esta política.</p>
+            <p class="text-gray-700 text-xs">Para dúvidas, entre em contato com o desenvolvedor.</p>
+        </div>
+    </div>
+    <!-- Área Administrativa -->
+    <div id="admin-section" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-lg w-full relative">
+            <button id="close-admin" class="absolute top-2 right-4 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold mb-4">Área Administrativa</h2>
+            <div id="admin-login" class="mb-4">
+                <input type="password" id="admin-password" placeholder="Senha de admin" class="border rounded px-3 py-2 mr-2">
+                <button id="admin-login-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Entrar</button>
+            </div>
+            <div id="admin-panel" class="hidden">
+                <form id="admin-form" class="mb-4">
+                    <input type="text" id="admin-enunciado" placeholder="Enunciado" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-tema" placeholder="Temas (separados por vírgula)" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-imagem" placeholder="URL da Imagem (opcional)" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoA" placeholder="Opção A" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoB" placeholder="Opção B" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoC" placeholder="Opção C" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoD" placeholder="Opção D" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoE" placeholder="Opção E" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-resposta" placeholder="Resposta Correta (A-E)" maxlength="1" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-explicacao" placeholder="Explicação (opcional)" class="border rounded px-2 py-1 w-full mb-2">
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Salvar Pergunta</button>
+                </form>
+                <div id="admin-questions-list" class="max-h-60 overflow-y-auto"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Seu arquivo de configuração do Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { perguntasLocais } from './perguntas.js';
 
         // Configuração do Firebase
@@ -305,9 +409,9 @@
             themeCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', () => {
                     if (checkbox.checked) {
-                        checkbox.parentElement.classList.add('bg-blue-100', 'ring', 'ring-blue-300');
+                        checkbox.parentElement.classList.add('bg-blue-200', 'ring', 'ring-blue-700');
                     } else {
-                        checkbox.parentElement.classList.remove('bg-blue-100', 'ring', 'ring-blue-300');
+                        checkbox.parentElement.classList.remove('bg-blue-200', 'ring', 'ring-blue-700');
                     }
                 });
             });
@@ -394,6 +498,7 @@
         teamCards.forEach(card => {
             card.setAttribute('tabindex', '0');
             card.setAttribute('aria-label', `Selecionar time ${card.dataset.team}`);
+            card.setAttribute('role', 'button');
             card.addEventListener('click', () => {
                 teamCards.forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
@@ -427,9 +532,9 @@
         themeCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
-                    checkbox.parentElement.classList.add('bg-blue-100', 'ring', 'ring-blue-300');
+                    checkbox.parentElement.classList.add('bg-blue-200', 'ring', 'ring-blue-700');
                 } else {
-                    checkbox.parentElement.classList.remove('bg-blue-100', 'ring', 'ring-blue-300');
+                    checkbox.parentElement.classList.remove('bg-blue-200', 'ring', 'ring-blue-700');
                 }
             });
         });
@@ -455,6 +560,43 @@
             // onAuthStateChanged será chamado novamente com o usuário anônimo
         });
 
+        // Timer (cronômetro)
+        let timerInterval = null;
+        let timerSeconds = 0;
+        const timerElement = document.getElementById('timer');
+        function startTimer() {
+            timerSeconds = 0;
+            timerElement.textContent = '00:00';
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const min = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                const sec = String(timerSeconds % 60).padStart(2, '0');
+                timerElement.textContent = `${min}:${sec}`;
+            }, 1000);
+        }
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        // Filtro de perguntas por tema
+        function getSelectedThemes() {
+            const themeCheckboxes = document.querySelectorAll('#section-themes input[type="checkbox"]');
+            return Array.from(themeCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        }
+        function filterQuestionsByThemes(perguntas, temasSelecionados) {
+            if (!temasSelecionados || temasSelecionados.length === 0) return perguntas;
+            return perguntas.filter(q => {
+                if (Array.isArray(q.tema)) {
+                    return q.tema.some(t => temasSelecionados.includes(t));
+                } else if (q.tema) {
+                    return temasSelecionados.includes(q.tema);
+                }
+                return false;
+            });
+        }
+
         // Iniciar Desafio
         startChallengeButton.addEventListener('click', async () => {
             if (!selectedTeam) {
@@ -473,10 +615,16 @@
             // Define o número total de questões
             totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
 
-            // Sorteia perguntas do perguntasLocais
-            questions = perguntasLocais.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
+            // Filtro de perguntas por tema
+            const temasSelecionados = getSelectedThemes();
+            let perguntasFiltradas = filterQuestionsByThemes(perguntasLocais, temasSelecionados);
+            if (perguntasFiltradas.length < totalQuestions) {
+                showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
+            }
+            questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
             currentScore = 0;
             currentQuestionIndex = 0;
+            userAnswers = [];
             updateQuestionDisplay();
 
             sectionTeamSelection.classList.add('hidden');
@@ -485,6 +633,7 @@
             startChallengeButton.classList.add('hidden');
             sectionQuestion.classList.remove('hidden');
             currentScoreElement.textContent = currentScore;
+            startTimer();
         });
 
         function updateQuestionDisplay() {
@@ -492,10 +641,19 @@
                 const question = questions[currentQuestionIndex];
                 currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
                 currentQuestionTextElement.innerHTML = question.enunciado;
-                questionImageElement.src = question.imagem_url || 'https://placehold.co/400x250/E0E0E0/000000?text=Sem+Imagem';
+                if (question.imagem_url && question.imagem_url.trim() !== "") {
+                    questionImageElement.src = question.imagem_url;
+                    questionImageElement.style.display = 'block';
+                    questionImageElement.setAttribute('alt', 'Imagem da Questão');
+                } else {
+                    questionImageElement.style.display = 'none';
+                }
                 currentScoreElement.textContent = currentScore;
                 confirmAnswerButton.classList.remove('hidden');
                 nextQuestionButton.classList.add('hidden');
+                // Barra de progresso
+                const progressBar = document.getElementById('progress-bar');
+                progressBar.textContent = `Questão ${currentQuestionIndex + 1} de ${questions.length}`;
                 // Renderiza opções múltipla escolha
                 optionsContainer.innerHTML = '';
                 const opcoes = [
@@ -509,15 +667,27 @@
                 opcoes.forEach(op => {
                     if (!op.texto) return;
                     const label = document.createElement('label');
-                    label.className = 'flex items-center gap-2 cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-blue-50 transition';
+                    label.className = 'flex items-center gap-2 cursor-pointer bg-white border border-gray-700 rounded-lg px-4 py-2 hover:bg-blue-100 transition';
+                    label.setAttribute('tabindex', '0');
+                    label.setAttribute('role', 'radio');
+                    label.setAttribute('aria-checked', 'false');
                     const radio = document.createElement('input');
                     radio.type = 'radio';
                     radio.name = 'option';
                     radio.value = op.letra;
-                    radio.className = 'form-radio text-blue-600';
+                    radio.className = 'form-radio text-blue-700';
                     radio.setAttribute('aria-label', `Alternativa ${op.letra}`);
                     radio.addEventListener('change', () => {
                         selectedOption = op.letra;
+                        // Atualiza aria-checked
+                        optionsContainer.querySelectorAll('label').forEach(lab => lab.setAttribute('aria-checked', 'false'));
+                        label.setAttribute('aria-checked', 'true');
+                    });
+                    label.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change'));
+                        }
                     });
                     label.appendChild(radio);
                     const span = document.createElement('span');
@@ -525,18 +695,54 @@
                     label.appendChild(span);
                     optionsContainer.appendChild(label);
                 });
+                // Salva referência para feedback visual
+                optionsContainer.selectedOption = () => selectedOption;
+                // Esconde explicação ao trocar de questão
+                const explanationContainer = document.getElementById('explanation-container');
+                explanationContainer.classList.add('hidden');
+                explanationContainer.textContent = '';
             } else {
                 endChallenge();
             }
         }
 
         confirmAnswerButton.addEventListener('click', () => {
+            // Feedback visual nas alternativas
+            const radios = optionsContainer.querySelectorAll('input[type="radio"]');
+            let selectedOption = null;
+            radios.forEach(radio => { if (radio.checked) selectedOption = radio.value; });
             if (!selectedOption) {
                 showModal('Selecione uma alternativa antes de confirmar.');
                 return;
             }
             const correctAnswer = questions[currentQuestionIndex].resposta_correta;
             const isCorrect = selectedOption === correctAnswer;
+            // Destacar alternativas
+            optionsContainer.querySelectorAll('label').forEach(label => {
+                const radio = label.querySelector('input[type="radio"]');
+                label.classList.remove('bg-green-200', 'bg-red-200', 'border-green-700', 'border-red-700');
+                if (radio.value === correctAnswer) {
+                    label.classList.add('bg-green-200', 'border-green-700');
+                }
+                if (radio.checked && radio.value !== correctAnswer) {
+                    label.classList.add('bg-red-200', 'border-red-700');
+                }
+            });
+            // Mostrar explicação se houver
+            const explanationContainer = document.getElementById('explanation-container');
+            const question = questions[currentQuestionIndex];
+            if (question.explicacao) {
+                explanationContainer.textContent = question.explicacao;
+                explanationContainer.classList.remove('hidden');
+            } else {
+                explanationContainer.classList.add('hidden');
+                explanationContainer.textContent = '';
+            }
+            // Salva resposta do usuário para revisão
+            userAnswers[currentQuestionIndex] = {
+                escolhida: selectedOption,
+                correta: correctAnswer
+            };
             if (isCorrect) {
                 currentScore += 10;
                 showModal('Resposta Correta! +10 pontos.');
@@ -557,6 +763,7 @@
             sectionQuestion.classList.add('hidden');
             sectionChallengeFinished.classList.remove('hidden');
             finalScoreElement.textContent = currentScore;
+            stopTimer();
 
             // Salvar pontuação no Firestore
             if (currentUserUid && selectedTeam) {
@@ -588,6 +795,8 @@
             selectedTeam = null;
             selectedTeamDisplay.textContent = 'Time Selecionado: Nenhum';
             teamCards.forEach(c => c.classList.remove('selected'));
+            stopTimer();
+            timerElement.textContent = '';
         });
 
         viewRankingButton.addEventListener('click', async () => {
@@ -655,6 +864,158 @@
 
         // Inicializa o ranking ao carregar a página (opcional)
         // loadRanking(); // Pode chamar aqui se quiser que o ranking seja carregado na inicialização
+
+        // Modo revisão
+        const sectionReview = document.getElementById('section-review');
+        const reviewList = document.getElementById('review-list');
+        const reviewButton = document.getElementById('review-button');
+        const reviewBackButton = document.getElementById('review-back-button');
+        if (reviewButton) {
+            reviewButton.addEventListener('click', () => {
+                sectionChallengeFinished.classList.add('hidden');
+                sectionReview.classList.remove('hidden');
+                renderReview();
+            });
+        }
+        if (reviewBackButton) {
+            reviewBackButton.addEventListener('click', () => {
+                sectionReview.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+            });
+        }
+        function renderReview() {
+            reviewList.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const user = userAnswers[idx] || {};
+                const correta = user.correta;
+                const escolhida = user.escolhida;
+                const bloco = document.createElement('div');
+                bloco.className = 'mb-6 p-4 rounded-lg border shadow-sm bg-white';
+                bloco.innerHTML = `
+                    <div class="mb-2 font-semibold text-blue-800">Questão ${idx + 1}</div>
+                    <div class="mb-2 text-gray-800">${q.enunciado}</div>
+                    ${q.imagem_url ? `<img src="${q.imagem_url}" alt="Imagem da Questão" class="my-2 mx-auto rounded shadow max-w-full" style="max-width:300px;">` : ''}
+                    <div class="mb-2">
+                        ${['A','B','C','D','E'].map(letra => {
+                            if (!q['opcao_' + letra]) return '';
+                            let style = '';
+                            if (letra === correta) style += 'bg-green-200 border-green-700';
+                            if (letra === escolhida && letra !== correta) style += ' bg-red-200 border-red-700';
+                            return `<div class="my-1 px-2 py-1 rounded border ${style}"><b>${letra}.</b> ${q['opcao_' + letra]}</div>`;
+                        }).join('')}
+                    </div>
+                    <div class="mb-2"><b>Sua resposta:</b> ${escolhida || '<span class="text-gray-400">Não respondida</span>'}</div>
+                    <div class="mb-2"><b>Correta:</b> ${correta}</div>
+                    ${q.explicacao ? `<div class="mt-2 p-3 rounded bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900"><b>Explicação:</b> ${q.explicacao}</div>` : ''}
+                `;
+                reviewList.appendChild(bloco);
+            });
+        }
+        // --- Animações suaves ---
+        function fadeOutIn(element, callback) {
+            element.classList.add('fade');
+            element.classList.add('hide');
+            setTimeout(() => {
+                if (callback) callback();
+                element.classList.remove('hide');
+            }, 400);
+        }
+        // Use fadeOutIn(sectionQuestion, updateQuestionDisplay) ao trocar de questão.
+        // --- Política de Privacidade ---
+        document.getElementById('privacy-link').onclick = function(e) {
+            e.preventDefault();
+            document.getElementById('privacy-modal').style.display = 'flex';
+        };
+        document.getElementById('close-privacy-modal').onclick = function() {
+            document.getElementById('privacy-modal').style.display = 'none';
+        };
+        // --- Área Administrativa ---
+        let isAdmin = false;
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 'A') {
+                document.getElementById('admin-section').classList.remove('hidden');
+            }
+        });
+        document.getElementById('close-admin').onclick = function() {
+            document.getElementById('admin-section').classList.add('hidden');
+        };
+        document.getElementById('admin-login-btn').onclick = function() {
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'admin123') { // Troque a senha depois!
+                isAdmin = true;
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadAdminQuestions();
+            } else {
+                alert('Senha incorreta!');
+            }
+        };
+        // CRUD de perguntas (exemplo usando Firebase)
+        async function loadAdminQuestions() {
+            const qSnap = await getDocs(collection(db, "perguntas"));
+            const list = document.getElementById('admin-questions-list');
+            list.innerHTML = '';
+            qSnap.forEach(doc => {
+                const q = doc.data();
+                const div = document.createElement('div');
+                div.className = 'border p-2 mb-2 rounded';
+                div.innerHTML = `<b>${q.enunciado}</b> <button data-id="${doc.id}" class="text-red-600 delete-q">Excluir</button>`;
+                list.appendChild(div);
+            });
+            list.querySelectorAll('.delete-q').forEach(btn => {
+                btn.onclick = async function() {
+                    await deleteDoc(doc(db, "perguntas", btn.dataset.id));
+                    loadAdminQuestions();
+                };
+            });
+        }
+        document.getElementById('admin-form').onsubmit = async function(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const enunciado = document.getElementById('admin-enunciado').value;
+            const tema = document.getElementById('admin-tema').value.split(',').map(t=>t.trim());
+            const imagem_url = document.getElementById('admin-imagem').value;
+            const opcao_A = document.getElementById('admin-opcaoA').value;
+            const opcao_B = document.getElementById('admin-opcaoB').value;
+            const opcao_C = document.getElementById('admin-opcaoC').value;
+            const opcao_D = document.getElementById('admin-opcaoD').value;
+            const opcao_E = document.getElementById('admin-opcaoE').value;
+            const resposta_correta = document.getElementById('admin-resposta').value.toUpperCase();
+            const explicacao = document.getElementById('admin-explicacao').value;
+            if (!enunciado || !tema.length || !opcao_A || !opcao_B || !opcao_C || !opcao_D || !opcao_E || !resposta_correta.match(/^[A-E]$/)) {
+                alert('Preencha todos os campos obrigatórios corretamente!');
+                return;
+            }
+            await addDoc(collection(db, "perguntas"), { enunciado, tema, imagem_url, opcao_A, opcao_B, opcao_C, opcao_D, opcao_E, resposta_correta, explicacao });
+            loadAdminQuestions();
+            document.getElementById('admin-form').reset();
+        };
+        // --- Carregamento assíncrono de perguntas (simulado) ---
+        async function fetchPerguntas() {
+            // Simule fetch de perguntas do Firebase ou arquivo externo
+            // Aqui, apenas retorna perguntasLocais para compatibilidade
+            return perguntasLocais;
+        }
+        // --- Validação de dados ---
+        // Exemplo: impedir pontuação negativa ou acima do máximo
+        function validarPontuacao(p) {
+            if (typeof p !== 'number' || p < 0) return 0;
+            if (p > (questions.length * 10)) return questions.length * 10;
+            return p;
+        }
+        // --- Instruções de minificação/cache ---
+        /*
+        Para produção:
+        - Minifique este HTML, CSS e JS (use Terser, html-minifier, etc).
+        - Configure cache no servidor (exemplo Firebase Hosting):
+        "headers": [
+          { "source": "**/*.@(js|css)", "headers": [ { "key": "Cache-Control", "value": "public,max-age=31536000,immutable" } ] }
+        ]
+        */
     </script>
 </body>
 </html>
+
