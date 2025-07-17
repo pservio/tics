@@ -1,4 +1,4 @@
-export const perguntasLocais = [
+const perguntasLocais = [
     {
         id: 1,
         tema: ["Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
@@ -9,7 +9,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II, e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 2,
@@ -21,7 +22,8 @@ export const perguntasLocais = [
         opcao_C: "I, IV e V.",
         opcao_D: "II, III e IV.",
         opcao_E: "I, II, III e V.",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 3,
@@ -33,7 +35,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 4,
@@ -45,7 +48,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 5,
@@ -57,7 +61,8 @@ export const perguntasLocais = [
         opcao_C: "a performance da artista aborda o corpo negro feminino permeado por classificações sociais de identidade baseadas em discursos heteronormativos, padrões de anatomias, forma e cor sobre o corpo .",
         opcao_D: "a arte política e socialmente engajada surgiu a partir da efetiva aplicação da legislação que prevê o ensino da História e das culturas brasileira e africana em todos os níveis de ensino .",
         opcao_E: "o uso do próprio corpo em performance, por mulheres, contradiz as reflexões características do feminismo, que critica o corpo feminino objetificado .",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 6,
@@ -69,7 +74,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a ll é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 7,
@@ -81,7 +87,8 @@ export const perguntasLocais = [
         opcao_C: "A infogravura de Denilson Baniwa problematiza a presença do indígena na arte, mas também a defesa de seus direitos como brasileiros, nas questões territoriais e de defesa da vida .",
         opcao_D: "O artista, ao utilizar em seu desenho códigos visuais semelhantes ao viés ocidentalista de representação naturalista, demonstra a interiorização de sua subalternidade étnica e cultural .",
         opcao_E: "Os critérios universais existentes para determinar de antemão que um objeto singular possa ser considerado como obra de arte, seja indígena ou não indígena, são norteados por um conceito comum de arte .",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 8,
@@ -93,7 +100,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e III.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 9,
@@ -105,7 +113,8 @@ export const perguntasLocais = [
         opcao_C: "I e IV.",
         opcao_D: "II e V.",
         opcao_E: "III, IV e V.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 10,
@@ -117,7 +126,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a ll é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 11,
@@ -129,7 +139,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a ll é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 12,
@@ -141,7 +152,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 13,
@@ -153,7 +165,8 @@ export const perguntasLocais = [
         opcao_C: "promoveu a espetacularização do lixo, por expô-lo em um ponto de atração turística sem vínculo com a arte .",
         opcao_D: "aproximou o público, por meio da experiência sensível, dos problemas relacionados com o lixo apontados nas reportagens .",
         opcao_E: "incentivou o uso de materiais recicláveis no Ensino de Artes como forma de contribuição com a natureza e com a padronização de soluções criativas .",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 14,
@@ -165,7 +178,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 15,
@@ -177,7 +191,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a Il é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 16,
@@ -189,7 +204,8 @@ export const perguntasLocais = [
         opcao_C: "II e III, apenas.",
         opcao_D: "II, III e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 17,
@@ -201,7 +217,8 @@ export const perguntasLocais = [
         opcao_C: "ANDRADE, F. Composição em Vermelho, 1972-1974. Materiais diversos .",
         opcao_D: "CATUNDA, L. Bicho. 2000. Acrílica sobre tela e espuma .",
         opcao_E: "SCHWANKE, L. H. sem título. Final dos anos 1980. Apropriação de escorredores de arroz sobre suporte de papelão .",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 18,
@@ -213,7 +230,8 @@ export const perguntasLocais = [
         opcao_C: "A instalação de Olafur Eliasson, inspirada em fenômenos da natureza, desafia as percepções do natural e do artificial .",
         opcao_D: "O artista estimula os espectadores a perceber a natureza dos objetos, lâmpadas, espelho e umidificadores, ao compará-los com os fenômenos da natureza .",
         opcao_E: "A obra de Olafur Eliasson, por meio das percepções das cores, da névoa e do ar, desvia a atenção do espectador das questões socioambientais .",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 19,
@@ -225,7 +243,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a Il é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 20,
@@ -237,7 +256,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV, apenas.",
         opcao_D: "I, II e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 21,
@@ -249,7 +269,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 22,
@@ -261,7 +282,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a Il é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 23,
@@ -273,7 +295,8 @@ export const perguntasLocais = [
         opcao_C: "I e III, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 24,
@@ -285,7 +308,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a ll é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a Il é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 25,
@@ -297,7 +321,8 @@ export const perguntasLocais = [
         opcao_C: "I, II e IV.",
         opcao_D: "I, III, IV e V.",
         opcao_E: "II, III, IV e V.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 26,
@@ -309,7 +334,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e III.",
         opcao_E: "I, II e IV.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 27,
@@ -321,7 +347,8 @@ export const perguntasLocais = [
         opcao_C: "I, IV e V.",
         opcao_D: "II, III e V.",
         opcao_E: "II, IV e V.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 28,
@@ -333,7 +360,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 29,
@@ -345,7 +373,8 @@ export const perguntasLocais = [
         opcao_C: "A figura 2 dialoga com a agenda Queer e a figura 1 se opõe à fluidez da noção de gênero .",
         opcao_D: "A figura 2 evidencia os estereótipos de gênero à medida que avança nos planos da obra .",
         opcao_E: "As figuras 1 e 2 limitam a discussão dos estereótipos de gênero .",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 30,
@@ -357,7 +386,8 @@ export const perguntasLocais = [
         opcao_C: "integra esta área a outros conteúdos, práticas e linguagens, relacionando-os ao mundo a sua volta e ampliando o campo de atuação de professores e estudantes .",
         opcao_D: "desenvolve a meta discursividade, visando a legitimação dos campos de ensino nessa área de conhecimento .",
         opcao_E: "exige dos professores polivalência em campos de atuação distintos, assim como conhecimento e domínio sobre as mais diversas linguagens a fim de transmití-las .",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 31,
@@ -369,7 +399,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 32,
@@ -381,7 +412,8 @@ export const perguntasLocais = [
         opcao_C: "I e III, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 33,
@@ -393,7 +425,8 @@ export const perguntasLocais = [
         opcao_C: "A obra tem vida própria e é autônoma, pois a imagem capturada pelo fotógrafo foge ao controle do desejado e ao domínio da técnica .",
         opcao_D: "A fotografia engana, pois é um jogo de ilusões, um tipo de falso testemunho, que faz o espectador acreditar em inverdades e fantasias .",
         opcao_E: "A capacidade da fotografia em transformar as coisas em algo belo resulta dos meios técnicos nela empregados e de sua faculdade para alimentar falsas experiências estéticas .",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 34,
@@ -405,7 +438,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 35,
@@ -417,7 +451,8 @@ export const perguntasLocais = [
         opcao_C: "II e III.",
         opcao_D: "I, III e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 36,
@@ -429,7 +464,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "I e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 37,
@@ -441,7 +477,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e III.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 38,
@@ -453,7 +490,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 39,
@@ -465,7 +503,8 @@ export const perguntasLocais = [
         opcao_C: "I, II e III.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.  ",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 40,
@@ -477,7 +516,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 41,
@@ -489,7 +529,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 42,
@@ -501,7 +542,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 43,
@@ -513,7 +555,8 @@ export const perguntasLocais = [
         opcao_C: "A escultura de Durham segue padrões da arte clássica uma vez que consiste na representação de um retrato .",
         opcao_D: "A obra de um artista que se considera 'primitivo pós-moderno' não deve ser classificada como arte contemporânea .",
         opcao_E: "As manifestações artísticas da população indígena são exemplos de artefatos considerados obras de arte clássicas .",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 44,
@@ -525,7 +568,8 @@ export const perguntasLocais = [
         opcao_C: "I e III, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 45,
@@ -537,7 +581,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 46,
@@ -549,7 +594,8 @@ export const perguntasLocais = [
         opcao_C: "II e IV, apenas.",
         opcao_D: "I, II e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 47,
@@ -561,7 +607,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 48,
@@ -573,7 +620,8 @@ export const perguntasLocais = [
         opcao_C: "uma obra de arte sensacionalista que, embora bem intencionada, não deveria fazer parte do Musa .",
         opcao_D: "uma boa ideia para recompor a flora e a fauna marinhas, mas com impactos ambientais irreversíveis .",
         opcao_E: "uma obra de arte engajada e, ao mesmo tempo, uma forma de recomposição da flora e da fauna marinhas .",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 49,
@@ -585,7 +633,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 50,
@@ -597,7 +646,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 51,
@@ -609,7 +659,8 @@ export const perguntasLocais = [
         opcao_C: "processo avaliativo que priorize o uso da língua portuguesa na modalidade escrita, dada a importância da manutenção do registro da aprendizagem .",
         opcao_D: "ensino da língua brasileira de sinais (Libras) após a aquisição da língua portuguesa na modalidade escrita, em processo análogo ao da alfabetização de aluno ouvinte .",
         opcao_E: "educação inclusiva, apesar de a surdez não se enquadrar no campo da deficiência física ou das limitações de mobilidade .",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 52,
@@ -621,7 +672,8 @@ export const perguntasLocais = [
         opcao_C: "se valha das diferenças sexuais naturais entre meninos e meninas para conduzir a classe e manter a disciplina .",
         opcao_D: "se refira à questão de gênero de forma tangencial, suficiente para promover vivência menos intransigente e mais equânime entre homens e mulheres .",
         opcao_E: "reforce modelos de comportamentos socialmente atribuídos a homens e mulheres que formam um conjunto de representações sobre masculinidade e feminilidade .",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 53,
@@ -633,7 +685,8 @@ export const perguntasLocais = [
         opcao_C: "II, III e IV.",
         opcao_D: "I, II, III e V.",
         opcao_E: "II, III, IV e V.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 54,
@@ -645,7 +698,8 @@ export const perguntasLocais = [
         opcao_C: "Aplicar exercícios de fixação em níveis crescentes de complexidade para a internalização dos conteúdos pelos estudantes .",
         opcao_D: "Partir do saber do cotidiano do estudante sobre a relação entre força e movimento para provocar o surgimento de hipóteses, criar conflitos cognitivos para desenvolvimento do conceito desejado .",
         opcao_E: "Realizar leituras informativas sobre o conteúdo e, a partir da apresentação de slides ilustrativos, descrever o conceito de força e de movimento, apresentando exemplos .",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 55,
@@ -657,7 +711,8 @@ export const perguntasLocais = [
         opcao_C: "o ensino da Arte facilitará a afirmação das identidades étnicas através do estudo da auto- imagem do povo brasileiro . Ao aplicar a referida lei, promoverá a ampliação do acesso de negros ao ensino superior, que será alterado pelo ensino da contribuição dos africanos e indígenas .",
         opcao_D: "os arte-educadores são obrigados a conhecer e ensinar a História da África nas escolas . Ao utilizar as artes visuais na educação para as relações étnicorraciais, facilitarão a compreensão e contextualização da temática da nova disciplina imposta pelas citadas leis federais .",
         opcao_E: "a aplicabilidade da referida legislação nas escolas exigirá o uso da música de origem negra em todas as aulas de Artes . Ao trabalhar a musicalidade de influência africana, os arte-educadores promoverão a difusão da contribuição dos negros e indígenas e o diálogo com a música de qualidade na cultura nacional .",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 56,
@@ -669,7 +724,8 @@ export const perguntasLocais = [
         opcao_C: "Defende-se uma concepção de arte como algo pertencente a uma cultura de nível superior, à qual só chega, quer como produtores, quer como apreciadores, indivíduos muito preparados esteticamente a partir do domínio de saberes disciplinares .",
         opcao_D: "Um modo de motivação dos estudantes parte da adoção de uma postura pedagógica em artes visuais que não concebe a arte como mero artefato para apreciação, mas sim como 'experiência' capaz de conectar-se com a própria cultura estética dos estudantes .",
         opcao_E: "As propostas pedagógicas culturalistas desconsideram o 'popular' e o 'cotidiano' que, na maioria das vezes, pulsa fora dos ambientes culturais tradicionais, confrontando-se com as experiências vitais dos estudantes e favorecendo uma visão historicista do fazer artístico .",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 57,
@@ -681,7 +737,8 @@ export const perguntasLocais = [
         opcao_C: "I e III, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 58,
@@ -693,7 +750,8 @@ export const perguntasLocais = [
         opcao_C: "II e III, apenas.",
         opcao_D: "III e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 59,
@@ -705,7 +763,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II, III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 60,
@@ -717,7 +776,8 @@ export const perguntasLocais = [
         opcao_C: "II e III.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 61,
@@ -729,7 +789,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 62,
@@ -741,7 +802,8 @@ export const perguntasLocais = [
         opcao_C: "O ensino da arte no Brasil, desde seus primórdios, ultrapassa as fronteiras entre as chamadas 'artes maiores' e aquelas que emanam da cultura popular .",
         opcao_D: "Um dos problemas da educação brasileira no que diz respeito ao ensino de artes reside na preferência pela arte erudita, que não apenas se revela nos programas curriculares como, também, nas próprias concepções de arte dos arte-educadores .",
         opcao_E: "Os arte-educadores brasileiros têm uma concepção de arte intercultural, pelo que recorrem, em sua prática de sala de aula, às manifestações artísticas populares .",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 63,
@@ -753,7 +815,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "I e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 64,
@@ -765,7 +828,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 65,
@@ -777,7 +841,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 66,
@@ -789,7 +854,8 @@ export const perguntasLocais = [
         opcao_C: "I e II.",
         opcao_D: "II e III.",
         opcao_E: "III e IV.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 67,
@@ -801,7 +867,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 68,
@@ -813,7 +880,8 @@ export const perguntasLocais = [
         opcao_C: "II e III.",
         opcao_D: "I, III e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 69,
@@ -825,7 +893,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 70,
@@ -837,7 +906,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 71,
@@ -849,7 +919,8 @@ export const perguntasLocais = [
         opcao_C: "II e III, apenas.",
         opcao_D: "III e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 72,
@@ -861,7 +932,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.  ",
         opcao_E: "As asserções I e II são proposições falsas.  ",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 73,
@@ -873,7 +945,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 74,
@@ -885,7 +958,8 @@ export const perguntasLocais = [
         opcao_C: "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.  ",
         opcao_D: "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
         opcao_E: "As asserções I e II são proposições falsas.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     },
     {
         id: 75,
@@ -897,7 +971,8 @@ export const perguntasLocais = [
         opcao_C: "I e III, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "A"
+        resposta_correta: "A",
+        explicacao: ""
     },
     {
         id: 76,
@@ -909,7 +984,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II, III.",
         opcao_E: "I, II e IV.  ",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 77,
@@ -921,7 +997,8 @@ export const perguntasLocais = [
         opcao_C: "III e IV.",
         opcao_D: "I, II e IV.",
         opcao_E: "II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 78,
@@ -933,7 +1010,8 @@ export const perguntasLocais = [
         opcao_C: "estabelece que a melhoria da educação básica evidencia a base para o desenvolvimento, pois o crescimento econômico é o indicador do percentual de recursos do PIB a ser aplicado em educação .",
         opcao_D: "disponibiliza para os gestores escolares o crescimento de 10% dos investimentos do PIB em educação, ao ano, durante os próximos 10 anos e um Sistema Nacional de Avaliação para verificar a efetivação das diretrizes e metas dispostas no referido Plano .",
         opcao_E: "permite planejar a educação para os próximos 10 anos e institui mecanismos de monitoramento e avaliação, tanto da execução do Plano como da qualidade da educação, por meio do estabelecimento de metas educacionais e definição dos investimentos a serem disponibilizados para o alcance dessas metas .",
-        resposta_correta: "E"
+        resposta_correta: "E",
+        explicacao: ""
     },
     {
         id: 79,
@@ -945,7 +1023,8 @@ export const perguntasLocais = [
         opcao_C: "II e IV, apenas.",
         opcao_D: "I, III e IV, apenas.",
         opcao_E: "I, II, III e IV.",
-        resposta_correta: "D"
+        resposta_correta: "D",
+        explicacao: ""
     },
     {
         id: 80,
@@ -957,7 +1036,8 @@ export const perguntasLocais = [
         opcao_C: "I e II, apenas.",
         opcao_D: "II e III, apenas.",
         opcao_E: "I, II e III.",
-        resposta_correta: "C"
+        resposta_correta: "C",
+        explicacao: ""
     },
     {
         id: 81,
@@ -969,6 +1049,7 @@ export const perguntasLocais = [
         opcao_C: "II, III e IV.",
         opcao_D: "I, II, IV e V.",
         opcao_E: "I, III, IV e V.",
-        resposta_correta: "B"
+        resposta_correta: "B",
+        explicacao: ""
     }
 ];
