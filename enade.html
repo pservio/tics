@@ -227,6 +227,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { perguntasLocais } from './perguntas.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -269,6 +270,14 @@
         const currentQuestionNumberElement = document.getElementById('current-question-number');
         const currentQuestionTextElement = document.getElementById('current-question-text');
         const questionImageElement = document.getElementById('question-image');
+        // Elementos para múltipla escolha
+        let optionsContainer = document.getElementById('options-container');
+        if (!optionsContainer) {
+            optionsContainer = document.createElement('div');
+            optionsContainer.id = 'options-container';
+            optionsContainer.className = 'flex flex-col items-start gap-2 mb-4';
+            currentQuestionTextElement.insertAdjacentElement('afterend', optionsContainer);
+        }
 
         // Modal de Mensagem
         const messageModal = document.getElementById('message-modal');
@@ -412,7 +421,7 @@
         });
 
         // Iniciar Desafio
-        startChallengeButton.addEventListener('click', () => {
+        startChallengeButton.addEventListener('click', async () => {
             if (!selectedTeam) {
                 showModal('Por favor, selecione um time antes de iniciar o desafio.');
                 return;
@@ -429,8 +438,8 @@
             // Define o número total de questões
             totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
 
-            // Simula o carregamento de questões (em um cenário real, viriam do Firestore)
-            questions = generateMockQuestions(totalQuestions);
+            // Sorteia perguntas do perguntasLocais
+            questions = perguntasLocais.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
             currentScore = 0;
             currentQuestionIndex = 0;
             updateQuestionDisplay();
@@ -443,75 +452,61 @@
             currentScoreElement.textContent = currentScore;
         });
 
-        // Função para gerar questões mock (apenas para demonstração)
-        function generateMockQuestions(num) {
-            const mockQuestions = [
-                {
-                    text: "Qual artista é conhecido por suas performances que exploram questões de gênero e sexualidade, muitas vezes utilizando o próprio corpo como suporte?",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+1",
-                    answer: "Performance Artist" // Resposta correta para simulação
-                },
-                {
-                    text: "Cite um movimento artístico do século XX que utilizou a fotografia como principal meio de expressão, explorando a objetividade e a documentação do cotidiano.",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+2",
-                    answer: "Nova Objetividade"
-                },
-                {
-                    text: "Qual técnica de gravura envolve o uso de ácidos para corroer uma placa de metal, criando linhas que retêm a tinta?",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+3",
-                    answer: "Água-forte"
-                },
-                {
-                    text: "Descreva brevemente a importância da cor na obra de Henri Matisse.",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+4",
-                    answer: "Cor"
-                },
-                {
-                    text: "Quem é o artista brasileiro que criou a obra 'Bandeira Branca', que questiona o conceito de nação e identidade?",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+5",
-                    answer: "Cildo Meireles"
-                },
-                {
-                    text: "Qual o nome da artista que utiliza cabelos e unhas em suas instalações, explorando temas de ancestralidade e memória?",
-                    image: "https://placehold.co/400x250/E0E0E0/000000?text=Questão+6",
-                    answer: "Rosana Paulino"
-                }
-            ];
-            // Embaralha as questões e pega o número necessário
-            return mockQuestions.sort(() => 0.5 - Math.random()).slice(0, num);
-        }
-
         function updateQuestionDisplay() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
                 currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
-                currentQuestionTextElement.textContent = question.text;
-                questionImageElement.src = question.image;
+                currentQuestionTextElement.innerHTML = question.enunciado;
+                questionImageElement.src = question.imagem_url || 'https://placehold.co/400x250/E0E0E0/000000?text=Sem+Imagem';
                 currentScoreElement.textContent = currentScore;
                 confirmAnswerButton.classList.remove('hidden');
                 nextQuestionButton.classList.add('hidden');
-                document.getElementById('answer-input').value = '';
-                document.getElementById('answer-input').focus();
+                // Renderiza opções múltipla escolha
+                optionsContainer.innerHTML = '';
+                const opcoes = [
+                    {letra: 'A', texto: question.opcao_A},
+                    {letra: 'B', texto: question.opcao_B},
+                    {letra: 'C', texto: question.opcao_C},
+                    {letra: 'D', texto: question.opcao_D},
+                    {letra: 'E', texto: question.opcao_E}
+                ];
+                let selectedOption = null;
+                opcoes.forEach(op => {
+                    if (!op.texto) return;
+                    const label = document.createElement('label');
+                    label.className = 'flex items-center gap-2 cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-blue-50 transition';
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'option';
+                    radio.value = op.letra;
+                    radio.className = 'form-radio text-blue-600';
+                    radio.setAttribute('aria-label', `Alternativa ${op.letra}`);
+                    radio.addEventListener('change', () => {
+                        selectedOption = op.letra;
+                    });
+                    label.appendChild(radio);
+                    const span = document.createElement('span');
+                    span.innerHTML = `<b>${op.letra}.</b> ${op.texto}`;
+                    label.appendChild(span);
+                    optionsContainer.appendChild(label);
+                });
             } else {
                 endChallenge();
             }
         }
 
         confirmAnswerButton.addEventListener('click', () => {
-            const answerInput = document.getElementById('answer-input');
-            const userAnswer = answerInput.value.trim();
-            if (!userAnswer) {
-                showModal('Digite uma resposta antes de confirmar.');
-                answerInput.focus();
+            if (!selectedOption) {
+                showModal('Selecione uma alternativa antes de confirmar.');
                 return;
             }
-            const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
-            const isCorrect = userAnswer.toLowerCase() === correctAnswer;
+            const correctAnswer = questions[currentQuestionIndex].resposta_correta;
+            const isCorrect = selectedOption === correctAnswer;
             if (isCorrect) {
                 currentScore += 10;
                 showModal('Resposta Correta! +10 pontos.');
             } else {
-                showModal(`Resposta Incorreta. Resposta correta: ${questions[currentQuestionIndex].answer}`);
+                showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
             }
             currentScoreElement.textContent = currentScore;
             confirmAnswerButton.classList.add('hidden');
