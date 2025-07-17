@@ -1,4 +1,4 @@
-const perguntasLocais = [
+export const perguntasLocais = [
     {
         id: 1,
         tema: ["Teoria, Historiografia e Crítica da Arte", "Relações entre Arte, Memória e Sociedade"],
