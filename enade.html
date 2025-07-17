@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE - Artes Visuais</title>
+    <title>*Desafio ENADE - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1100,6 +1100,20 @@
             } else {
                 themeCountInfo.textContent = `${filtradas.length} perguntas disponíveis para os temas selecionados`;
             }
+        }
+
+        // Após a definição de sectionRanking e das demais seções:
+        const footerRankingLink = document.getElementById('footer-ranking-link');
+        if (footerRankingLink) {
+            footerRankingLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                sectionTeamSelection.classList.add('hidden');
+                document.getElementById('section-themes').classList.add('hidden');
+                document.getElementById('section-challenge-size').classList.add('hidden');
+                startChallengeButton.classList.add('hidden');
+                sectionRanking.classList.remove('hidden');
+                await loadRanking();
+            });
         }
 
     </script>
