@@ -167,8 +167,11 @@
             <p id="current-question-text" class="text-lg text-gray-800 mb-6">Esta é a pergunta de exemplo.</p>
             <img id="question-image" src="https://placehold.co/400x250/E0E0E0/000000?text=Imagem+da+Questão" alt="Imagem da Questão" class="mx-auto rounded-lg shadow-md mb-6">
             <div class="flex justify-center gap-4">
-                <button id="confirm-answer-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Confirmar Resposta</button>
-                <button id="next-question-button" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Próxima Questão</button>
+                <input id="answer-input" type="text" aria-label="Digite sua resposta" placeholder="Digite sua resposta aqui" class="border border-gray-300 rounded-lg px-4 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off">
+            </div>
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="confirm-answer-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Confirmar resposta">Confirmar Resposta</button>
+                <button id="next-question-button" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Próxima questão">Próxima Questão</button>
             </div>
             <p class="mt-4 text-xl font-bold text-gray-800">Pontuação: <span id="current-score">0</span></p>
         </div>
@@ -204,7 +207,8 @@
                     <!-- Linhas do ranking serão inseridas aqui por JS -->
                 </tbody>
             </table>
-            <button id="back-to-home-button" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">Voltar</button>
+            <div id="ranking-empty-message" class="text-gray-500 mt-4 hidden">Nenhum resultado encontrado para este filtro.</div>
+            <button id="back-to-home-button" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" aria-label="Voltar para início">Voltar</button>
         </div>
 
         <!-- Modal de Mensagem (para substituir alert()) -->
@@ -330,12 +334,67 @@
 
         // Seleção de Time
         teamCards.forEach(card => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `Selecionar time ${card.dataset.team}`);
             card.addEventListener('click', () => {
                 teamCards.forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
                 selectedTeam = card.dataset.team;
                 selectedTeamDisplay.textContent = `Time Selecionado: ${selectedTeam}`;
             });
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    card.click();
+                }
+            });
+        });
+
+        // Feedback visual para radio de número de questões
+        const challengeSizeRadios = document.querySelectorAll('input[name="challenge-size"]');
+        challengeSizeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                challengeSizeRadios.forEach(r => r.parentElement.classList.remove('ring', 'ring-blue-400'));
+                if (radio.checked) {
+                    radio.parentElement.classList.add('ring', 'ring-blue-400');
+                }
+            });
+            // Inicializa visual
+            if (radio.checked) {
+                radio.parentElement.classList.add('ring', 'ring-blue-400');
+            }
+        });
+
+        // Feedback visual para temas
+        const themeCheckboxes = document.querySelectorAll('#section-themes input[type="checkbox"]');
+        themeCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.classList.add('bg-blue-100', 'ring', 'ring-blue-300');
+                } else {
+                    checkbox.parentElement.classList.remove('bg-blue-100', 'ring', 'ring-blue-300');
+                }
+            });
+        });
+
+        // Ajuste status de autenticação para mostrar "Carregando..." apenas enquanto necessário
+        let authLoading = true;
+        function setAuthStatus(loading, user) {
+            if (loading) {
+                authStatusElement.textContent = 'Carregando...';
+                userUidElement.textContent = 'UID: N/A';
+            } else if (user) {
+                authStatusElement.textContent = 'Logado';
+                userUidElement.textContent = `UID: ${user.uid}`;
+            } else {
+                authStatusElement.textContent = 'Deslogado';
+                userUidElement.textContent = 'UID: N/A';
+            }
+        }
+        setAuthStatus(true, null);
+        onAuthStateChanged(auth, (user) => {
+            authLoading = false;
+            setAuthStatus(false, user);
+            // onAuthStateChanged será chamado novamente com o usuário anônimo
         });
 
         // Iniciar Desafio
@@ -344,8 +403,12 @@
                 showModal('Por favor, selecione um time antes de iniciar o desafio.');
                 return;
             }
-            if (!currentUserUid) {
+            if (authLoading) {
                 showModal('Aguarde, o sistema de autenticação está carregando. Tente novamente em instantes.');
+                return;
+            }
+            if (!currentUserUid) {
+                showModal('Não foi possível autenticar. Recarregue a página.');
                 return;
             }
 
@@ -413,28 +476,37 @@
                 currentScoreElement.textContent = currentScore;
                 confirmAnswerButton.classList.remove('hidden');
                 nextQuestionButton.classList.add('hidden');
+                document.getElementById('answer-input').value = '';
+                document.getElementById('answer-input').focus();
             } else {
                 endChallenge();
             }
         }
 
         confirmAnswerButton.addEventListener('click', () => {
-            // Lógica de verificação de resposta (simulada)
-            const isCorrect = Math.random() > 0.5; // Simula uma resposta correta/incorreta
+            const answerInput = document.getElementById('answer-input');
+            const userAnswer = answerInput.value.trim();
+            if (!userAnswer) {
+                showModal('Digite uma resposta antes de confirmar.');
+                answerInput.focus();
+                return;
+            }
+            const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
+            const isCorrect = userAnswer.toLowerCase() === correctAnswer;
             if (isCorrect) {
-                currentScore += 10; // Adiciona pontos
+                currentScore += 10;
                 showModal('Resposta Correta! +10 pontos.');
             } else {
-                showModal('Resposta Incorreta. Tente novamente na próxima!');
+                showModal(`Resposta Incorreta. Resposta correta: ${questions[currentQuestionIndex].answer}`);
             }
             currentScoreElement.textContent = currentScore;
             confirmAnswerButton.classList.add('hidden');
             nextQuestionButton.classList.remove('hidden');
         });
-
-        nextQuestionButton.addEventListener('click', () => {
-            currentQuestionIndex++;
-            updateQuestionDisplay();
+        document.getElementById('answer-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                confirmAnswerButton.click();
+            }
         });
 
         async function endChallenge() {
@@ -489,24 +561,26 @@
         });
 
         async function loadRanking(filter = 'all') {
-            rankingTableBody.innerHTML = ''; // Limpa a tabela
+            rankingTableBody.innerHTML = '';
+            document.getElementById('ranking-empty-message').classList.add('hidden');
+            rankingTableBody.insertAdjacentHTML('beforebegin', '<div id="ranking-loading" class="text-gray-500 mb-2">Carregando ranking...</div>');
             let q;
             if (filter === 'all') {
                 q = collection(db, "ranking");
             } else {
                 q = query(collection(db, "ranking"), where("team", "==", filter));
             }
-
             try {
                 const querySnapshot = await getDocs(q);
                 let rankingData = [];
                 querySnapshot.forEach((doc) => {
                     rankingData.push(doc.data());
                 });
-
                 // Ordena por pontuação (maior para menor)
                 rankingData.sort((a, b) => b.score - a.score);
-
+                if (rankingData.length === 0) {
+                    document.getElementById('ranking-empty-message').classList.remove('hidden');
+                }
                 rankingData.forEach(item => {
                     const row = rankingTableBody.insertRow();
                     row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-50');
@@ -520,6 +594,9 @@
             } catch (e) {
                 console.error("Erro ao carregar ranking: ", e);
                 showModal(`Erro ao carregar ranking: ${e.message}`);
+            } finally {
+                const loadingDiv = document.getElementById('ranking-loading');
+                if (loadingDiv) loadingDiv.remove();
             }
         }
 
