@@ -265,26 +265,31 @@
             };
 
             // Check for time slot conflicts
-            const conflict = checkTimeSlotConflict(disciplineData, disciplines);
+            const conflict = checkTimeSlotConflict(editingDiscipline ? { ...editingDiscipline, ...disciplineData } : disciplineData, disciplines);
             if (conflict) {
                 setErrorMessage(`Conflito de horário: "${disciplineData.name}" se sobrepõe a "${conflict.name}" em ${disciplineData.dayOfWeek} nos horários: ${disciplineData.timeSlots.filter(slot => conflict.timeSlots.includes(slot)).join(', ')}.`);
                 return;
             }
 
             if (editingDiscipline) {
-              // Update existing discipline
-              setDisciplines(disciplines.map(d =>
-                d.id === editingDiscipline.id ? { ...d, ...disciplineData } : d
-              ));
-              setEditingDiscipline(null);
-              setSuccessMessage(`Disciplina "${disciplineData.name}" atualizada com sucesso!`);
+              // Atualize no Firestore primeiro
+              updateDisciplineInFirestore({ ...editingDiscipline, ...disciplineData }).then(() => {
+                setDisciplines(disciplines.map(d =>
+                  d.id === editingDiscipline.id ? { ...d, ...disciplineData } : d
+                ));
+                setEditingDiscipline(null);
+                setSuccessMessage(`Disciplina "${disciplineData.name}" atualizada com sucesso!`);
+              });
             } else {
-              // Add new discipline
-              setDisciplines([...disciplines, { id: Date.now(), ...disciplineData }]);
-              setSuccessMessage(`Disciplina "${disciplineData.name}" adicionada com sucesso!`);
+              // Adicionar nova disciplina
+              const newDiscipline = { id: Date.now(), ...disciplineData };
+              addDisciplineToFirestore(newDiscipline).then(() => {
+                setDisciplines([...disciplines, newDiscipline]);
+                setSuccessMessage(`Disciplina "${disciplineData.name}" adicionada com sucesso!`);
+              });
             }
 
-            // Clear form fields
+            // Limpar campos do formulário
             setNewDisciplineName('');
             setNewDisciplineWorkload('');
             setNewDisciplineSemester('');
@@ -335,10 +340,12 @@
               return;
             }
 
-            // Filter out the discipline to be deleted
-            setDisciplines(disciplines.filter(discipline => discipline.id !== id));
-            setSuccessMessage(`Disciplina "${disciplineToDelete.name}" removida com sucesso!`);
-            setErrorMessage('');
+            // Remover do Firestore primeiro
+            deleteDisciplineFromFirestore(id).then(() => {
+              setDisciplines(disciplines.filter(discipline => discipline.id !== id));
+              setSuccessMessage(`Disciplina "${disciplineToDelete.name}" removida com sucesso!`);
+              setErrorMessage('');
+            });
           };
 
           // Function to import disciplines from CSV content
@@ -829,38 +836,26 @@
           firebase.initializeApp(firebaseConfig);
           const db = firebase.firestore();
 
-          // Salvar todas as disciplinas (substitui tudo)
-          function saveDisciplinesToFirestore(disciplines) {
-            const batch = db.batch();
+          // Função para adicionar disciplina no Firestore
+          function addDisciplineToFirestore(discipline) {
             const colRef = db.collection("disciplinas");
-            // Apaga tudo antes (para manter igual ao localStorage)
-            colRef.get().then(snapshot => {
-              snapshot.forEach(doc => batch.delete(doc.ref));
-              disciplines.forEach(d => {
-                const docRef = colRef.doc(d.id ? d.id.toString() : undefined);
-                batch.set(docRef, d);
-              });
-              batch.commit();
-            });
+            const docRef = colRef.doc(discipline.id.toString());
+            return docRef.set(discipline);
           }
 
-          function loadDisciplinesFromFirestore(setDisciplines) {
-            db.collection("disciplinas").get().then(snapshot => {
-              const data = [];
-              snapshot.forEach(doc => data.push(doc.data()));
-              setDisciplines(data);
-            });
+          // Função para atualizar disciplina no Firestore
+          function updateDisciplineInFirestore(updatedDiscipline) {
+            const colRef = db.collection("disciplinas");
+            const docRef = colRef.doc(updatedDiscipline.id.toString());
+            return docRef.set(updatedDiscipline);
           }
 
-          // No início do App()
-          React.useEffect(() => {
-            loadDisciplinesFromFirestore(setDisciplines);
-          }, []);
-
-          // Sempre que disciplinas mudarem, salve no Firestore
-          React.useEffect(() => {
-            saveDisciplinesToFirestore(disciplines);
-          }, [disciplines]);
+          // Função para remover disciplina do Firestore
+          function deleteDisciplineFromFirestore(id) {
+            const colRef = db.collection("disciplinas");
+            const docRef = colRef.doc(id.toString());
+            return docRef.delete();
+          }
 
           return (
             <div className="min-h-screen bg-gray-100 p-4 font-sans flex flex-col items-center">
