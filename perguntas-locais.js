@@ -1055,5 +1055,3 @@ export const perguntasLocais = [
         explicacao: ""
     }
 ];
-
-export { perguntasLocais };
