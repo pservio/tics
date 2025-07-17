@@ -269,6 +269,7 @@
                 </button>
             </div>
             <a href="#" id="privacy-link" class="underline hover:text-blue-700">Política de Privacidade</a>
+            <a href="#" id="footer-ranking-link" class="underline hover:text-blue-700 mt-2">Ver Ranking</a>
         </footer>
     </div>
     <!-- Modal Política de Privacidade -->
@@ -892,7 +893,22 @@
                 if (rankingData.length === 0) {
                     document.getElementById('ranking-empty-message').classList.remove('hidden');
                 }
+                // Agrupar e somar por time
+                const teamScores = {};
                 rankingData.forEach(item => {
+                    if (!teamScores[item.team]) {
+                        teamScores[item.team] = 0;
+                    }
+                    teamScores[item.team] += item.score;
+                });
+                // Transformar em array para ordenar
+                const teamScoresArray = Object.entries(teamScores).map(([team, score]) => ({ team, score }));
+                // Ordenar do maior para o menor
+                teamScoresArray.sort((a, b) => b.score - a.score);
+                if (teamScoresArray.length === 0) {
+                    document.getElementById('ranking-empty-message').classList.remove('hidden');
+                }
+                teamScoresArray.forEach(item => {
                     const row = rankingTableBody.insertRow();
                     row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-50');
                     const teamCell = row.insertCell();
