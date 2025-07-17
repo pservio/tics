@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE 6- Artes Visuais</title>
+    <title>Desafio ENADE - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -368,6 +368,12 @@
         const sectionThemes = document.getElementById('section-themes');
         const themesContainer = sectionThemes.querySelector('.flex.flex-wrap');
 
+        // Adicione um elemento para mostrar a contagem de perguntas filtradas
+        let themeCountInfo = document.createElement('div');
+        themeCountInfo.id = 'theme-count-info';
+        themeCountInfo.className = 'mt-2 text-sm text-blue-700 font-semibold';
+        themesContainer.parentElement.appendChild(themeCountInfo);
+
         // Carregar temas dinamicamente a partir das perguntas
         function getUniqueThemes(perguntas) {
             const temasSet = new Set();
@@ -397,11 +403,11 @@
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 themesContainer.appendChild(label);
+                // Atualize a contagem ao mudar
+                checkbox.addEventListener('change', updateThemeCountInfo);
             });
+            updateThemeCountInfo();
         }
-
-        // Renderiza os temas ao carregar a página
-        renderThemesCheckboxes();
 
         // Atualiza os checkboxes de temas para feedback visual
         function updateThemeCheckboxFeedback() {
@@ -673,7 +679,7 @@
                     confirmAnswerButton.classList.remove('hidden');
                 }
                 if (nextQuestionButton) {
-                    nextQuestionButton.classList.add('hidden');
+                    nextQuestionButton.classList.remove('hidden');
                 }
                 // Barra de progresso
                 const progressBar = document.getElementById('progress-bar');
@@ -848,6 +854,13 @@
                 document.getElementById('section-themes').classList.remove('hidden');
                 document.getElementById('section-challenge-size').classList.remove('hidden');
                 startChallengeButton.classList.remove('hidden');
+            });
+        }
+
+        if (nextQuestionButton) {
+            nextQuestionButton.addEventListener('click', () => {
+                currentQuestionIndex++;
+                updateQuestionDisplay();
             });
         }
 
@@ -1053,6 +1066,17 @@
             if (typeof p !== 'number' || p < 0) return 0;
             if (p > (questions.length * 10)) return questions.length * 10;
             return p;
+        }
+
+        function updateThemeCountInfo() {
+            const temasSelecionados = getSelectedThemes();
+            const todasPerguntas = perguntasLocais;
+            const filtradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
+            if (temasSelecionados.length === 0) {
+                themeCountInfo.textContent = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
+            } else {
+                themeCountInfo.textContent = `${filtradas.length} perguntas disponíveis para os temas selecionados`;
+            }
         }
 
     </script>
