@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE - Artes Visuais (versão 2.0) </title>
+    <title>Desafio ENADE - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -148,22 +148,18 @@
         <!-- Seção 1: Escolha do Time -->
         <div id="section-team-selection" class="mb-8" role="region" aria-label="Escolha de Time">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div id="team-berna" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Berna Reale" tabindex="0" aria-label="Selecionar time Berna Reale" role="button">
-                    <img src="https://placehold.co/100x100/A78BFA/ffffff?text=Berna" alt="Berna Reale" class="rounded-full mb-3">
-                    <span class="font-medium text-gray-700">Berna Reale</span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div id="team-2012-2017" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas 2012-2017" tabindex="0" aria-label="Selecionar time turmas 2012-2017" role="button">
+                    <img src="https://placehold.co/100x100/60A5FA/ffffff?text=2012-2017" alt="turmas 2012-2017" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas 2012-2017</span>
                 </div>
-                <div id="team-denilson" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Denilson Baniwa" tabindex="0" aria-label="Selecionar time Denilson Baniwa" role="button">
-                    <img src="https://placehold.co/100x100/60A5FA/ffffff?text=Denilson" alt="Denilson Baniwa" class="rounded-full mb-3">
-                    <span class="font-medium text-gray-700">Denilson Baniwa</span>
+                <div id="team-2018-2019" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas: 2018-2019" tabindex="0" aria-label="Selecionar time turmas: 2018-2019" role="button">
+                    <img src="https://placehold.co/100x100/F87171/ffffff?text=2018-2019" alt="turmas: 2018-2019" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas: 2018-2019</span>
                 </div>
-                <div id="team-rosana" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Rosana Paulino" tabindex="0" aria-label="Selecionar time Rosana Paulino" role="button">
-                    <img src="https://placehold.co/100x100/F87171/ffffff?text=Rosana" alt="Rosana Paulino" class="rounded-full mb-3">
-                    <span class="font-medium text-gray-700">Rosana Paulino</span>
-                </div>
-                <div id="team-uyra" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="Uýra Sodoma" tabindex="0" aria-label="Selecionar time Uýra Sodoma" role="button">
-                    <img src="https://placehold.co/100x100/4ADE80/ffffff?text=Uýra" alt="Uýra Sodoma" class="rounded-full mb-3">
-                    <span class="font-medium text-gray-700">Uýra Sodoma</span>
+                <div id="team-2020-2024" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas: 2020-2024" tabindex="0" aria-label="Selecionar time turmas: 2020-2024" role="button">
+                    <img src="https://placehold.co/100x100/4ADE80/ffffff?text=2020-2024" alt="turmas: 2020-2024" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas: 2020-2024</span>
                 </div>
             </div>
             <p id="selected-team-display" class="mt-4 text-lg font-semibold text-gray-600">Time Selecionado: Nenhum</p>
@@ -236,10 +232,9 @@
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Ranking de Times</h2>
             <div class="flex justify-center gap-4 mb-4">
                 <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="all">Todos</button>
-                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Berna Reale">Berna Reale</button>
-                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Denilson Baniwa">Denilson Baniwa</button>
-                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Rosana Paulino">Rosana Paulino</button>
-                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="Uýra Sodoma">Uýra Sodoma</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas 2012-2017">turmas 2012-2017</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas: 2018-2019">turmas: 2018-2019</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas: 2020-2024">turmas: 2020-2024</button>
             </div>
             <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
                 <thead class="bg-gray-200">
