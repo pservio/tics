@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE 9 - Artes Visuais</title>
+    <title>Desafio ENADE - Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -387,8 +387,15 @@
             return Array.from(temasSet).sort();
         }
 
+        let allPerguntas = [];
+        (async function() {
+            allPerguntas = await fetchPerguntas();
+            renderThemesCheckboxes();
+            updateThemeCountInfo();
+        })();
+
         function renderThemesCheckboxes() {
-            const temas = getUniqueThemes(perguntasLocais);
+            const temas = getUniqueThemes(allPerguntas);
             themesContainer.innerHTML = '';
             temas.forEach(tema => {
                 const label = document.createElement('label');
@@ -403,7 +410,6 @@
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 themesContainer.appendChild(label);
-                // Atualize a contagem ao mudar
                 checkbox.addEventListener('change', () => { updateThemeCountInfo(); });
             });
             updateThemeCountInfo();
@@ -640,10 +646,13 @@
                     showModal('Não foi possível autenticar. Recarregue a página.');
                     return;
                 }
+                if (!allPerguntas || allPerguntas.length === 0) {
+                    showModal('As perguntas ainda estão carregando. Aguarde um momento e tente novamente.');
+                    return;
+                }
                 totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
                 const temasSelecionados = getSelectedThemes();
-                const todasPerguntas = await fetchPerguntas();
-                let perguntasFiltradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
+                let perguntasFiltradas = filterQuestionsByThemes(allPerguntas, temasSelecionados);
                 if (perguntasFiltradas.length < totalQuestions) {
                     showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
                 }
@@ -1070,7 +1079,7 @@
 
         async function updateThemeCountInfo() {
             const temasSelecionados = getSelectedThemes();
-            const todasPerguntas = await fetchPerguntas();
+            const todasPerguntas = allPerguntas;
             const filtradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
             if (temasSelecionados.length === 0) {
                 themeCountInfo.textContent = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
