@@ -83,11 +83,7 @@
         // Main App component for the curriculum creator
         function App() {
           // State to store the list of disciplines
-          const [disciplines, setDisciplines] = React.useState(() => {
-            // Load disciplines from localStorage on component mount
-            const saved = localStorage.getItem('curriculum-disciplines');
-            return saved ? JSON.parse(saved) : [];
-          });
+          const [disciplines, setDisciplines] = React.useState([]);
           // State for the new discipline form inputs
           const [newDisciplineName, setNewDisciplineName] = React.useState('');
           const [newDisciplineWorkload, setNewDisciplineWorkload] = React.useState('');
@@ -185,10 +181,16 @@
             );
           };
 
-          // Save disciplines to localStorage whenever they change
+          // Carregar disciplinas do Firestore ao montar o componente
           React.useEffect(() => {
-            localStorage.setItem('curriculum-disciplines', JSON.stringify(disciplines));
-          }, [disciplines]);
+            db.collection("disciplinas").get().then((querySnapshot) => {
+              const loaded = [];
+              querySnapshot.forEach((doc) => {
+                loaded.push(doc.data());
+              });
+              setDisciplines(loaded);
+            });
+          }, []);
 
           // Clear messages when form inputs or CSV input change
           React.useEffect(() => {
@@ -1455,7 +1457,7 @@
                   {/* All Semesters Timetables */}
                   <div className="space-y-6">
                     {semesterOptions.map(semester => {
-                      const semesterDisciplines = assignedDisciplines.filter(d => d.semester === semester);
+                      const semesterDisciplines = disciplines.filter(d => d.semester === semester);
                       const semesterDisciplinesByDay = daysOfWeek.reduce((acc, day) => {
                         acc[day] = semesterDisciplines
                           .filter(d => d.dayOfWeek === day)
