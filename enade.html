@@ -223,12 +223,26 @@
     </div>
 
     <!-- Seu arquivo de configuração do Firebase -->
-    <script type="module" src="firebase-config.js"></script>
     <script type="module">
-        // Importa a instância de autenticação do seu arquivo de configuração
-        import { auth, db } from './firebase-config.js';
-        import { signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+          authDomain: "desafioenade2.firebaseapp.com",
+          projectId: "desafioenade2",
+          storageBucket: "desafioenade2.firebasestorage.app",
+          messagingSenderId: "987973574127",
+          appId: "1:987973574127:web:4041110632500dbd482a1a",
+          measurementId: "G-FD8E45DWKR"
+        };
+
+        // Inicialização do Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // Elementos UI para o status de autenticação
         const authStatusElement = document.getElementById('auth-status');
