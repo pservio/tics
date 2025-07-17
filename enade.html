@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE - Artes Visuais</title>
+    <title>Desafio ENADE - Artes Visuais (versão 2.0) </title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -132,23 +132,18 @@
         #privacy-modal .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; position: relative; }
         #privacy-modal .close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
         #privacy-modal .close-button:hover { color: #000; }
+        #auth-status-box {
+            background: none !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="container bg-white rounded-xl shadow-lg p-8 md:p-10" role="main" aria-label="Quiz ENADE Artes Visuais">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Desafio ENADE - Artes Visuais</h1>
-
-        <!-- Seção de Autenticação (Adicionada) -->
-        <div class="bg-blue-50 p-4 rounded-lg mb-6 shadow-sm">
-            <h2 class="text-xl font-semibold text-blue-800 mb-2">Status de Autenticação</h2>
-            <p id="auth-status" class="text-blue-700">Carregando...</p>
-            <p id="user-uid" class="text-blue-600 text-sm break-all">UID: N/A</p>
-            <button id="sign-out-button" aria-label="Sair da conta" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                Sair
-            </button>
-        </div>
-        <!-- Fim da Seção de Autenticação -->
 
         <!-- Seção 1: Escolha do Time -->
         <div id="section-team-selection" class="mb-8" role="region" aria-label="Escolha de Time">
@@ -269,7 +264,15 @@
                 <button id="modal-ok-button" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">OK</button>
             </div>
         </div>
-        <footer class="mt-10 text-center text-gray-500 text-sm">
+        <footer class="mt-10 text-center text-gray-500 text-sm flex flex-col items-center gap-2">
+            <div id="auth-status-box" class="flex flex-col items-center gap-1">
+                <span id="auth-status" class="text-gray-500 text-xs">Carregando...</span>
+                <span id="user-uid" class="text-gray-400 text-xs">UID: N/A</span>
+                <button id="sign-out-button" aria-label="Sair da conta"
+                    class="mt-1 bg-gray-200 hover:bg-gray-300 text-gray-600 text-xs px-2 py-1 rounded transition duration-200 shadow-none border border-gray-300">
+                    Sair
+                </button>
+            </div>
             <a href="#" id="privacy-link" class="underline hover:text-blue-700">Política de Privacidade</a>
         </footer>
     </div>
