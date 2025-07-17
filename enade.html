@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE 5.1 - Artes Visuais</title>
+    <title>Desafio ENADE 6- Artes Visuais</title>
     <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -314,7 +314,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { perguntasLocais } from './perguntas-locais.js';
+        import { perguntasLocais } from './perguntas.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -429,6 +429,7 @@
         let currentQuestionIndex = 0;
         let questions = [];
         let totalQuestions = 3; // Padrão
+        let userAnswers = [];
 
         // Função para exibir o modal de mensagem
         function showModal(message) {
@@ -437,17 +438,23 @@
         }
 
         // Event listeners para o modal
-        closeModalButton.addEventListener('click', () => {
-            messageModal.style.display = 'none';
-        });
-        modalOkButton.addEventListener('click', () => {
-            messageModal.style.display = 'none';
-        });
-        window.addEventListener('click', (event) => {
-            if (event.target == messageModal) {
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', () => {
                 messageModal.style.display = 'none';
-            }
-        });
+            });
+        }
+        if (modalOkButton) {
+            modalOkButton.addEventListener('click', () => {
+                messageModal.style.display = 'none';
+            });
+        }
+        if (messageModal) {
+            window.addEventListener('click', (event) => {
+                if (event.target == messageModal) {
+                    messageModal.style.display = 'none';
+                }
+            });
+        }
 
         // --- Lógica de Autenticação Firebase ---
         let currentUserUid = null; // Variável para armazenar o UID do usuário logado
@@ -480,17 +487,19 @@
         });
 
         // Botão de Sair
-        signOutButton.addEventListener('click', () => {
-            signOut(auth)
-                .then(() => {
-                    console.log('Usuário saiu com sucesso.');
-                    showModal('Você saiu do jogo.');
-                })
-                .catch((error) => {
-                    console.error('Erro ao sair:', error);
-                    showModal(`Erro ao sair: ${error.message}`);
-                });
-        });
+        if (signOutButton) {
+            signOutButton.addEventListener('click', () => {
+                signOut(auth)
+                    .then(() => {
+                        console.log('Usuário saiu com sucesso.');
+                        showModal('Você saiu do jogo.');
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao sair:', error);
+                        showModal(`Erro ao sair: ${error.message}`);
+                    });
+            });
+        }
 
         // --- Lógica do Jogo (Mantida do seu site original, com pequenas adaptações) ---
 
@@ -611,39 +620,41 @@
         }
 
         // Iniciar Desafio
-        startChallengeButton.addEventListener('click', async () => {
-            if (!selectedTeam) {
-                showModal('Por favor, selecione um time antes de iniciar o desafio.');
-                return;
-            }
-            if (authLoading) {
-                showModal('Aguarde, o sistema de autenticação está carregando. Tente novamente em instantes.');
-                return;
-            }
-            if (!currentUserUid) {
-                showModal('Não foi possível autenticar. Recarregue a página.');
-                return;
-            }
-            totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
-            const temasSelecionados = getSelectedThemes();
-            const todasPerguntas = await fetchPerguntas();
-            let perguntasFiltradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
-            if (perguntasFiltradas.length < totalQuestions) {
-                showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
-            }
-            questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
-            currentScore = 0;
-            currentQuestionIndex = 0;
-            userAnswers = [];
-            updateQuestionDisplay();
-            sectionTeamSelection.classList.add('hidden');
-            document.getElementById('section-themes').classList.add('hidden');
-            document.getElementById('section-challenge-size').classList.add('hidden');
-            startChallengeButton.classList.add('hidden');
-            sectionQuestion.classList.remove('hidden');
-            currentScoreElement.textContent = currentScore;
-            startTimer();
-        });
+        if (startChallengeButton) {
+            startChallengeButton.addEventListener('click', async () => {
+                if (!selectedTeam) {
+                    showModal('Por favor, selecione um time antes de iniciar o desafio.');
+                    return;
+                }
+                if (authLoading) {
+                    showModal('Aguarde, o sistema de autenticação está carregando. Tente novamente em instantes.');
+                    return;
+                }
+                if (!currentUserUid) {
+                    showModal('Não foi possível autenticar. Recarregue a página.');
+                    return;
+                }
+                totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
+                const temasSelecionados = getSelectedThemes();
+                const todasPerguntas = await fetchPerguntas();
+                let perguntasFiltradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
+                if (perguntasFiltradas.length < totalQuestions) {
+                    showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
+                }
+                questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
+                currentScore = 0;
+                currentQuestionIndex = 0;
+                userAnswers = [];
+                updateQuestionDisplay();
+                sectionTeamSelection.classList.add('hidden');
+                document.getElementById('section-themes').classList.add('hidden');
+                document.getElementById('section-challenge-size').classList.add('hidden');
+                startChallengeButton.classList.add('hidden');
+                sectionQuestion.classList.remove('hidden');
+                currentScoreElement.textContent = currentScore;
+                startTimer();
+            });
+        }
 
         function updateQuestionDisplay() {
             if (currentQuestionIndex < questions.length) {
@@ -658,8 +669,12 @@
                     questionImageElement.style.display = 'none';
                 }
                 currentScoreElement.textContent = currentScore;
-                confirmAnswerButton.classList.remove('hidden');
-                nextQuestionButton.classList.add('hidden');
+                if (confirmAnswerButton) {
+                    confirmAnswerButton.classList.remove('hidden');
+                }
+                if (nextQuestionButton) {
+                    nextQuestionButton.classList.add('hidden');
+                }
                 // Barra de progresso
                 const progressBar = document.getElementById('progress-bar');
                 progressBar.textContent = `Questão ${currentQuestionIndex + 1} de ${questions.length}`;
@@ -715,58 +730,66 @@
             }
         }
 
-        confirmAnswerButton.addEventListener('click', () => {
-            // Feedback visual nas alternativas
-            const radios = optionsContainer.querySelectorAll('input[type="radio"]');
-            let selectedOption = null;
-            radios.forEach(radio => { if (radio.checked) selectedOption = radio.value; });
-            if (!selectedOption) {
-                showModal('Selecione uma alternativa antes de confirmar.');
-                return;
-            }
-            const correctAnswer = questions[currentQuestionIndex].resposta_correta;
-            const isCorrect = selectedOption === correctAnswer;
-            // Destacar alternativas
-            optionsContainer.querySelectorAll('label').forEach(label => {
-                const radio = label.querySelector('input[type="radio"]');
-                label.classList.remove('bg-green-200', 'bg-red-200', 'border-green-700', 'border-red-700');
-                if (radio.value === correctAnswer) {
-                    label.classList.add('bg-green-200', 'border-green-700');
+        if (confirmAnswerButton) {
+            confirmAnswerButton.addEventListener('click', () => {
+                // Feedback visual nas alternativas
+                const radios = optionsContainer.querySelectorAll('input[type="radio"]');
+                let selectedOption = null;
+                radios.forEach(radio => { if (radio.checked) selectedOption = radio.value; });
+                if (!selectedOption) {
+                    showModal('Selecione uma alternativa antes de confirmar.');
+                    return;
                 }
-                if (radio.checked && radio.value !== correctAnswer) {
-                    label.classList.add('bg-red-200', 'border-red-700');
+                const correctAnswer = questions[currentQuestionIndex].resposta_correta;
+                const isCorrect = selectedOption === correctAnswer;
+                // Destacar alternativas
+                optionsContainer.querySelectorAll('label').forEach(label => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    label.classList.remove('bg-green-200', 'bg-red-200', 'border-green-700', 'border-red-700');
+                    if (radio.value === correctAnswer) {
+                        label.classList.add('bg-green-200', 'border-green-700');
+                    }
+                    if (radio.checked && radio.value !== correctAnswer) {
+                        label.classList.add('bg-red-200', 'border-red-700');
+                    }
+                });
+                // Mostrar explicação se houver
+                const explanationContainer = document.getElementById('explanation-container');
+                const question = questions[currentQuestionIndex];
+                if (question.explicacao) {
+                    explanationContainer.textContent = question.explicacao;
+                    explanationContainer.classList.remove('hidden');
+                } else {
+                    explanationContainer.classList.add('hidden');
+                    explanationContainer.textContent = '';
+                }
+                // Salva resposta do usuário para revisão
+                userAnswers[currentQuestionIndex] = {
+                    escolhida: selectedOption,
+                    correta: correctAnswer
+                };
+                if (isCorrect) {
+                    currentScore += 10;
+                    showModal('Resposta Correta! +10 pontos.');
+                } else {
+                    showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
+                }
+                currentScoreElement.textContent = currentScore;
+                if (confirmAnswerButton) {
+                    confirmAnswerButton.classList.add('hidden');
+                }
+                if (nextQuestionButton) {
+                    nextQuestionButton.classList.remove('hidden');
                 }
             });
-            // Mostrar explicação se houver
-            const explanationContainer = document.getElementById('explanation-container');
-            const question = questions[currentQuestionIndex];
-            if (question.explicacao) {
-                explanationContainer.textContent = question.explicacao;
-                explanationContainer.classList.remove('hidden');
-            } else {
-                explanationContainer.classList.add('hidden');
-                explanationContainer.textContent = '';
-            }
-            // Salva resposta do usuário para revisão
-            userAnswers[currentQuestionIndex] = {
-                escolhida: selectedOption,
-                correta: correctAnswer
-            };
-            if (isCorrect) {
-                currentScore += 10;
-                showModal('Resposta Correta! +10 pontos.');
-            } else {
-                showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
-            }
-            currentScoreElement.textContent = currentScore;
-            confirmAnswerButton.classList.add('hidden');
-            nextQuestionButton.classList.remove('hidden');
-        });
-        document.getElementById('answer-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                confirmAnswerButton.click();
-            }
-        });
+        }
+        if (document.getElementById('answer-input')) {
+            document.getElementById('answer-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    confirmAnswerButton.click();
+                }
+            });
+        }
 
         async function endChallenge() {
             sectionQuestion.classList.add('hidden');
@@ -794,33 +817,39 @@
             }
         }
 
-        playAgainButton.addEventListener('click', () => {
-            // Reinicia o jogo
-            sectionChallengeFinished.classList.add('hidden');
-            sectionTeamSelection.classList.remove('hidden');
-            document.getElementById('section-themes').classList.remove('hidden');
-            document.getElementById('section-challenge-size').classList.remove('hidden');
-            startChallengeButton.classList.remove('hidden');
-            selectedTeam = null;
-            selectedTeamDisplay.textContent = 'Time Selecionado: Nenhum';
-            teamCards.forEach(c => c.classList.remove('selected'));
-            stopTimer();
-            timerElement.textContent = '';
-        });
+        if (playAgainButton) {
+            playAgainButton.addEventListener('click', () => {
+                // Reinicia o jogo
+                sectionChallengeFinished.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+                selectedTeam = null;
+                selectedTeamDisplay.textContent = 'Time Selecionado: Nenhum';
+                teamCards.forEach(c => c.classList.remove('selected'));
+                stopTimer();
+                timerElement.textContent = '';
+            });
+        }
 
-        viewRankingButton.addEventListener('click', async () => {
-            sectionChallengeFinished.classList.add('hidden');
-            sectionRanking.classList.remove('hidden');
-            await loadRanking();
-        });
+        if (viewRankingButton) {
+            viewRankingButton.addEventListener('click', async () => {
+                sectionChallengeFinished.classList.add('hidden');
+                sectionRanking.classList.remove('hidden');
+                await loadRanking();
+            });
+        }
 
-        backToHomeButton.addEventListener('click', () => {
-            sectionRanking.classList.add('hidden');
-            sectionTeamSelection.classList.remove('hidden');
-            document.getElementById('section-themes').classList.remove('hidden');
-            document.getElementById('section-challenge-size').classList.remove('hidden');
-            startChallengeButton.classList.remove('hidden');
-        });
+        if (backToHomeButton) {
+            backToHomeButton.addEventListener('click', () => {
+                sectionRanking.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+            });
+        }
 
         async function loadRanking(filter = 'all') {
             rankingTableBody.innerHTML = '';
@@ -934,13 +963,17 @@
         }
         // Use fadeOutIn(sectionQuestion, updateQuestionDisplay) ao trocar de questão.
         // --- Política de Privacidade ---
-        document.getElementById('privacy-link').onclick = function(e) {
-            e.preventDefault();
-            document.getElementById('privacy-modal').style.display = 'flex';
-        };
-        document.getElementById('close-privacy-modal').onclick = function() {
-            document.getElementById('privacy-modal').style.display = 'none';
-        };
+        if (document.getElementById('privacy-link')) {
+            document.getElementById('privacy-link').onclick = function(e) {
+                e.preventDefault();
+                document.getElementById('privacy-modal').style.display = 'flex';
+            };
+        }
+        if (document.getElementById('close-privacy-modal')) {
+            document.getElementById('close-privacy-modal').onclick = function() {
+                document.getElementById('privacy-modal').style.display = 'none';
+            };
+        }
         // --- Área Administrativa ---
         let isAdmin = false;
         document.addEventListener('keydown', function(e) {
@@ -948,20 +981,24 @@
                 document.getElementById('admin-section').classList.remove('hidden');
             }
         });
-        document.getElementById('close-admin').onclick = function() {
-            document.getElementById('admin-section').classList.add('hidden');
-        };
-        document.getElementById('admin-login-btn').onclick = function() {
-            const pass = document.getElementById('admin-password').value;
-            if (pass === 'admin123') { // Troque a senha depois!
-                isAdmin = true;
-                document.getElementById('admin-login').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                loadAdminQuestions();
-            } else {
-                alert('Senha incorreta!');
-            }
-        };
+        if (document.getElementById('close-admin')) {
+            document.getElementById('close-admin').onclick = function() {
+                document.getElementById('admin-section').classList.add('hidden');
+            };
+        }
+        if (document.getElementById('admin-login-btn')) {
+            document.getElementById('admin-login-btn').onclick = function() {
+                const pass = document.getElementById('admin-password').value;
+                if (pass === 'admin123') { // Troque a senha depois!
+                    isAdmin = true;
+                    document.getElementById('admin-login').classList.add('hidden');
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    loadAdminQuestions();
+                } else {
+                    alert('Senha incorreta!');
+                }
+            };
+        }
         // CRUD de perguntas (exemplo usando Firebase)
         async function loadAdminQuestions() {
             const qSnap = await getDocs(collection(db, "perguntas"));
@@ -981,27 +1018,29 @@
                 };
             });
         }
-        document.getElementById('admin-form').onsubmit = async function(e) {
-            e.preventDefault();
-            if (!isAdmin) return;
-            const enunciado = document.getElementById('admin-enunciado').value;
-            const tema = document.getElementById('admin-tema').value.split(',').map(t=>t.trim());
-            const imagem_url = document.getElementById('admin-imagem').value;
-            const opcao_A = document.getElementById('admin-opcaoA').value;
-            const opcao_B = document.getElementById('admin-opcaoB').value;
-            const opcao_C = document.getElementById('admin-opcaoC').value;
-            const opcao_D = document.getElementById('admin-opcaoD').value;
-            const opcao_E = document.getElementById('admin-opcaoE').value;
-            const resposta_correta = document.getElementById('admin-resposta').value.toUpperCase();
-            const explicacao = document.getElementById('admin-explicacao').value;
-            if (!enunciado || !tema.length || !opcao_A || !opcao_B || !opcao_C || !opcao_D || !opcao_E || !resposta_correta.match(/^[A-E]$/)) {
-                alert('Preencha todos os campos obrigatórios corretamente!');
-                return;
-            }
-            await addDoc(collection(db, "perguntas"), { enunciado, tema, imagem_url, opcao_A, opcao_B, opcao_C, opcao_D, opcao_E, resposta_correta, explicacao });
-            loadAdminQuestions();
-            document.getElementById('admin-form').reset();
-        };
+        if (document.getElementById('admin-form')) {
+            document.getElementById('admin-form').onsubmit = async function(e) {
+                e.preventDefault();
+                if (!isAdmin) return;
+                const enunciado = document.getElementById('admin-enunciado').value;
+                const tema = document.getElementById('admin-tema').value.split(',').map(t=>t.trim());
+                const imagem_url = document.getElementById('admin-imagem').value;
+                const opcao_A = document.getElementById('admin-opcaoA').value;
+                const opcao_B = document.getElementById('admin-opcaoB').value;
+                const opcao_C = document.getElementById('admin-opcaoC').value;
+                const opcao_D = document.getElementById('admin-opcaoD').value;
+                const opcao_E = document.getElementById('admin-opcaoE').value;
+                const resposta_correta = document.getElementById('admin-resposta').value.toUpperCase();
+                const explicacao = document.getElementById('admin-explicacao').value;
+                if (!enunciado || !tema.length || !opcao_A || !opcao_B || !opcao_C || !opcao_D || !opcao_E || !resposta_correta.match(/^[A-E]$/)) {
+                    alert('Preencha todos os campos obrigatórios corretamente!');
+                    return;
+                }
+                await addDoc(collection(db, "perguntas"), { enunciado, tema, imagem_url, opcao_A, opcao_B, opcao_C, opcao_D, opcao_E, resposta_correta, explicacao });
+                loadAdminQuestions();
+                document.getElementById('admin-form').reset();
+            };
+        }
         // --- Carregamento assíncrono de perguntas (simulado) ---
         async function fetchPerguntas() {
             // Simule fetch de perguntas do Firebase ou arquivo externo
