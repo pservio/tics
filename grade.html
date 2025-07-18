@@ -729,6 +729,58 @@
             ) || null;
           }
 
+          // Estado para popover de criação rápida
+          const [quickAdd, setQuickAdd] = React.useState({ open: false, semester: '', day: '', time: '', anchor: null });
+          const [quickName, setQuickName] = React.useState('');
+          const [quickWorkload, setQuickWorkload] = React.useState('');
+          const [quickNucleo, setQuickNucleo] = React.useState('');
+          const [quickPrereq, setQuickPrereq] = React.useState('');
+          // Função para abrir popover
+          const openQuickAdd = (semester, day, time, anchor) => {
+            setQuickAdd({ open: true, semester, day, time, anchor });
+            setQuickName('');
+            setQuickWorkload('');
+            setQuickNucleo('');
+            setQuickPrereq('');
+          };
+          // Função para fechar popover
+          const closeQuickAdd = () => setQuickAdd({ open: false, semester: '', day: '', time: '', anchor: null });
+          // Função para criar disciplina rapidamente
+          const handleQuickAdd = (e) => {
+            e.preventDefault();
+            if (!quickName.trim() || !quickWorkload.trim() || !quickNucleo.trim()) {
+              setErrorMessage('Preencha nome, carga horária e núcleo.');
+              return;
+            }
+            const timeSlots = calculateTimeSlots(quickWorkload, quickAdd.time);
+            if (timeSlots.length === 0) {
+              setErrorMessage('Horário/carga horária inválidos.');
+              return;
+            }
+            const newDiscipline = {
+              id: Date.now(),
+              name: quickName.trim(),
+              workload: quickWorkload,
+              semester: quickAdd.semester,
+              prerequisites: quickPrereq.split(',').map(p=>p.trim()).filter(Boolean),
+              nucleo: quickNucleo,
+              dayOfWeek: quickAdd.day,
+              timeSlots
+            };
+            // Verificar conflito
+            const conflict = checkTimeSlotConflict(newDiscipline, disciplines);
+            if (conflict) {
+              setErrorMessage(`Conflito com "${conflict.name}" neste horário.`);
+              return;
+            }
+            addDisciplineToFirestore(newDiscipline).then(() => {
+              setDisciplines([...disciplines, newDiscipline]);
+              setSuccessMessage('Disciplina criada!');
+              setTimeout(() => setSuccessMessage(''), 2000);
+              closeQuickAdd();
+            });
+          };
+
           return (
             <div className="min-h-screen bg-gray-100 p-4 font-sans flex flex-col items-center">
               <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
@@ -1021,48 +1073,57 @@
                                         onDragLeave={handleDragLeave}
                                         onDrop={(e) => handleDrop(e, day, slot.time, semester)}
                                       >
-                                        {semesterDisciplinesByDay[day]
-                                          .filter(d => d.timeSlots[0] === slot.time)
-                                          .map(discipline => {
-                                            const heightInPixels = discipline.timeSlots.length * 90 - 8;
+                                        {(() => {
+                                          const cellDisciplines = semesterDisciplinesByDay[day].filter(d => d.timeSlots[0] === slot.time);
+                                          if (cellDisciplines.length === 0) {
                                             return (
-                                              <div
-                                                key={discipline.id}
-                                                draggable="true"
-                                                onDragStart={(e) => handleDragStart(e, discipline.id)}
-                                                onDragEnd={handleDragEnd}
-                                                className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getNucleoColor(discipline.nucleo)}`}
-                                                style={{
-                                                  height: `${heightInPixels}px`,
-                                                  top: '4px',
-                                                  zIndex: 10,
-                                                }}
-                                              >
-                                                <span className="font-bold">{discipline.name}</span>
-                                                <span className="">({discipline.workload})</span>
-                                                <div className="flex space-x-1 mt-1">
-                                                  <button
-                                                    onClick={(e) => {
-                                                      e.stopPropagation();
-                                                      handleEditDiscipline(discipline);
-                                                    }}
-                                                    className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700"
-                                                  >
-                                                    Editar
-                                                  </button>
-                                                  <button
-                                                    onClick={(e) => {
-                                                      e.stopPropagation();
-                                                      deleteDiscipline(discipline.id);
-                                                    }}
-                                                    className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-md hover:bg-red-600"
-                                                  >
-                                                    Excluir
-                                                  </button>
-                                                </div>
-                                              </div>
+                                              <button className="w-full h-full text-xs text-blue-400 hover:text-blue-700" type="button" onClick={e => { e.stopPropagation(); openQuickAdd(semester, day, slot.time, e.currentTarget); }}>
+                                                + Adicionar
+                                              </button>
                                             );
-                                          })}
+                                          } else {
+                                            return cellDisciplines.map(discipline => {
+                                              const heightInPixels = discipline.timeSlots.length * 90 - 8;
+                                              return (
+                                                <div
+                                                  key={discipline.id}
+                                                  draggable="true"
+                                                  onDragStart={(e) => handleDragStart(e, discipline.id)}
+                                                  onDragEnd={handleDragEnd}
+                                                  className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getNucleoColor(discipline.nucleo)}`}
+                                                  style={{
+                                                    height: `${heightInPixels}px`,
+                                                    top: '4px',
+                                                    zIndex: 10,
+                                                  }}
+                                                >
+                                                  <span className="font-bold">{discipline.name}</span>
+                                                  <span className="">({discipline.workload})</span>
+                                                  <div className="flex space-x-1 mt-1">
+                                                    <button
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditDiscipline(discipline);
+                                                      }}
+                                                      className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700"
+                                                    >
+                                                      Editar
+                                                    </button>
+                                                    <button
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        deleteDiscipline(discipline.id);
+                                                      }}
+                                                      className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-md hover:bg-red-600"
+                                                    >
+                                                      Excluir
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              );
+                                            });
+                                          }
+                                        })()}
                                       </td>
                                     ))}
                                   </tr>
