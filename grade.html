@@ -389,6 +389,12 @@
                   : d
               )
             );
+            // Salvar no Firestore
+            updateDisciplineInFirestore({ ...draggedDiscipline, dayOfWeek: targetDay, timeSlots: newTimeSlots, semester: targetSemester })
+              .then(() => {
+                setSuccessMessage('Mudança salva no banco de dados!');
+                setTimeout(() => setSuccessMessage(''), 2000);
+              });
 
             const semesterChange = draggedDiscipline.semester !== targetSemester 
               ? ` e movida do ${draggedDiscipline.semester || 'não alocada'} para ${targetSemester}`
