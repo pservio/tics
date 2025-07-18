@@ -729,57 +729,6 @@
             ) || null;
           }
 
-          // Estado para modal de adição rápida
-          const [quickAddModal, setQuickAddModal] = React.useState({ open: false, semester: '', day: '', startTime: '' });
-          const [quickAddName, setQuickAddName] = React.useState('');
-          const [quickAddWorkload, setQuickAddWorkload] = React.useState('');
-          const [quickAddNucleo, setQuickAddNucleo] = React.useState('');
-          const [quickAddPrereq, setQuickAddPrereq] = React.useState('');
-          // Função para abrir modal ao clicar em célula vazia
-          const handleCellClick = (semester, day, startTime) => {
-            setQuickAddModal({ open: true, semester, day, startTime });
-            setQuickAddName('');
-            setQuickAddWorkload('');
-            setQuickAddNucleo('');
-            setQuickAddPrereq('');
-          };
-          // Função para salvar disciplina do modal
-          const handleQuickAddDiscipline = (e) => {
-            e.preventDefault();
-            if (!quickAddName.trim() || !quickAddWorkload.trim()) {
-              setErrorMessage('Preencha nome e carga horária.');
-              return;
-            }
-            const timeSlots = calculateTimeSlots(quickAddWorkload, quickAddModal.startTime);
-            if (timeSlots.length === 0) {
-              setErrorMessage('Horário/carga horária inválidos.');
-              return;
-            }
-            const prereqArr = quickAddPrereq.split(',').map(p => p.trim()).filter(Boolean);
-            const newDiscipline = {
-              id: Date.now(),
-              name: quickAddName.trim(),
-              workload: quickAddWorkload,
-              semester: quickAddModal.semester,
-              prerequisites: prereqArr,
-              nucleo: quickAddNucleo,
-              dayOfWeek: quickAddModal.day,
-              timeSlots
-            };
-            // Verificar conflito
-            const conflict = checkTimeSlotConflict(newDiscipline, disciplines);
-            if (conflict) {
-              setErrorMessage(`Conflito com "${conflict.name}" neste horário.`);
-              return;
-            }
-            addDisciplineToFirestore(newDiscipline).then(() => {
-              setDisciplines([...disciplines, newDiscipline]);
-              setSuccessMessage('Disciplina adicionada!');
-              setTimeout(() => setSuccessMessage(''), 2000);
-              setQuickAddModal({ open: false, semester: '', day: '', startTime: '' });
-            });
-          };
-
           return (
             <div className="min-h-screen bg-gray-100 p-4 font-sans flex flex-col items-center">
               <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
@@ -1114,17 +1063,6 @@
                                               </div>
                                             );
                                           })}
-                                      {/* Se célula vazia, permitir clique para adicionar */}
-                                      {semesterDisciplinesByDay[day].every(d => d.timeSlots[0] !== slot.time) && (
-                                        <button
-                                          className="w-full h-full flex items-center justify-center text-xs text-blue-400 hover:text-blue-700 hover:bg-blue-50 rounded transition"
-                                          style={{ minHeight: '40px' }}
-                                          onClick={() => handleCellClick(semester, day, slot.time)}
-                                          type="button"
-                                        >
-                                          + Adicionar
-                                        </button>
-                                      )}
                                       </td>
                                     ))}
                                   </tr>
@@ -1410,46 +1348,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-    {/* Modal centralizado para adição rápida */}
-    {quickAddModal.open && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative animate-fade-in">
-          <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-700" onClick={() => setQuickAddModal({ open: false, semester: '', day: '', startTime: '' })}>&times;</button>
-          <h2 className="text-lg font-bold mb-4 text-center">Adicionar Disciplina</h2>
-          <form onSubmit={handleQuickAddDiscipline} className="space-y-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Nome:</label>
-              <input type="text" className="mt-1 w-full border rounded px-2 py-1" value={quickAddName} onChange={e => setQuickAddName(e.target.value)} autoFocus />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Carga Horária:</label>
-              <select className="mt-1 w-full border rounded px-2 py-1" value={quickAddWorkload} onChange={e => setQuickAddWorkload(e.target.value)}>
-                <option value="">Selecione</option>
-                {workloadOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Núcleo:</label>
-              <select className="mt-1 w-full border rounded px-2 py-1" value={quickAddNucleo} onChange={e => setQuickAddNucleo(e.target.value)}>
-                <option value="">Selecione</option>
-                <option value="núcleo 1 (formação geral)">núcleo 1 (formação geral)</option>
-                <option value="núcleo 2 (conteúdos específicos)">núcleo 2 (conteúdos específicos)</option>
-                <option value="Núcleo 3 (Extensão)">Núcleo 3 (Extensão)</option>
-                <option value="Núcleo 4 (Estágio)">Núcleo 4 (Estágio)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Pré-requisitos (opcional):</label>
-              <input type="text" className="mt-1 w-full border rounded px-2 py-1" value={quickAddPrereq} onChange={e => setQuickAddPrereq(e.target.value)} placeholder="Ex: Álgebra Linear, Cálculo I" />
-            </div>
-            <div className="flex gap-2 mt-4">
-              <button type="submit" className="flex-1 bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">Salvar</button>
-              <button type="button" className="flex-1 bg-gray-300 text-gray-700 rounded px-4 py-2 hover:bg-gray-400" onClick={() => setQuickAddModal({ open: false, semester: '', day: '', startTime: '' })}>Cancelar</button>
-            </div>
-            <div className="text-xs text-gray-500 mt-2 text-center">{quickAddModal.semester} • {quickAddModal.day} • {quickAddModal.startTime}</div>
-          </form>
-        </div>
-      </div>
-    )}
 </body>
 </html>
