@@ -491,6 +491,16 @@
               }
             });
 
+            // Lista de disciplinas por núcleo
+            pdfContent += `
+              <h2>Disciplinas por Núcleo</h2>
+              ${Object.keys(workloadStats.workloadByNucleo).map(nucleo => {
+                const nucleoDiscs = assignedDisciplines.filter(d => d.nucleo === nucleo);
+                if (nucleoDiscs.length === 0) return '';
+                return `<div style="margin-bottom: 12px;"><strong>${nucleo}</strong><ul style="margin: 0 0 0 18px; padding: 0;">${nucleoDiscs.map(d => `<li>${d.name} - ${d.workload}</li>`).join('')}</ul></div>`;
+              }).join('')}
+            `;
+
             pdfContent += `
               </body>
               </html>
