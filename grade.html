@@ -358,43 +358,41 @@
             e.preventDefault();
             e.currentTarget.classList.remove('drag-over-cell');
 
-            const disciplineId = parseInt(e.dataTransfer.getData('disciplineId'), 10);
-            const draggedDiscipline = disciplines.find(d => d.id === disciplineId);
+            const disciplineId = e.dataTransfer.getData('disciplineId');
+            // Corrigir para aceitar id string ou number
+            const draggedDiscipline = disciplines.find(d => String(d.id) === String(disciplineId));
 
             if (!draggedDiscipline) return;
 
-            // Calculate new time slots based on the target time slot
+            // Calcular novos horários com base no horário alvo
             const newTimeSlots = calculateTimeSlots(draggedDiscipline.workload, targetTimeSlot);
-            
             if (newTimeSlots.length === 0) {
               setErrorMessage(`Não é possível alocar "${draggedDiscipline.name}" no horário ${targetTimeSlot}. Tente outro horário.`);
               return;
             }
 
-            // Check for conflicts with the new time slots
+            // Verificar conflitos
             const conflict = checkTimeSlotConflict(
-              { ...draggedDiscipline, dayOfWeek: targetDay, timeSlots: newTimeSlots },
-              disciplines.filter(d => d.id !== disciplineId)
+              { ...draggedDiscipline, dayOfWeek: targetDay, timeSlots: newTimeSlots, semester: targetSemester },
+              disciplines.filter(d => String(d.id) !== String(disciplineId))
             );
-
             if (conflict) {
               setErrorMessage(`Conflito de horário: "${draggedDiscipline.name}" se sobrepõe a "${conflict.name}" em ${targetDay} nos horários: ${newTimeSlots.filter(slot => conflict.timeSlots.includes(slot)).join(', ')}.`);
               return;
             }
 
-            // Update the discipline with new day, time slots, and semester
+            // Atualizar disciplina com novo dia, horários e semestre
             setDisciplines(prevDisciplines =>
               prevDisciplines.map(d =>
-                d.id === disciplineId
+                String(d.id) === String(disciplineId)
                   ? { ...d, dayOfWeek: targetDay, timeSlots: newTimeSlots, semester: targetSemester }
                   : d
               )
             );
-            
+
             const semesterChange = draggedDiscipline.semester !== targetSemester 
-              ? ` e movida do ${draggedDiscipline.semester} para ${targetSemester}`
+              ? ` e movida do ${draggedDiscipline.semester || 'não alocada'} para ${targetSemester}`
               : '';
-            
             setSuccessMessage(`"${draggedDiscipline.name}" movida para ${targetDay} no horário ${targetTimeSlot}${semesterChange}.`);
             setErrorMessage('');
           };
