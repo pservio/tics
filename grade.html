@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Grade Curricular2</title>
+    <title>Criador de Grade Curricular</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -709,6 +709,18 @@
           // Supondo que cada disciplina tenha: { dia, semestre, ... }
           function existeConflito(dia, semestre, listaDisciplinas) {
             return listaDisciplinas.some(d => d.dia === dia && d.semestre === semestre);
+          }
+
+          // Função para verificar conflito de horários entre disciplinas
+          function checkTimeSlotConflict(candidate, allDisciplines) {
+            // Só verifica conflito se a disciplina tiver dia e horários definidos
+            if (!candidate.dayOfWeek || !candidate.timeSlots || candidate.timeSlots.length === 0) return null;
+            return allDisciplines.find(d =>
+              d.id !== candidate.id &&
+              d.dayOfWeek === candidate.dayOfWeek &&
+              d.semester === candidate.semester &&
+              d.timeSlots && d.timeSlots.some(slot => candidate.timeSlots.includes(slot))
+            ) || null;
           }
 
           return (
