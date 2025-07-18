@@ -321,12 +321,7 @@
           };
 
  
-              // Validar horário de início
-              const validStartTimes = timeSlotOptions.map(slot => slot.time);
-              if (!validStartTimes.includes(startTime)) {
-                errors.push(`Linha ${i + 1}: Horário de início "${startTime}" inválido. Horários válidos: ${validStartTimes.join(', ')}.`);
-                continue;
-              }
+
 
               // Calcular horários automáticos
               const calculatedTimeSlots = calculateTimeSlots(workload, startTime);
