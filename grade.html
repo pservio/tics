@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Grade Curricular 2</title>
+    <title>Criador de Grade Curricular3</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -200,21 +200,22 @@
 
           // Helper function to check for time slot conflicts
           const checkTimeSlotConflict = (disciplineToCheck, currentDisciplines) => {
-              // Filter disciplines on the same day, excluding the discipline being edited/moved
-              const disciplinesOnSameDay = currentDisciplines.filter(d =>
-                  d.dayOfWeek === disciplineToCheck.dayOfWeek && d.id !== disciplineToCheck.id
+              // Agora filtra por dia E semestre
+              const disciplinesOnSameDayAndSemester = currentDisciplines.filter(d =>
+                  d.dayOfWeek === disciplineToCheck.dayOfWeek &&
+                  d.semester === disciplineToCheck.semester &&
+                  d.id !== disciplineToCheck.id
               );
 
-              for (const existingDisc of disciplinesOnSameDay) {
-                  // Check for overlap in time slots
+              for (const existingDisc of disciplinesOnSameDayAndSemester) {
                   const hasOverlap = disciplineToCheck.timeSlots.some(newSlot =>
                       existingDisc.timeSlots.includes(newSlot)
                   );
                   if (hasOverlap) {
-                      return existingDisc; // Return the conflicting discipline
+                      return existingDisc;
                   }
               }
-              return null; // No conflict found
+              return null;
           };
 
           // Function to handle adding a new discipline or updating an existing one
