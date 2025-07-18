@@ -1616,7 +1616,169 @@
                 </div>
               </div>
             </div>
-          );
+            <div className="mb-8 p-4 bg-purple-50 rounded-lg shadow-inner">
+              <h2 className="text-xl font-semibold text-gray-700 mb-3 text-center">Gerenciamento de Dados</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                <button
+                  onClick={exportToCSV}
+                  className="px-4 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  📄 Exportar CSV
+                </button>
+                <button
+                  onClick={exportToPDF}
+                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  🖨️ Exportar PDF
+                </button>
+                <button
+                  onClick={() => {
+                    const dataStr = JSON.stringify(disciplines, null, 2);
+                    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                    const url = URL.createObjectURL(dataBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `grade_curricular_backup_${new Date().toISOString().split('T')[0]}.json`;
+                    link.click();
+                    setSuccessMessage('Backup das disciplinas exportado com sucesso!');
+                  }}
+                  className="px-4 py-2 bg-yellow-600 text-white font-semibold rounded-md shadow-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  💾 Backup JSON
+                </button>
+                <button
+                  onClick={importBackupJSON}
+                  className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  📥 Importar Backup
+                </button>
+                <button
+                  onClick={() => {
+                    const errors = validatePrerequisites();
+                    if (errors.length > 0) {
+                      setErrorMessage(`Erros de validação:\n${errors.join('\n')}`);
+                    } else {
+                      setSuccessMessage('Todas as dependências estão válidas!');
+                    }
+                  }}
+                  className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-md shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  ✅ Validar Pré-requisitos
+                </button>
+                <button
+                  onClick={() => {
+                    const reportWindow = window.open('', '_blank');
+                    const reportContent = `
+                      <!DOCTYPE html>
+                      <html>
+                      <head>
+                        <title>Relatório de Carga Horária</title>
+                        <style>
+                          body { font-family: Arial, sans-serif; margin: 20px; }
+                          table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+                          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                          th { background-color: #f2f2f2; font-weight: bold; }
+                          .met { background-color: #d4edda; }
+                          .not-met { background-color: #f8d7da; }
+                          h1, h2 { color: #333; }
+                          .summary { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                        </style>
+                      </head>
+                      <body>
+                        <h1>Relatório de Carga Horária do Curso</h1>
+                        
+                        <div class="summary">
+                          <h2>Resumo Geral</h2>
+                          <p><strong>Carga Horária Total:</strong> ${workloadStats.totalWorkload} horas</p>
+                          <p><strong>Total de Disciplinas:</strong> ${disciplines.length}</p>
+                          <p><strong>Disciplinas Alocadas:</strong> ${assignedDisciplines.length}</p>
+                          <p><strong>Disciplinas Não Alocadas:</strong> ${unassignedDisciplines.length}</p>
+                        </div>
+
+                        <h2>Análise por Núcleo</h2>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Núcleo</th>
+                              <th>Carga Atual</th>
+                              <th>Meta</th>
+                              <th>Percentual</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${Object.entries(workloadStats.targetStatus).map(([nucleo, status]) => `
+                              <tr class="${status.met ? 'met' : 'not-met'}">
+                                <td>${nucleo}</td>
+                                <td>${status.current}h</td>
+                                <td>${status.target}h</td>
+                                <td>${status.percentage}%</td>
+                                <td>${status.met ? '✅ Meta Atingida' : '❌ Meta Não Atingida'}</td>
+                              </tr>
+                            `).join('')}
+                          </tbody>
+                        </table>
+
+                        <h2>Disciplinas por Semestre</h2>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Semestre</th>
+                              <th>Disciplinas</th>
+                              <th>Alocadas</th>
+                              <th>Carga Horária</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${semesterOptions.map(semester => {
+                              const semesterDisciplines = disciplines.filter(d => d.semester === semester);
+                              const assigned = semesterDisciplines.filter(d => d.dayOfWeek && d.timeSlots.length > 0);
+                              const semesterWorkload = semesterDisciplines.reduce((total, d) => {
+                                const hours = parseInt(d.workload.replace('h', ''));
+                                return total + hours;
+                              }, 0);
+                              
+                              return `
+                                <tr>
+                                  <td>${semester}</td>
+                                  <td>${semesterDisciplines.length}</td>
+                                  <td>${assigned.length}</td>
+                                  <td>${semesterWorkload}h</td>
+                                </tr>
+                              `;
+                            }).join('')}
+                          </tbody>
+                        </table>
+
+                        <p><em>Relatório gerado em: ${new Date().toLocaleString('pt-BR')}</em></p>
+                      </body>
+                      </html>
+                    `;
+                    
+                    reportWindow.document.write(reportContent);
+                    reportWindow.document.close();
+                    reportWindow.print();
+                    setSuccessMessage('Relatório de carga horária exportado com sucesso!');
+                  }}
+                  className="px-4 py-2 bg-teal-600 text-white font-semibold rounded-md shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  📊 Relatório de Carga Horária
+                </button>
+                <button
+                  onClick={clearAllData}
+                  className="px-4 py-2 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                >
+                  🗑️ Limpar Dados
+                </button>
+              </div>
+              <div className="mt-4 text-center text-sm text-gray-600">
+                <p>💡 <strong>Dica:</strong> Seus dados são salvos automaticamente no navegador. Use o backup JSON para transferir dados entre dispositivos.</p>
+              </div>
+              {/* ... estatísticas e análise por núcleo ... */}
+              {/* ... visão geral por semestre ... */}
+            </div>
+          </div>
+        );
         }
 
         // Render the App component into the 'root' div using React 18 syntax
