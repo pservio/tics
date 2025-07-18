@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Grade Curricular</title>
+    <title>Criador de Grade Curricular 2</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -873,6 +873,11 @@
               default:
                 return 'bg-gray-200 text-gray-800 border-gray-400';
             }
+          }
+
+          // Supondo que cada disciplina tenha: { dia, semestre, ... }
+          function existeConflito(dia, semestre, listaDisciplinas) {
+            return listaDisciplinas.some(d => d.dia === dia && d.semestre === semestre);
           }
 
           return (
