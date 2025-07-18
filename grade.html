@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Grade Curricular 4</title>
+    <title>Criador de Grade Curricular 5</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -94,12 +94,6 @@
           const [newDisciplineStartTime, setNewDisciplineStartTime] = React.useState('');
           // State for the discipline currently being edited
           const [editingDiscipline, setEditingDiscipline] = React.useState(null);
-          // State for the CSV input text area
-          const [csvInput, setCsvInput] = React.useState('');
-          // State for error messages
-          const [errorMessage, setErrorMessage] = React.useState('');
-          // State for success messages
-          const [successMessage, setSuccessMessage] = React.useState('');
           // State for drag feedback
           const [draggedDisciplineId, setDraggedDisciplineId] = React.useState(null);
           // State for search and filters
@@ -196,7 +190,7 @@
           React.useEffect(() => {
             setErrorMessage('');
             setSuccessMessage('');
-          }, [newDisciplineName, newDisciplineWorkload, newDisciplineSemester, newDisciplinePrerequisites, newDisciplineNucleo, newDisciplineDayOfWeek, newDisciplineStartTime, csvInput, editingDiscipline]);
+          }, [newDisciplineName, newDisciplineWorkload, newDisciplineSemester, newDisciplinePrerequisites, newDisciplineNucleo, newDisciplineDayOfWeek, newDisciplineStartTime, editingDiscipline]);
 
           // Helper function to check for time slot conflicts
           const checkTimeSlotConflict = (disciplineToCheck, currentDisciplines) => {
