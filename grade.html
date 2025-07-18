@@ -479,11 +479,7 @@
                               ${assignedDisciplinesByDay[day]
                                 .filter(d => d.timeSlots.includes(slot.time))
                                 .map(discipline => 
-                                  discipline.timeSlots[0] === slot.time ? 
-                                  `<div>
-                                    <strong>${discipline.name}</strong>
-                                    <div class="discipline-info">${discipline.workload} | ${discipline.nucleo}</div>
-                                  </div>` : ''
+                                  `<div><strong>${discipline.name}</strong><div class="discipline-info">${discipline.workload} | ${discipline.nucleo}</div></div>`
                                 ).join('')}
                             </td>
                           `).join('')}
