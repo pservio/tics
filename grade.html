@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Grade Curricular3</title>
+    <title>Criador de Grade Curricular</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -769,8 +769,8 @@
             }, 0);
 
             const workloadByNucleo = {
-              'Núcleo 1': 0,
-              'Núcleo 2': 0,
+              'núcleo 1 (formação geral)': 0,
+              'núcleo 2 (conteúdos específicos)': 0,
               'Núcleo 3 (Extensão)': 0,
               'Núcleo 4 (Estágio)': 0
             };
@@ -784,8 +784,8 @@
 
             // Calculate targets
             const targets = {
-              'Núcleo 1': 900,
-              'Núcleo 2': 1600,
+              'núcleo 1 (formação geral)': 900,
+              'núcleo 2 (conteúdos específicos)': 1600,
               'Núcleo 3 (Extensão)': Math.round(totalWorkload * 0.10), // 10% of total
               'Núcleo 4 (Estágio)': 400
             };
@@ -863,9 +863,9 @@
           // Função utilitária para cor de fundo por núcleo
           function getNucleoColor(nucleo) {
             switch (nucleo) {
-              case 'Núcleo 1':
+              case 'núcleo 1 (formação geral)':
                 return 'bg-blue-200 text-blue-800 border-blue-500';
-              case 'Núcleo 2':
+              case 'núcleo 2 (conteúdos específicos)':
                 return 'bg-green-200 text-green-800 border-green-500';
               case 'Núcleo 3 (Extensão)':
                 return 'bg-yellow-200 text-yellow-800 border-yellow-500';
@@ -1246,8 +1246,8 @@
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     >
                       <option value="">Selecione um núcleo</option>
-                      <option value="Núcleo 1">Núcleo 1</option>
-                      <option value="Núcleo 2">Núcleo 2</option>
+                      <option value="núcleo 1 (formação geral)">núcleo 1 (formação geral)</option>
+                      <option value="núcleo 2 (conteúdos específicos)">núcleo 2 (conteúdos específicos)</option>
                       <option value="Núcleo 3 (Extensão)">Núcleo 3 (Extensão)</option>
                       <option value="Núcleo 4 (Estágio)">Núcleo 4 (Estágio)</option>
                     </select>
@@ -1381,8 +1381,8 @@
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-sm"
                       >
                         <option value="">Todos os núcleos</option>
-                        <option value="Núcleo 1">Núcleo 1</option>
-                        <option value="Núcleo 2">Núcleo 2</option>
+                        <option value="núcleo 1 (formação geral)">núcleo 1 (formação geral)</option>
+                        <option value="núcleo 2 (conteúdos específicos)">núcleo 2 (conteúdos específicos)</option>
                         <option value="Núcleo 3 (Extensão)">Núcleo 3 (Extensão)</option>
                         <option value="Núcleo 4 (Estágio)">Núcleo 4 (Estágio)</option>
                       </select>
