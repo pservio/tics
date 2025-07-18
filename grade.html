@@ -116,8 +116,8 @@
           // Define workload options
           const workloadOptions = ['30h', '60h', '90h'];
 
-          // Define semester options
-          const semesterOptions = Array.from({ length: 8 }, (_, i) => `${i + 1}º Semestre`);
+          // Define semester options (apenas de 1º a 9º Semestre, sem Semestre Extra)
+          const semesterOptions = Array.from({ length: 9 }, (_, i) => `${i + 1}º Semestre`);
 
           // Function to calculate time slots based on workload and start time
           const calculateTimeSlots = (workload, startTime) => {
@@ -650,7 +650,7 @@
           const workloadStats = calculateWorkloadStats();
 
           // Group assigned disciplines by day and then by time slot for display
-          const daysOfWeek = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+          const daysOfWeek = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
           const assignedDisciplinesByDay = daysOfWeek.reduce((acc, day) => {
             acc[day] = assignedDisciplines
               .filter(d => d.dayOfWeek === day)
