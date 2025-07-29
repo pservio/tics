@@ -81,20 +81,33 @@ const App = () => {
 
   // Estados da aplicação
   const [bancas, setBancas] = useState([]); // Lista de bancas
-  // Salas disponíveis iniciais, conforme fornecido pelo usuário
-  const initialSalas = ["Sala de Arte e Tecnologia", "Auditório Mário Meireles", "(on-line)"];
-  // Datas disponíveis iniciais, conforme fornecido pelo usuário
-  const initialDatas = ["2025-08-04", "2025-08-05", "2025-08-06", "2025-08-07", "2025-08-08"]; // Formato YYYY-MM-DD para input type="date"
-  // Professores disponíveis iniciais, conforme fornecido pelo usuário
-  const initialProfessores = [
-    "Dinho", "Elisene", "Frederico", "Isabel", "Jordana", "Larissa",
-    "Luísa", "Maira", "Marcelo", "Mariana", "Mateus", "Murilo",
-    "Pablo", "Plínio", "Paulo César", "Vinícius"
-  ];
+  
+  // Configurações iniciais - agora mais flexíveis
+  const [configuracoes, setConfiguracoes] = useState({
+    periodoAtual: '2025.1', // Período atual (ex: 2025.1, 2025.2, 2026.1)
+    salas: ["Sala de Arte e Tecnologia", "Auditório Mário Meireles", "(on-line)"],
+    datas: ["2025-08-04", "2025-08-05", "2025-08-06", "2025-08-07", "2025-08-08"],
+    professores: [
+      "Dinho", "Elisene", "Frederico", "Isabel", "Jordana", "Larissa",
+      "Luísa", "Maira", "Marcelo", "Mariana", "Mateus", "Murilo",
+      "Pablo", "Plínio", "Paulo César", "Vinícius"
+    ]
+  });
 
-  const [professores, setProfessores] = useState(initialProfessores); // Lista de professores, inicializada com os professores fornecidos
-  const [salas, setSalas] = useState(initialSalas); // Lista de salas, inicializada com as salas fornecidas
-  const [datasDisponiveis, setDatasDisponiveis] = useState(initialDatas); // Lista de datas, inicializada com as datas fornecidas
+  // Estados para gerenciamento de períodos
+  const [periodos, setPeriodos] = useState(['2025.1']); // Lista de períodos disponíveis
+  const [periodoSelecionado, setPeriodoSelecionado] = useState('2025.1');
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [novaConfiguracao, setNovaConfiguracao] = useState({
+    periodo: '',
+    salas: '',
+    datas: '',
+    professores: ''
+  });
+
+  const [professores, setProfessores] = useState(configuracoes.professores);
+  const [salas, setSalas] = useState(configuracoes.salas);
+  const [datasDisponiveis, setDatasDisponiveis] = useState(configuracoes.datas);
 
   const [novaBanca, setNovaBanca] = useState({ // Estado para nova banca a ser adicionada
     data: '',
@@ -133,6 +146,78 @@ const App = () => {
     setModalAction(null);
   }, []);
 
+  // Função para carregar configurações do período
+  const carregarConfiguracoes = useCallback(async (periodo) => {
+    if (!firebaseReady || !db || !userId) return;
+
+    try {
+      const configRef = db.collection(`users/${userId}/configuracoes`).doc(periodo);
+      const doc = await configRef.get();
+      
+      if (doc.exists) {
+        const config = doc.data();
+        setConfiguracoes(config);
+        setProfessores(config.professores || []);
+        setSalas(config.salas || []);
+        setDatasDisponiveis(config.datas || []);
+      } else {
+        // Usar configurações padrão se não existir
+        const configPadrao = {
+          periodoAtual: periodo,
+          salas: configuracoes.salas,
+          datas: configuracoes.datas,
+          professores: configuracoes.professores
+        };
+        setConfiguracoes(configPadrao);
+        setProfessores(configPadrao.professores);
+        setSalas(configPadrao.salas);
+        setDatasDisponiveis(configPadrao.datas);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar configurações:", error);
+    }
+  }, [firebaseReady, db, userId, configuracoes]);
+
+  // Função para salvar configurações do período
+  const salvarConfiguracoes = useCallback(async (periodo, config) => {
+    if (!firebaseReady || !db || !userId) return;
+
+    try {
+      await db.collection(`users/${userId}/configuracoes`).doc(periodo).set(config);
+      showCustomModal("Configurações salvas com sucesso!", "success");
+    } catch (error) {
+      console.error("Erro ao salvar configurações:", error);
+      showCustomModal("Erro ao salvar configurações.", "error");
+    }
+  }, [firebaseReady, db, userId, showCustomModal]);
+
+  // Função para criar novo período ou atualizar existente
+  const criarNovoPeriodo = useCallback(async () => {
+    if (!novaConfiguracao.periodo) {
+      showCustomModal("Por favor, informe o nome do período.", "error");
+      return;
+    }
+
+    const periodo = novaConfiguracao.periodo;
+    const novasConfigs = {
+      periodoAtual: periodo,
+      salas: novaConfiguracao.salas.split(',').map(s => s.trim()).filter(s => s),
+      datas: novaConfiguracao.datas.split(',').map(d => d.trim()).filter(d => d),
+      professores: novaConfiguracao.professores.split(',').map(p => p.trim()).filter(p => p)
+    };
+
+    await salvarConfiguracoes(periodo, novasConfigs);
+    
+    // Se é um período novo, adicionar à lista
+    if (!periodos.includes(periodo)) {
+      setPeriodos(prev => [...prev, periodo]);
+    }
+    
+    setPeriodoSelecionado(periodo);
+    setShowConfigModal(false);
+    setNovaConfiguracao({ periodo: '', salas: '', datas: '', professores: '' });
+  }, [novaConfiguracao, salvarConfiguracoes, showCustomModal, periodos]);
+
   // Efeito para autenticar o usuário e inicializar o listener de autenticação
   useEffect(() => {
     if (!firebaseReady || !auth) return;
@@ -157,11 +242,39 @@ const App = () => {
     authenticate();
   }, [firebaseReady, auth]);
 
-  // Efeito para carregar as bancas do Firestore quando o userId estiver disponível
+  // Efeito para carregar períodos disponíveis
   useEffect(() => {
     if (!firebaseReady || !db || !isAuthReady || !userId) return;
 
-    const bancasRef = db.collection(`users/${userId}/bancas`);
+    const periodosRef = db.collection(`users/${userId}/configuracoes`);
+    
+    const unsubscribe = periodosRef.onSnapshot((snapshot) => {
+      const periodosData = snapshot.docs.map(doc => doc.id);
+      if (periodosData.length > 0) {
+        setPeriodos(periodosData);
+        if (!periodoSelecionado || !periodosData.includes(periodoSelecionado)) {
+          setPeriodoSelecionado(periodosData[0]);
+        }
+      }
+    }, (error) => {
+      console.error("Erro ao carregar períodos:", error);
+    });
+
+    return () => unsubscribe();
+  }, [firebaseReady, db, userId, isAuthReady, periodoSelecionado]);
+
+  // Efeito para carregar configurações quando o período mudar
+  useEffect(() => {
+    if (periodoSelecionado) {
+      carregarConfiguracoes(periodoSelecionado);
+    }
+  }, [periodoSelecionado, carregarConfiguracoes]);
+
+  // Efeito para carregar as bancas do Firestore quando o userId estiver disponível
+  useEffect(() => {
+    if (!firebaseReady || !db || !isAuthReady || !userId || !periodoSelecionado) return;
+
+    const bancasRef = db.collection(`users/${userId}/periodos/${periodoSelecionado}/bancas`);
     const q = bancasRef;
 
     const unsubscribe = q.onSnapshot((snapshot) => {
@@ -174,10 +287,10 @@ const App = () => {
       });
       setBancas(bancasData);
 
-      // Extrair professores, salas e datas únicas, garantindo que as iniciais sejam mantidas
-      const allProfessores = new Set(initialProfessores);
-      const allSalas = new Set(initialSalas);
-      const allDatas = new Set(initialDatas);
+      // Extrair professores, salas e datas únicas das bancas existentes
+      const allProfessores = new Set(configuracoes.professores || []);
+      const allSalas = new Set(configuracoes.salas || []);
+      const allDatas = new Set(configuracoes.datas || []);
 
       bancasData.forEach(banca => {
         allProfessores.add(banca.orientador);
@@ -186,6 +299,7 @@ const App = () => {
         allSalas.add(banca.local);
         allDatas.add(banca.data);
       });
+      
       setProfessores(Array.from(allProfessores).sort());
       setSalas(Array.from(allSalas).sort());
       setDatasDisponiveis(Array.from(allDatas).sort());
@@ -195,7 +309,7 @@ const App = () => {
     });
 
     return () => unsubscribe();
-  }, [firebaseReady, db, userId, isAuthReady, initialSalas, initialDatas, initialProfessores, showCustomModal]);
+  }, [firebaseReady, db, userId, isAuthReady, periodoSelecionado, configuracoes, showCustomModal]);
 
   // Função para lidar com a mudança nos campos do formulário
   const handleChange = (e) => {
@@ -302,14 +416,14 @@ const App = () => {
 
       if (editandoBancaId) {
         // Atualizar banca existente
-        const bancaRef = db.collection(`users/${userId}/bancas`).doc(editandoBancaId);
+        const bancaRef = db.collection(`users/${userId}/periodos/${periodoSelecionado}/bancas`).doc(editandoBancaId);
         await bancaRef.update(bancaParaSalvar);
         setSucesso("Banca atualizada com sucesso!");
         showCustomModal("Banca atualizada com sucesso!", "success");
         setEditandoBancaId(null);
       } else {
         // Adicionar nova banca
-        await db.collection(`users/${userId}/bancas`).add(bancaParaSalvar);
+        await db.collection(`users/${userId}/periodos/${periodoSelecionado}/bancas`).add(bancaParaSalvar);
         setSucesso("Banca adicionada com sucesso!");
         showCustomModal("Banca adicionada com sucesso!", "success");
       }
@@ -364,7 +478,7 @@ const App = () => {
       return;
     }
     try {
-      await db.collection(`users/${userId}/bancas`).doc(id).delete();
+      await db.collection(`users/${userId}/periodos/${periodoSelecionado}/bancas`).doc(id).delete();
       setSucesso("Banca excluída com sucesso!");
       showCustomModal("Banca excluída com sucesso!", "success");
     } catch (error) {
@@ -388,9 +502,34 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 font-inter">
       <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Gerenciador de Bancas de TCC
-        </h1>
+        {/* Header com seletor de período */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+            🎓 Gerenciador de Bancas de TCC
+          </h1>
+          
+          <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700">Período:</label>
+              <select 
+                value={periodoSelecionado} 
+                onChange={(e) => setPeriodoSelecionado(e.target.value)}
+                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {periodos.map(periodo => (
+                  <option key={periodo} value={periodo}>{periodo}</option>
+                ))}
+              </select>
+            </div>
+            
+            <button
+              onClick={() => setShowConfigModal(true)}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+            >
+              ⚙️ Configurar Período
+            </button>
+          </div>
+                </div>
 
         {/* Status do Firebase */}
         {!firebaseReady && (
@@ -401,6 +540,43 @@ const App = () => {
         {firebaseReady && !userId && (
           <div className="mb-4 text-center text-sm text-blue-600 bg-blue-100 p-2 rounded">
             🔄 Inicializando sistema...
+          </div>
+        )}
+
+        {/* Informações do Período Atual */}
+        {periodoSelecionado && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  📅 Período: {periodoSelecionado}
+                </h2>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>📚 {bancas.length} bancas agendadas</div>
+                  <div>🏫 {salas.length} salas disponíveis</div>
+                  <div>👥 {professores.length} professores cadastrados</div>
+                  <div>📅 {datasDisponiveis.length} datas disponíveis</div>
+                </div>
+              </div>
+              
+              <div className="mt-4 md:mt-0">
+                <button
+                  onClick={() => {
+                    const configAtual = {
+                      periodo: periodoSelecionado,
+                      salas: salas.join(', '),
+                      datas: datasDisponiveis.join(', '),
+                      professores: professores.join(', ')
+                    };
+                    setNovaConfiguracao(configAtual);
+                    setShowConfigModal(true);
+                  }}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+                >
+                  ✏️ Editar Configurações
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -838,6 +1014,94 @@ const App = () => {
           </div>
         )}
       </div>
+
+      {/* Modal de Configuração de Períodos */}
+      {showConfigModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                ⚙️ {periodos.includes(novaConfiguracao.periodo) ? 'Editar' : 'Configurar Novo'} Período
+              </h3>
+              <button
+                onClick={() => setShowConfigModal(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nome do Período (ex: 2025.2, 2026.1)
+                </label>
+                <input
+                  type="text"
+                  value={novaConfiguracao.periodo}
+                  onChange={(e) => setNovaConfiguracao(prev => ({ ...prev, periodo: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="2025.2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Salas Disponíveis (separadas por vírgula)
+                </label>
+                <textarea
+                  value={novaConfiguracao.salas}
+                  onChange={(e) => setNovaConfiguracao(prev => ({ ...prev, salas: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="3"
+                  placeholder="Sala de Arte e Tecnologia, Auditório Mário Meireles, (on-line)"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Datas Disponíveis (formato YYYY-MM-DD, separadas por vírgula)
+                </label>
+                <textarea
+                  value={novaConfiguracao.datas}
+                  onChange={(e) => setNovaConfiguracao(prev => ({ ...prev, datas: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="3"
+                  placeholder="2025-12-01, 2025-12-02, 2025-12-03, 2025-12-04, 2025-12-05"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Professores Disponíveis (separados por vírgula)
+                </label>
+                <textarea
+                  value={novaConfiguracao.professores}
+                  onChange={(e) => setNovaConfiguracao(prev => ({ ...prev, professores: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="4"
+                  placeholder="Dinho, Elisene, Frederico, Isabel, Jordana, Larissa, Luísa, Maira, Marcelo, Mariana, Mateus, Murilo, Pablo, Plínio, Paulo César, Vinícius"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={() => setShowConfigModal(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={criarNovoPeriodo}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                {periodos.includes(novaConfiguracao.periodo) ? 'Atualizar' : 'Criar'} Período
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Personalizado */}
       {showModal && (
