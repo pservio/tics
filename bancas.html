@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Bancas de TCC</title>
+    <title>Gerenciador de Bancas de TCC 2.0</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -511,30 +511,42 @@ const App = () => {
                 </thead>
                 <tbody>
                   {bancas.map((banca) => (
-                    <tr key={banca.id} className="hover:bg-gray-50">
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">{formatarData(banca.data)}</td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.horarioInicio} - {banca.horarioFim}</td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.local}</td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.discente}</td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.orientador}</td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">
-                        {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''}
-                      </td>
-                      <td className="py-2 px-4 border-b text-sm text-gray-700">
-                        <button
-                          onClick={() => handleEdit(banca)}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-xs mr-2 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDeleteConfirm(banca.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs shadow-md transition duration-300 ease-in-out transform hover:scale-105"
-                        >
-                          Excluir
-                        </button>
-                      </td>
-                    </tr>
+                    <React.Fragment key={banca.id}>
+                      {/* Linha principal com informações básicas */}
+                      <tr className="hover:bg-gray-50">
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">{formatarData(banca.data)}</td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.horarioInicio} - {banca.horarioFim}</td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.local}</td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.discente}</td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.orientador}</td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">
+                          {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''}
+                        </td>
+                        <td className="py-2 px-4 border-b text-sm text-gray-700">
+                          <button
+                            onClick={() => handleEdit(banca)}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-xs mr-2 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDeleteConfirm(banca.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Excluir
+                          </button>
+                        </td>
+                      </tr>
+                      {/* Linha adicional com o título do trabalho */}
+                      <tr className="hover:bg-gray-50 bg-gray-50">
+                        <td colSpan="7" className="py-2 px-4 border-b text-sm">
+                          <div className="flex items-center">
+                            <span className="font-medium text-gray-700 mr-2">📋 Título:</span>
+                            <span className="text-gray-800 italic">{banca.titulo}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
