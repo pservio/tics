@@ -494,135 +494,66 @@ const App = () => {
         {bancas.length > 0 && (
           <div className="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">📅 Visualização Semanal</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Calendário Semanal */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-center mb-4 text-gray-800">Semana de 04/08 a 10/08/2025</h3>
-                <div className="grid grid-cols-7 gap-2">
-                  {/* Cabeçalho dos dias da semana */}
-                  {[
-                    { dia: 'Dom', data: '2025-08-03', label: '03/08' },
-                    { dia: 'Seg', data: '2025-08-04', label: '04/08' },
-                    { dia: 'Ter', data: '2025-08-05', label: '05/08' },
-                    { dia: 'Qua', data: '2025-08-06', label: '06/08' },
-                    { dia: 'Qui', data: '2025-08-07', label: '07/08' },
-                    { dia: 'Sex', data: '2025-08-08', label: '08/08' },
-                    { dia: 'Sáb', data: '2025-08-09', label: '09/08' }
-                  ].map(({ dia, data, label }) => {
-                    const bancasDoDia = bancas.filter(b => b.data === data);
-                    const hoje = new Date().toISOString().split('T')[0];
-                    const isHoje = data === hoje;
-                    
-                    return (
-                      <div key={data} className="flex flex-col">
-                        {/* Cabeçalho do dia */}
-                        <div className={`p-2 text-center font-medium text-sm rounded-t ${
-                          isHoje 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700'
-                        }`}>
-                          <div className="font-bold">{dia}</div>
-                          <div className="text-xs">{label}</div>
-                        </div>
-                        
-                        {/* Conteúdo do dia */}
-                        <div className={`flex-1 p-2 border border-gray-200 rounded-b min-h-[120px] ${
-                          bancasDoDia.length > 0 
-                            ? 'bg-blue-50 border-blue-300' 
-                            : 'bg-white'
-                        }`}>
-                          {bancasDoDia.length === 0 ? (
-                            <div className="text-center text-gray-400 text-xs mt-4">
-                              Sem bancas
-                            </div>
-                          ) : (
-                            <div className="space-y-1">
-                              {bancasDoDia.map((banca, index) => (
-                                <div key={banca.id} className="bg-white p-2 rounded border border-blue-200 text-xs">
-                                  <div className="font-bold text-blue-700">
-                                    {banca.horarioInicio} - {banca.horarioFim}
-                                  </div>
-                                  <div className="text-gray-700 truncate">
-                                    {banca.discente}
-                                  </div>
-                                  <div className="text-gray-500 truncate">
-                                    {banca.local}
-                                  </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-center mb-4 text-gray-800">Semana de 04/08 a 10/08/2025</h3>
+              <div className="grid grid-cols-7 gap-2">
+                {/* Cabeçalho dos dias da semana */}
+                {[
+                  { dia: 'Dom', data: '2025-08-03', label: '03/08' },
+                  { dia: 'Seg', data: '2025-08-04', label: '04/08' },
+                  { dia: 'Ter', data: '2025-08-05', label: '05/08' },
+                  { dia: 'Qua', data: '2025-08-06', label: '06/08' },
+                  { dia: 'Qui', data: '2025-08-07', label: '07/08' },
+                  { dia: 'Sex', data: '2025-08-08', label: '08/08' },
+                  { dia: 'Sáb', data: '2025-08-09', label: '09/08' }
+                ].map(({ dia, data, label }) => {
+                  const bancasDoDia = bancas.filter(b => b.data === data);
+                  const hoje = new Date().toISOString().split('T')[0];
+                  const isHoje = data === hoje;
+                  
+                  return (
+                    <div key={data} className="flex flex-col">
+                      {/* Cabeçalho do dia */}
+                      <div className={`p-2 text-center font-medium text-sm rounded-t ${
+                        isHoje 
+                          ? 'bg-blue-600 text-white' 
+                          : 'bg-gray-200 text-gray-700'
+                      }`}>
+                        <div className="font-bold">{dia}</div>
+                        <div className="text-xs">{label}</div>
+                      </div>
+                      
+                      {/* Conteúdo do dia */}
+                      <div className={`flex-1 p-2 border border-gray-200 rounded-b min-h-[120px] ${
+                        bancasDoDia.length > 0 
+                          ? 'bg-blue-50 border-blue-300' 
+                          : 'bg-white'
+                      }`}>
+                        {bancasDoDia.length === 0 ? (
+                          <div className="text-center text-gray-400 text-xs mt-4">
+                            Sem bancas
+                          </div>
+                        ) : (
+                          <div className="space-y-1">
+                            {bancasDoDia.map((banca, index) => (
+                              <div key={banca.id} className="bg-white p-2 rounded border border-blue-200 text-xs">
+                                <div className="font-bold text-blue-700">
+                                  {banca.horarioInicio} - {banca.horarioFim}
                                 </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                                <div className="text-gray-700 truncate">
+                                  {banca.discente}
+                                </div>
+                                <div className="text-gray-500 truncate">
+                                  {banca.local}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Lista detalhada das bancas da semana */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800">📋 Bancas da Semana</h3>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {(() => {
-                    // Filtrar bancas da semana (04/08 a 10/08)
-                    const bancasDaSemana = bancas.filter(banca => {
-                      const data = new Date(banca.data);
-                      const inicioSemana = new Date('2025-08-04');
-                      const fimSemana = new Date('2025-08-10');
-                      return data >= inicioSemana && data <= fimSemana;
-                    });
-
-                    // Agrupar bancas por data
-                    const bancasPorData = {};
-                    bancasDaSemana.forEach(banca => {
-                      if (!bancasPorData[banca.data]) {
-                        bancasPorData[banca.data] = [];
-                      }
-                      bancasPorData[banca.data].push(banca);
-                    });
-
-                    // Ordenar datas
-                    const datasOrdenadas = Object.keys(bancasPorData).sort();
-
-                    if (datasOrdenadas.length === 0) {
-                      return (
-                        <div className="text-center text-gray-500 py-8">
-                          <div className="text-4xl mb-2">📅</div>
-                          <div>Nenhuma banca agendada para esta semana</div>
-                        </div>
-                      );
-                    }
-
-                    return datasOrdenadas.map(data => (
-                      <div key={data} className="bg-white p-3 rounded-lg border border-gray-200">
-                        <h4 className="font-semibold text-blue-700 mb-2">
-                          📅 {formatarData(data)} ({bancasPorData[data].length} banca{bancasPorData[data].length > 1 ? 's' : ''})
-                        </h4>
-                        <div className="space-y-2">
-                          {bancasPorData[data].map(banca => (
-                            <div key={banca.id} className="bg-gray-50 p-2 rounded text-sm">
-                              <div className="font-medium text-gray-800">
-                                ⏰ {banca.horarioInicio} - {banca.horarioFim}
-                              </div>
-                              <div className="text-gray-600">
-                                👤 {banca.discente}
-                              </div>
-                              <div className="text-gray-600">
-                                📍 {banca.local}
-                              </div>
-                              <div className="text-gray-600">
-                                🎓 {banca.orientador} | {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''}
-                              </div>
-                              <div className="text-gray-600 mt-1">
-                                📋 {banca.titulo}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ));
-                  })()}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
