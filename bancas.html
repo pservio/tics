@@ -546,8 +546,12 @@ const App = () => {
                                 <div className="text-gray-500 truncate">
                                   {banca.local}
                                 </div>
-                                <div className="text-gray-600 truncate mt-1">
-                                  🎓 {banca.orientador} | {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''}
+                                <div className="text-gray-600 mt-1 space-y-0.5">
+                                  <div className="truncate">🎓 {banca.orientador}</div>
+                                  <div className="truncate">👥 {banca.avaliador1}</div>
+                                  {banca.avaliador2 && (
+                                    <div className="truncate">👥 {banca.avaliador2}</div>
+                                  )}
                                 </div>
                               </div>
                             ))}
