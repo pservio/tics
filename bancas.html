@@ -1,19 +1,32 @@
-import React, { useState, useEffect, useCallback } from 'react';
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Bancas de TCC</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React e ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel para JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
 
-// Importações do Firebase
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-
-// Definição das variáveis globais para Firebase (fornecidas pelo ambiente Canvas)
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+    <script type="text/babel">
+// Usando React global do CDN
+const { useState, useEffect, useCallback } = React;
 
 // Componente principal da aplicação
 const App = () => {
@@ -48,8 +61,6 @@ const App = () => {
   const [editandoBancaId, setEditandoBancaId] = useState(null); // ID da banca sendo editada
   const [erro, setErro] = useState(''); // Mensagens de erro
   const [sucesso, setSucesso] = useState(''); // Mensagens de sucesso
-  const [userId, setUserId] = useState(null); // ID do usuário autenticado
-  const [isAuthReady, setIsAuthReady] = useState(false); // Indica se a autenticação está pronta
   const [showModal, setShowModal] = useState(false); // Estado para controlar a visibilidade do modal
   const [modalMessage, setModalMessage] = useState(''); // Mensagem do modal
   const [modalType, setModalType] = useState(''); // Tipo do modal (success, error, confirm)
@@ -71,95 +82,28 @@ const App = () => {
     setModalAction(null);
   }, []);
 
-  // Efeito para autenticar o usuário e inicializar o listener de autenticação
+  // Carregar bancas do localStorage
   useEffect(() => {
-    const authenticate = async () => {
-      try {
-        if (initialAuthToken) {
-          await signInWithCustomToken(auth, initialAuthToken);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch (error) {
-        console.error("Erro na autenticação Firebase:", error);
-        showCustomModal("Erro ao autenticar. Por favor, tente novamente.", "error");
-      }
-    };
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-        setIsAuthReady(true);
-        console.log("Usuário autenticado:", user.uid);
-      } else {
-        setUserId(null);
-        setIsAuthReady(true);
-        console.log("Nenhum usuário autenticado.");
-      }
-    });
-
-    authenticate();
-
-    // Limpeza do listener ao desmontar o componente
-    return () => unsubscribe();
-  }, [auth, initialAuthToken, showCustomModal]);
-
-  // Efeito para carregar as bancas do Firestore quando o userId estiver disponível
-  useEffect(() => {
-    if (isAuthReady && userId) {
-      const bancasRef = collection(db, `artifacts/${appId}/users/${userId}/bancas`);
-      const q = query(bancasRef);
-
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const bancasData = snapshot.docs.map(doc => {
-          const data = doc.data();
-          let avaliador1 = data.avaliador1 || '';
-          let avaliador2 = data.avaliador2 || '';
-
-          // Compatibilidade com dados antigos que usavam 'bancaMembros' como string
-          if (!avaliador1 && !avaliador2 && typeof data.bancaMembros === 'string') {
-            const membrosAntigos = data.bancaMembros.split(' / ').map(m => m.trim()).filter(m => m !== '');
-            avaliador1 = membrosAntigos[0] || '';
-            avaliador2 = membrosAntigos[1] || '';
-          }
-
-          return {
-            id: doc.id,
-            ...data,
-            avaliador1,
-            avaliador2,
-          };
-        });
-        setBancas(bancasData);
-
-        // Extrair professores, salas e datas únicas, garantindo que as iniciais sejam mantidas
-        const allProfessores = new Set(initialProfessores); // Começa com os professores iniciais
-        const allSalas = new Set(initialSalas); // Começa com as salas iniciais
-        const allDatas = new Set(initialDatas); // Começa com as datas iniciais
-
-        bancasData.forEach(banca => {
-          allProfessores.add(banca.orientador);
-          if (banca.avaliador1) allProfessores.add(banca.avaliador1);
-          if (banca.avaliador2) allProfessores.add(banca.avaliador2);
-          allSalas.add(banca.local); // Adiciona novas salas encontradas nos dados
-          allDatas.add(banca.data); // Adiciona novas datas encontradas nos dados
-        });
-        setProfessores(Array.from(allProfessores).sort()); // Ordena os professores
-        setSalas(Array.from(allSalas).sort()); // Ordena as salas
-        setDatasDisponiveis(Array.from(allDatas).sort()); // Ordena as datas
-      }, (error) => {
-        console.error("Erro ao carregar bancas:", error);
-        showCustomModal("Erro ao carregar bancas. Por favor, tente novamente.", "error");
-      });
-
-      return () => unsubscribe();
+    const bancasSalvas = localStorage.getItem('bancas');
+    if (bancasSalvas) {
+      setBancas(JSON.parse(bancasSalvas));
     }
-  }, [db, userId, isAuthReady, initialSalas, initialDatas, initialProfessores, showCustomModal]);
+  }, []);
+
+  // Salvar bancas no localStorage quando mudar
+  useEffect(() => {
+    localStorage.setItem('bancas', JSON.stringify(bancas));
+  }, [bancas]);
 
   // Função para lidar com a mudança nos campos do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNovaBanca(prev => ({ ...prev, [name]: value }));
+    if (name === "data" && value === "Outra") {
+      // Se "Outra" for selecionado, limpa o campo de data para permitir a digitação
+      setNovaBanca(prev => ({ ...prev, data: '' }));
+    } else {
+      setNovaBanca(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   // Função para validar a nova banca antes de adicionar/atualizar
@@ -228,10 +172,6 @@ const App = () => {
   // Função para adicionar ou atualizar uma banca
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userId) {
-      showCustomModal("Usuário não autenticado. Por favor, tente novamente.", "error");
-      return;
-    }
 
     const validacaoErro = validarBanca(novaBanca, editandoBancaId);
     if (validacaoErro) {
@@ -241,7 +181,7 @@ const App = () => {
     }
 
     try {
-      // Salva os campos diretamente no Firestore
+      // Salva os campos diretamente no localStorage
       const bancaParaSalvar = {
         data: novaBanca.data,
         horarioInicio: novaBanca.horarioInicio,
@@ -256,14 +196,21 @@ const App = () => {
 
       if (editandoBancaId) {
         // Atualizar banca existente
-        const bancaRef = doc(db, `artifacts/${appId}/users/${userId}/bancas`, editandoBancaId);
-        await updateDoc(bancaRef, bancaParaSalvar);
+        setBancas(prev => prev.map(banca => 
+          banca.id === editandoBancaId 
+            ? { ...banca, ...bancaParaSalvar }
+            : banca
+        ));
         setSucesso("Banca atualizada com sucesso!");
         showCustomModal("Banca atualizada com sucesso!", "success");
         setEditandoBancaId(null);
       } else {
         // Adicionar nova banca
-        await addDoc(collection(db, `artifacts/${appId}/users/${userId}/bancas`), bancaParaSalvar);
+        const novaBancaComId = {
+          ...bancaParaSalvar,
+          id: Date.now().toString() // ID único baseado no timestamp
+        };
+        setBancas(prev => [...prev, novaBancaComId]);
         setSucesso("Banca adicionada com sucesso!");
         showCustomModal("Banca adicionada com sucesso!", "success");
       }
@@ -313,12 +260,8 @@ const App = () => {
   // Função para excluir uma banca
   const handleDelete = async (id) => {
     closeCustomModal(); // Fechar o modal de confirmação
-    if (!userId) {
-      showCustomModal("Usuário não autenticado. Por favor, tente novamente.", "error");
-      return;
-    }
     try {
-      await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/bancas`, id));
+      setBancas(prev => prev.filter(banca => banca.id !== id));
       setSucesso("Banca excluída com sucesso!");
       showCustomModal("Banca excluída com sucesso!", "success");
     } catch (error) {
@@ -346,13 +289,6 @@ const App = () => {
           Gerenciador de Bancas de TCC
         </h1>
 
-        {/* Exibe o ID do usuário para fins de depuração/identificação */}
-        {userId && (
-          <div className="mb-4 text-center text-sm text-gray-600">
-            Seu ID de Usuário: <span className="font-mono bg-gray-200 p-1 rounded">{userId}</span>
-          </div>
-        )}
-
         {/* Formulário para adicionar/editar banca */}
         <div className="mb-8 p-6 bg-blue-50 rounded-lg shadow-inner">
           <h2 className="text-2xl font-semibold mb-4 text-blue-700">
@@ -376,11 +312,11 @@ const App = () => {
                 {/* Adicionar opção para inserir nova data */}
                 <option value="Outra">Outra (digitar)</option>
               </select>
-              {novaBanca.data === 'Outra' && (
+              {novaBanca.data === '' && ( // Renderiza o input se a data for vazia (após selecionar "Outra")
                 <input
                   type="date"
                   name="data"
-                  value={''} // Explicitamente definido como string vazia
+                  value={novaBanca.data} // Agora novaBanca.data será ''
                   onChange={(e) => setNovaBanca(prev => ({ ...prev, data: e.target.value }))}
                   placeholder="Selecione a nova data"
                   className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -650,4 +586,8 @@ const App = () => {
   );
 };
 
-export default App;
+// Renderiza o componente React (versão compatível com CDN)
+ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
