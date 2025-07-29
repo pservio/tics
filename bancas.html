@@ -541,6 +541,92 @@ const App = () => {
             </div>
           )}
         </div>
+
+        {/* Estatísticas de Participação dos Professores */}
+        {bancas.length > 0 && (
+          <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Estatísticas de Participação dos Professores</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {(() => {
+                // Calcular estatísticas de participação
+                const estatisticas = {};
+                
+                bancas.forEach(banca => {
+                  // Contar orientador
+                  if (banca.orientador) {
+                    estatisticas[banca.orientador] = estatisticas[banca.orientador] || { orientador: 0, avaliador: 0, total: 0 };
+                    estatisticas[banca.orientador].orientador++;
+                    estatisticas[banca.orientador].total++;
+                  }
+                  
+                  // Contar avaliador 1
+                  if (banca.avaliador1) {
+                    estatisticas[banca.avaliador1] = estatisticas[banca.avaliador1] || { orientador: 0, avaliador: 0, total: 0 };
+                    estatisticas[banca.avaliador1].avaliador++;
+                    estatisticas[banca.avaliador1].total++;
+                  }
+                  
+                  // Contar avaliador 2
+                  if (banca.avaliador2) {
+                    estatisticas[banca.avaliador2] = estatisticas[banca.avaliador2] || { orientador: 0, avaliador: 0, total: 0 };
+                    estatisticas[banca.avaliador2].avaliador++;
+                    estatisticas[banca.avaliador2].total++;
+                  }
+                });
+                
+                // Ordenar por total de participações (decrescente)
+                const professoresOrdenados = Object.entries(estatisticas)
+                  .sort(([,a], [,b]) => b.total - a.total);
+                
+                return professoresOrdenados.map(([professor, stats]) => (
+                  <div key={professor} className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                    <h3 className="font-semibold text-lg text-gray-800 mb-2">{professor}</h3>
+                    <div className="space-y-1 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Total de participações:</span>
+                        <span className="font-bold text-blue-600">{stats.total}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Como orientador:</span>
+                        <span className="font-medium text-green-600">{stats.orientador}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Como avaliador:</span>
+                        <span className="font-medium text-purple-600">{stats.avaliador}</span>
+                      </div>
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+            
+            {/* Resumo Geral */}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+              <h3 className="font-semibold text-lg text-gray-800 mb-3">Resumo Geral</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-blue-600">{bancas.length}</div>
+                  <div className="text-sm text-gray-600">Total de Bancas</div>
+                </div>
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-green-600">
+                    {bancas.filter(b => b.orientador).length}
+                  </div>
+                  <div className="text-sm text-gray-600">Orientadores Únicos</div>
+                </div>
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-purple-600">
+                    {new Set([
+                      ...bancas.map(b => b.avaliador1).filter(Boolean),
+                      ...bancas.map(b => b.avaliador2).filter(Boolean)
+                    ]).size}
+                  </div>
+                  <div className="text-sm text-gray-600">Avaliadores Únicos</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal Personalizado */}
