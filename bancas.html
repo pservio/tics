@@ -1,0 +1,649 @@
+import React, { useState, useEffect, useCallback } from 'react';
+
+// Importações do Firebase
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+
+// Definição das variáveis globais para Firebase (fornecidas pelo ambiente Canvas)
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+// Inicializa o Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Componente principal da aplicação
+const App = () => {
+  // Estados da aplicação
+  const [bancas, setBancas] = useState([]); // Lista de bancas
+  // Salas disponíveis iniciais, conforme fornecido pelo usuário
+  const initialSalas = ["Sala de Arte e Tecnologia", "Auditório Mário Meireles", "(on-line)"];
+  // Datas disponíveis iniciais, conforme fornecido pelo usuário
+  const initialDatas = ["2025-08-04", "2025-08-05", "2025-08-06", "2025-08-07"]; // Formato YYYY-MM-DD para input type="date"
+  // Professores disponíveis iniciais, conforme fornecido pelo usuário
+  const initialProfessores = [
+    "Dinho", "Elisene", "Frederico", "Isabel", "Jordana", "Larissa",
+    "Luísa", "Maira", "Marcelo", "Mariana", "Mateus", "Murilo",
+    "Pablo", "Plínio", "Paulo César", "Vinícius"
+  ];
+
+  const [professores, setProfessores] = useState(initialProfessores); // Lista de professores, inicializada com os professores fornecidos
+  const [salas, setSalas] = useState(initialSalas); // Lista de salas, inicializada com as salas fornecidas
+  const [datasDisponiveis, setDatasDisponiveis] = useState(initialDatas); // Lista de datas, inicializada com as datas fornecidas
+
+  const [novaBanca, setNovaBanca] = useState({ // Estado para nova banca a ser adicionada
+    data: '',
+    horarioInicio: '',
+    horarioFim: '',
+    local: '',
+    discente: '',
+    titulo: '',
+    orientador: '',
+    avaliador1: '', // Novo campo para Avaliador 1
+    avaliador2: '', // Novo campo para Avaliador 2
+  });
+  const [editandoBancaId, setEditandoBancaId] = useState(null); // ID da banca sendo editada
+  const [erro, setErro] = useState(''); // Mensagens de erro
+  const [sucesso, setSucesso] = useState(''); // Mensagens de sucesso
+  const [userId, setUserId] = useState(null); // ID do usuário autenticado
+  const [isAuthReady, setIsAuthReady] = useState(false); // Indica se a autenticação está pronta
+  const [showModal, setShowModal] = useState(false); // Estado para controlar a visibilidade do modal
+  const [modalMessage, setModalMessage] = useState(''); // Mensagem do modal
+  const [modalType, setModalType] = useState(''); // Tipo do modal (success, error, confirm)
+  const [modalAction, setModalAction] = useState(null); // Ação a ser executada ao confirmar o modal
+
+  // Função para exibir o modal
+  const showCustomModal = useCallback((message, type, action = null) => {
+    setModalMessage(message);
+    setModalType(type);
+    setModalAction(() => action);
+    setShowModal(true);
+  }, []);
+
+  // Função para fechar o modal
+  const closeCustomModal = useCallback(() => {
+    setShowModal(false);
+    setModalMessage('');
+    setModalType('');
+    setModalAction(null);
+  }, []);
+
+  // Efeito para autenticar o usuário e inicializar o listener de autenticação
+  useEffect(() => {
+    const authenticate = async () => {
+      try {
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (error) {
+        console.error("Erro na autenticação Firebase:", error);
+        showCustomModal("Erro ao autenticar. Por favor, tente novamente.", "error");
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        setIsAuthReady(true);
+        console.log("Usuário autenticado:", user.uid);
+      } else {
+        setUserId(null);
+        setIsAuthReady(true);
+        console.log("Nenhum usuário autenticado.");
+      }
+    });
+
+    authenticate();
+
+    // Limpeza do listener ao desmontar o componente
+    return () => unsubscribe();
+  }, [auth, initialAuthToken, showCustomModal]);
+
+  // Efeito para carregar as bancas do Firestore quando o userId estiver disponível
+  useEffect(() => {
+    if (isAuthReady && userId) {
+      const bancasRef = collection(db, `artifacts/${appId}/users/${userId}/bancas`);
+      const q = query(bancasRef);
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const bancasData = snapshot.docs.map(doc => {
+          const data = doc.data();
+          let avaliador1 = data.avaliador1 || '';
+          let avaliador2 = data.avaliador2 || '';
+
+          // Compatibilidade com dados antigos que usavam 'bancaMembros' como string
+          if (!avaliador1 && !avaliador2 && typeof data.bancaMembros === 'string') {
+            const membrosAntigos = data.bancaMembros.split(' / ').map(m => m.trim()).filter(m => m !== '');
+            avaliador1 = membrosAntigos[0] || '';
+            avaliador2 = membrosAntigos[1] || '';
+          }
+
+          return {
+            id: doc.id,
+            ...data,
+            avaliador1,
+            avaliador2,
+          };
+        });
+        setBancas(bancasData);
+
+        // Extrair professores, salas e datas únicas, garantindo que as iniciais sejam mantidas
+        const allProfessores = new Set(initialProfessores); // Começa com os professores iniciais
+        const allSalas = new Set(initialSalas); // Começa com as salas iniciais
+        const allDatas = new Set(initialDatas); // Começa com as datas iniciais
+
+        bancasData.forEach(banca => {
+          allProfessores.add(banca.orientador);
+          if (banca.avaliador1) allProfessores.add(banca.avaliador1);
+          if (banca.avaliador2) allProfessores.add(banca.avaliador2);
+          allSalas.add(banca.local); // Adiciona novas salas encontradas nos dados
+          allDatas.add(banca.data); // Adiciona novas datas encontradas nos dados
+        });
+        setProfessores(Array.from(allProfessores).sort()); // Ordena os professores
+        setSalas(Array.from(allSalas).sort()); // Ordena as salas
+        setDatasDisponiveis(Array.from(allDatas).sort()); // Ordena as datas
+      }, (error) => {
+        console.error("Erro ao carregar bancas:", error);
+        showCustomModal("Erro ao carregar bancas. Por favor, tente novamente.", "error");
+      });
+
+      return () => unsubscribe();
+    }
+  }, [db, userId, isAuthReady, initialSalas, initialDatas, initialProfessores, showCustomModal]);
+
+  // Função para lidar com a mudança nos campos do formulário
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNovaBanca(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Função para validar a nova banca antes de adicionar/atualizar
+  const validarBanca = useCallback((banca, idAtual = null) => {
+    setErro('');
+    setSucesso('');
+
+    const { data, horarioInicio, horarioFim, local, orientador, avaliador1, avaliador2 } = banca;
+
+    if (!data || !horarioInicio || !horarioFim || !local || !orientador || !avaliador1 || !avaliador2) {
+      return "Todos os campos (Data, Horário, Local, Discente, Título, Orientador, Avaliador 1 e Avaliador 2) são obrigatórios.";
+    }
+
+    if (orientador === avaliador1 || orientador === avaliador2 || avaliador1 === avaliador2) {
+      return "O Orientador, Avaliador 1 e Avaliador 2 devem ser professores diferentes.";
+    }
+
+    const [hInicio, mInicio] = horarioInicio.split(':').map(Number);
+    const [hFim, mFim] = horarioFim.split(':').map(Number);
+
+    const inicio = hInicio * 60 + mInicio;
+    const fim = hFim * 60 + mFim;
+
+    if (fim <= inicio) {
+      return "O horário de término deve ser posterior ao horário de início.";
+    }
+
+    const professoresDaNovaBanca = [orientador, avaliador1, avaliador2];
+
+    // Verificar conflitos
+    for (const existente of bancas) {
+      if (existente.id === idAtual) continue; // Ignorar a própria banca ao editar
+
+      if (existente.data === data) {
+        const [existenteHInicio, existenteMInicio] = existente.horarioInicio.split(':').map(Number);
+        const [existenteHFim, existenteMFim] = existente.horarioFim.split(':').map(Number);
+
+        const existenteInicio = existenteHInicio * 60 + existenteMInicio;
+        const existenteFim = existenteHFim * 60 + existenteMFim;
+
+        // Conflito de horário
+        const sobreposicaoHorario = (inicio < existenteFim && fim > existenteInicio);
+
+        if (sobreposicaoHorario) {
+          // Conflito de sala
+          if (existente.local === local) {
+            return `A sala "${local}" já está ocupada neste horário.`;
+          }
+
+          // Conflito de professor
+          const professoresDaBancaExistente = [existente.orientador, existente.avaliador1, existente.avaliador2].filter(Boolean); // Filter Boolean para remover vazios/nulos
+
+          const professoresConflito = professoresDaNovaBanca.filter(prof =>
+            professoresDaBancaExistente.includes(prof)
+          );
+
+          if (professoresConflito.length > 0) {
+            return `O(s) professor(es) ${professoresConflito.join(', ')} já está(ão) em outra banca neste horário.`;
+          }
+        }
+      }
+    }
+    return null; // Nenhuma validação falhou
+  }, [bancas]);
+
+  // Função para adicionar ou atualizar uma banca
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!userId) {
+      showCustomModal("Usuário não autenticado. Por favor, tente novamente.", "error");
+      return;
+    }
+
+    const validacaoErro = validarBanca(novaBanca, editandoBancaId);
+    if (validacaoErro) {
+      setErro(validacaoErro);
+      showCustomModal(validacaoErro, "error");
+      return;
+    }
+
+    try {
+      // Salva os campos diretamente no Firestore
+      const bancaParaSalvar = {
+        data: novaBanca.data,
+        horarioInicio: novaBanca.horarioInicio,
+        horarioFim: novaBanca.horarioFim,
+        local: novaBanca.local,
+        discente: novaBanca.discente,
+        titulo: novaBanca.titulo,
+        orientador: novaBanca.orientador,
+        avaliador1: novaBanca.avaliador1,
+        avaliador2: novaBanca.avaliador2,
+      };
+
+      if (editandoBancaId) {
+        // Atualizar banca existente
+        const bancaRef = doc(db, `artifacts/${appId}/users/${userId}/bancas`, editandoBancaId);
+        await updateDoc(bancaRef, bancaParaSalvar);
+        setSucesso("Banca atualizada com sucesso!");
+        showCustomModal("Banca atualizada com sucesso!", "success");
+        setEditandoBancaId(null);
+      } else {
+        // Adicionar nova banca
+        await addDoc(collection(db, `artifacts/${appId}/users/${userId}/bancas`), bancaParaSalvar);
+        setSucesso("Banca adicionada com sucesso!");
+        showCustomModal("Banca adicionada com sucesso!", "success");
+      }
+      // Limpar formulário
+      setNovaBanca({
+        data: '',
+        horarioInicio: '',
+        horarioFim: '',
+        local: '',
+        discente: '',
+        titulo: '',
+        orientador: '',
+        avaliador1: '',
+        avaliador2: '',
+      });
+      setErro('');
+    } catch (error) {
+      console.error("Erro ao salvar banca:", error);
+      setErro("Erro ao salvar banca. Por favor, tente novamente.");
+      showCustomModal("Erro ao salvar banca. Por favor, tente novamente.", "error");
+    }
+  };
+
+  // Função para preencher o formulário para edição
+  const handleEdit = (banca) => {
+    setNovaBanca({
+      data: banca.data,
+      horarioInicio: banca.horarioInicio,
+      horarioFim: banca.horarioFim,
+      local: banca.local,
+      discente: banca.discente,
+      titulo: banca.titulo,
+      orientador: banca.orientador,
+      avaliador1: banca.avaliador1 || '', // Garante que é string vazia se undefined/null
+      avaliador2: banca.avaliador2 || '', // Garante que é string vazia se undefined/null
+    });
+    setEditandoBancaId(banca.id);
+    setErro('');
+    setSucesso('');
+  };
+
+  // Função para confirmar a exclusão de uma banca
+  const handleDeleteConfirm = (id) => {
+    showCustomModal("Tem certeza que deseja excluir esta banca?", "confirm", () => handleDelete(id));
+  };
+
+  // Função para excluir uma banca
+  const handleDelete = async (id) => {
+    closeCustomModal(); // Fechar o modal de confirmação
+    if (!userId) {
+      showCustomModal("Usuário não autenticado. Por favor, tente novamente.", "error");
+      return;
+    }
+    try {
+      await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/bancas`, id));
+      setSucesso("Banca excluída com sucesso!");
+      showCustomModal("Banca excluída com sucesso!", "success");
+    } catch (error) {
+      console.error("Erro ao excluir banca:", error);
+      setErro("Erro ao excluir banca. Por favor, tente novamente.");
+      showCustomModal("Erro ao excluir banca. Por favor, tente novamente.", "error");
+    }
+  };
+
+  // Função para formatar a data para exibição
+  const formatarData = (dataString) => {
+    if (!dataString) return '';
+    try {
+      const [ano, mes, dia] = dataString.split('-');
+      return `${dia}/${mes}/${ano}`;
+    } catch (e) {
+      return dataString; // Retorna a string original se houver erro na formatação
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4 font-inter">
+      <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          Gerenciador de Bancas de TCC
+        </h1>
+
+        {/* Exibe o ID do usuário para fins de depuração/identificação */}
+        {userId && (
+          <div className="mb-4 text-center text-sm text-gray-600">
+            Seu ID de Usuário: <span className="font-mono bg-gray-200 p-1 rounded">{userId}</span>
+          </div>
+        )}
+
+        {/* Formulário para adicionar/editar banca */}
+        <div className="mb-8 p-6 bg-blue-50 rounded-lg shadow-inner">
+          <h2 className="text-2xl font-semibold mb-4 text-blue-700">
+            {editandoBancaId ? 'Editar Banca' : 'Adicionar Nova Banca'}
+          </h2>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="data" className="block text-sm font-medium text-gray-700">Data</label>
+              <select
+                id="data"
+                name="data"
+                value={novaBanca.data}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Selecione uma data</option>
+                {datasDisponiveis.map((data, index) => (
+                  <option key={index} value={data}>{formatarData(data)}</option>
+                ))}
+                {/* Adicionar opção para inserir nova data */}
+                <option value="Outra">Outra (digitar)</option>
+              </select>
+              {novaBanca.data === 'Outra' && (
+                <input
+                  type="date"
+                  name="data"
+                  value={novaBanca.data === 'Outra' ? '' : novaBanca.data} // Limpa o campo se "Outra" for selecionada
+                  onChange={(e) => setNovaBanca(prev => ({ ...prev, data: e.target.value }))}
+                  placeholder="Selecione a nova data"
+                  className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              )}
+            </div>
+            <div>
+              <label htmlFor="horarioInicio" className="block text-sm font-medium text-gray-700">Horário Início</label>
+              <input
+                type="time"
+                id="horarioInicio"
+                name="horarioInicio"
+                value={novaBanca.horarioInicio}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="horarioFim" className="block text-sm font-medium text-gray-700">Horário Fim</label>
+              <input
+                type="time"
+                id="horarioFim"
+                name="horarioFim"
+                value={novaBanca.horarioFim}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="local" className="block text-sm font-medium text-gray-700">Local</label>
+              <select
+                id="local"
+                name="local"
+                value={novaBanca.local}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Selecione um local</option>
+                {salas.map((sala, index) => (
+                  <option key={index} value={sala}>{sala}</option>
+                ))}
+                {/* Adicionar opção para inserir novo local */}
+                <option value="Outro">Outro (digitar)</option>
+              </select>
+              {novaBanca.local === 'Outro' && (
+                <input
+                  type="text"
+                  name="local"
+                  value={novaBanca.local === 'Outro' ? '' : novaBanca.local} // Limpa o campo se "Outro" for selecionado
+                  onChange={(e) => setNovaBanca(prev => ({ ...prev, local: e.target.value }))}
+                  placeholder="Digite o novo local"
+                  className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              )}
+            </div>
+            <div>
+              <label htmlFor="discente" className="block text-sm font-medium text-gray-700">Discente</label>
+              <input
+                type="text"
+                id="discente"
+                name="discente"
+                value={novaBanca.discente}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="titulo" className="block text-sm font-medium text-gray-700">Título / Tema</label>
+              <input
+                type="text"
+                id="titulo"
+                name="titulo"
+                value={novaBanca.titulo}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="orientador" className="block text-sm font-medium text-gray-700">Orientador</label>
+              <select
+                id="orientador"
+                name="orientador"
+                value={novaBanca.orientador}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Selecione um orientador</option>
+                {professores.map((prof, index) => (
+                  <option key={index} value={prof}>{prof}</option>
+                ))}
+                {/* Adicionar opção para inserir novo professor */}
+                <option value="Outro">Outro (digitar)</option>
+              </select>
+              {novaBanca.orientador === 'Outro' && (
+                <input
+                  type="text"
+                  name="orientador"
+                  value={novaBanca.orientador === 'Outro' ? '' : novaBanca.orientador}
+                  onChange={(e) => setNovaBanca(prev => ({ ...prev, orientador: e.target.value }))}
+                  placeholder="Digite o nome do novo orientador"
+                  className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              )}
+            </div>
+            <div>
+              <label htmlFor="avaliador1" className="block text-sm font-medium text-gray-700">Avaliador 1</label>
+              <select
+                id="avaliador1"
+                name="avaliador1"
+                value={novaBanca.avaliador1}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Selecione um avaliador</option>
+                {professores.map((prof, index) => (
+                  <option key={index} value={prof}>{prof}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="avaliador2" className="block text-sm font-medium text-gray-700">Avaliador 2</label>
+              <select
+                id="avaliador2"
+                name="avaliador2"
+                value={novaBanca.avaliador2}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Selecione um avaliador</option>
+                {professores.map((prof, index) => (
+                  <option key={index} value={prof}>{prof}</option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-2 flex justify-end space-x-2">
+              <button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                {editandoBancaId ? 'Atualizar Banca' : 'Adicionar Banca'}
+              </button>
+              {editandoBancaId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditandoBancaId(null);
+                    setNovaBanca({
+                      data: '', horarioInicio: '', horarioFim: '', local: '', discente: '',
+                      titulo: '', orientador: '', avaliador1: '', avaliador2: '',
+                    });
+                    setErro('');
+                    setSucesso('');
+                  }}
+                  className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                >
+                  Cancelar Edição
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+
+        {/* Lista de Bancas */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">Bancas Agendadas</h2>
+          {bancas.length === 0 ? (
+            <p className="text-center text-gray-600">Nenhuma banca agendada ainda.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead className="bg-gray-200"><tr>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Data</th>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Horário</th>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Local</th>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Discente</th>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Orientador</th>
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Avaliadores</th> {/* Mudou para Avaliadores */}
+                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Ações</th>
+                </tr></thead>
+                <tbody>{bancas.map((banca) => (
+                  <tr key={banca.id} className="hover:bg-gray-50">
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">{formatarData(banca.data)}</td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.horarioInicio} - {banca.horarioFim}</td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.local}</td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.discente}</td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.orientador}</td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">
+                      {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''} {/* Exibe os avaliadores */}
+                    </td>
+                    <td className="py-2 px-4 border-b text-sm text-gray-700">
+                      <button
+                        onClick={() => handleEdit(banca)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-xs mr-2 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDeleteConfirm(banca.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Modal Personalizado */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+            <h3 className={`text-lg font-bold mb-4 ${modalType === 'error' ? 'text-red-600' : modalType === 'success' ? 'text-green-600' : 'text-gray-800'}`}>
+              {modalType === 'error' ? 'Erro!' : modalType === 'success' ? 'Sucesso!' : 'Confirmação'}
+            </h3>
+            <p className="mb-4 text-gray-700">{modalMessage}</p>
+            <div className="flex justify-end space-x-2">
+              {modalType === 'confirm' && (
+                <>
+                  <button
+                    onClick={closeCustomModal}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (modalAction) modalAction();
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+                  >
+                    Confirmar
+                  </button>
+                </>
+              )}
+              {(modalType === 'success' || modalType === 'error') && (
+                <button
+                  onClick={closeCustomModal}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+                >
+                  OK
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
