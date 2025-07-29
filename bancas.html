@@ -64,7 +64,7 @@ const App = () => {
         if (typeof firebase !== 'undefined') {
           const firebaseApp = initializeApp(firebaseConfig);
           const firestoreDb = firebase.firestore(firebaseApp);
-          const authInstance = getAuth(firebaseApp);
+          const authInstance = firebase.auth(firebaseApp);
           
           setApp(firebaseApp);
           setDb(firestoreDb);
@@ -139,14 +139,14 @@ const App = () => {
 
     const authenticate = async () => {
       try {
-        await signInAnonymously(auth);
+        await auth.signInAnonymously();
       } catch (error) {
         console.error("Erro na autenticação Firebase:", error);
         showCustomModal("Erro ao autenticar. Por favor, tente novamente.", "error");
       }
     };
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUserId(user.uid);
         setIsAuthReady(true);
@@ -168,10 +168,10 @@ const App = () => {
   useEffect(() => {
     if (!firebaseReady || !db || !isAuthReady || !userId) return;
 
-    const bancasRef = collection(db, `users/${userId}/bancas`);
-    const q = query(bancasRef);
+    const bancasRef = db.collection(`users/${userId}/bancas`);
+    const q = bancasRef;
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubscribe = q.onSnapshot((snapshot) => {
       const bancasData = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
@@ -309,14 +309,14 @@ const App = () => {
 
       if (editandoBancaId) {
         // Atualizar banca existente
-        const bancaRef = doc(db, `users/${userId}/bancas`, editandoBancaId);
-        await updateDoc(bancaRef, bancaParaSalvar);
+        const bancaRef = db.collection(`users/${userId}/bancas`).doc(editandoBancaId);
+        await bancaRef.update(bancaParaSalvar);
         setSucesso("Banca atualizada com sucesso!");
         showCustomModal("Banca atualizada com sucesso!", "success");
         setEditandoBancaId(null);
       } else {
         // Adicionar nova banca
-        await addDoc(collection(db, `users/${userId}/bancas`), bancaParaSalvar);
+        await db.collection(`users/${userId}/bancas`).add(bancaParaSalvar);
         setSucesso("Banca adicionada com sucesso!");
         showCustomModal("Banca adicionada com sucesso!", "success");
       }
@@ -371,7 +371,7 @@ const App = () => {
       return;
     }
     try {
-      await deleteDoc(doc(db, `users/${userId}/bancas`, id));
+      await db.collection(`users/${userId}/bancas`).doc(id).delete();
       setSucesso("Banca excluída com sucesso!");
       showCustomModal("Banca excluída com sucesso!", "success");
     } catch (error) {
@@ -889,3 +889,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
+
