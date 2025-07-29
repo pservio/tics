@@ -380,7 +380,7 @@ const App = () => {
                 <input
                   type="date"
                   name="data"
-                  value={novaBanca.data === 'Outra' ? '' : novaBanca.data} // Limpa o campo se "Outra" for selecionada
+                  value={''} // Explicitamente definido como string vazia
                   onChange={(e) => setNovaBanca(prev => ({ ...prev, data: e.target.value }))}
                   placeholder="Selecione a nova data"
                   className="mt-2 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -562,41 +562,45 @@ const App = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                <thead className="bg-gray-200"><tr>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Data</th>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Horário</th>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Local</th>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Discente</th>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Orientador</th>
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Avaliadores</th> {/* Mudou para Avaliadores */}
-                  <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Ações</th>
-                </tr></thead>
-                <tbody>{bancas.map((banca) => (
-                  <tr key={banca.id} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">{formatarData(banca.data)}</td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.horarioInicio} - {banca.horarioFim}</td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.local}</td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.discente}</td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.orientador}</td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">
-                      {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''} {/* Exibe os avaliadores */}
-                    </td>
-                    <td className="py-2 px-4 border-b text-sm text-gray-700">
-                      <button
-                        onClick={() => handleEdit(banca)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-xs mr-2 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDeleteConfirm(banca.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs shadow-md transition duration-300 ease-in-out transform hover:scale-105"
-                      >
-                        Excluir
-                      </button>
-                    </td>
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Data</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Horário</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Local</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Discente</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Orientador</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Avaliadores</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">Ações</th>
                   </tr>
-                ))}</tbody>
+                </thead>
+                <tbody>
+                  {bancas.map((banca) => (
+                    <tr key={banca.id} className="hover:bg-gray-50">
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">{formatarData(banca.data)}</td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.horarioInicio} - {banca.horarioFim}</td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.local}</td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.discente}</td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">{banca.orientador}</td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">
+                        {banca.avaliador1}{banca.avaliador2 ? ` / ${banca.avaliador2}` : ''}
+                      </td>
+                      <td className="py-2 px-4 border-b text-sm text-gray-700">
+                        <button
+                          onClick={() => handleEdit(banca)}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-xs mr-2 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDeleteConfirm(banca.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Excluir
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           )}
