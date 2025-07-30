@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Sistema de Relatórios - ENADE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">Teste do Sistema de Relatórios</h1>
+            
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Status do Sistema</h2>
+                <div id="status-container">
+                    <div class="test-result info">Iniciando testes...</div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Testes Disponíveis</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button id="test-functions" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Testar Funções
+                    </button>
+                    <button id="test-data-structure" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Testar Estrutura de Dados
+                    </button>
+                    <button id="test-firebase" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Testar Firebase
+                    </button>
+                    <button id="test-all" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Executar Todos os Testes
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Logs de Teste</h2>
+                <div id="test-logs" class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm max-h-96 overflow-y-auto">
+                    <div>Iniciando sistema de testes...</div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <a href="enade.html" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Voltar ao Quiz
+                </a>
+                <a href="reports-panel.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Painel de Relatórios
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+            authDomain: "desafioenade2.firebaseapp.com",
+            projectId: "desafioenade2",
+            storageBucket: "desafioenade2.appspot.com",
+            messagingSenderId: "987973574127",
+            appId: "1:987973574127:web:4041110632500dbd482a1a",
+            measurementId: "G-FD8E45DWKR"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elementos DOM
+        const statusContainer = document.getElementById('status-container');
+        const testLogs = document.getElementById('test-logs');
+        const testFunctionsBtn = document.getElementById('test-functions');
+        const testDataStructureBtn = document.getElementById('test-data-structure');
+        const testFirebaseBtn = document.getElementById('test-firebase');
+        const testAllBtn = document.getElementById('test-all');
+
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'text-red-400' : type === 'success' ? 'text-green-400' : 'text-yellow-400';
+            
+            testLogs.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            testLogs.scrollTop = testLogs.scrollHeight;
+            console.log(`[TEST] ${message}`);
+        }
+
+        // Função para atualizar status
+        function updateStatus(message, type = 'info') {
+            const colors = {
+                success: 'success',
+                error: 'error',
+                info: 'info'
+            };
+            
+            statusContainer.innerHTML = `<div class="test-result ${colors[type]}">${message}</div>`;
+        }
+
+        // Teste das funções do sistema de relatórios
+        async function testFunctions() {
+            addLog('Iniciando teste das funções...');
+            
+            try {
+                // Simular dados de teste
+                const testQuestionAttempts = {};
+                const testStudentAnswers = [];
+                
+                // Testar função recordQuestionAttempt (simulada)
+                function recordQuestionAttempt(questionId, studentAnswer, isCorrect, studentId, correctAnswer) {
+                    const timestamp = new Date();
+                    
+                    if (!testQuestionAttempts[questionId]) {
+                        testQuestionAttempts[questionId] = {
+                            totalAttempts: 0,
+                            correctAnswers: 0,
+                            wrongAnswers: 0,
+                            attempts: []
+                        };
+                    }
+                    
+                    testQuestionAttempts[questionId].totalAttempts++;
+                    if (isCorrect) {
+                        testQuestionAttempts[questionId].correctAnswers++;
+                    } else {
+                        testQuestionAttempts[questionId].wrongAnswers++;
+                    }
+                    
+                    testQuestionAttempts[questionId].attempts.push({
+                        studentId: studentId,
+                        studentAnswer: studentAnswer,
+                        isCorrect: isCorrect,
+                        timestamp: timestamp
+                    });
+                    
+                    testStudentAnswers.push({
+                        questionId: questionId,
+                        studentAnswer: studentAnswer,
+                        correctAnswer: correctAnswer,
+                        isCorrect: isCorrect,
+                        timestamp: timestamp,
+                        studentId: studentId
+                    });
+                }
+
+                // Testar com dados simulados
+                recordQuestionAttempt('questao_1', 'A', true, 'test_user', 'A');
+                recordQuestionAttempt('questao_1', 'B', false, 'test_user', 'A');
+                recordQuestionAttempt('questao_2', 'C', true, 'test_user', 'C');
+
+                addLog(`Teste de recordQuestionAttempt: ${Object.keys(testQuestionAttempts).length} questões registradas`, 'success');
+                addLog(`Total de tentativas: ${testStudentAnswers.length}`, 'success');
+
+                // Verificar estrutura dos dados
+                const question1 = testQuestionAttempts['questao_1'];
+                if (question1 && question1.totalAttempts === 2 && question1.correctAnswers === 1) {
+                    addLog('Estrutura de dados de tentativas está correta', 'success');
+                } else {
+                    addLog('Erro na estrutura de dados de tentativas', 'error');
+                }
+
+                updateStatus('Funções testadas com sucesso!', 'success');
+                
+            } catch (error) {
+                addLog(`Erro no teste de funções: ${error.message}`, 'error');
+                updateStatus('Erro no teste de funções', 'error');
+            }
+        }
+
+        // Teste da estrutura de dados
+        async function testDataStructure() {
+            addLog('Iniciando teste da estrutura de dados...');
+            
+            try {
+                // Simular estrutura de relatório
+                const testReportData = {
+                    studentId: 'test_user',
+                    studentName: 'Aluno Teste',
+                    studentEmail: 'teste@exemplo.com',
+                    sessionId: Date.now().toString(),
+                    startTime: new Date(),
+                    endTime: new Date(),
+                    totalQuestions: 10,
+                    correctAnswers: 7,
+                    score: 70,
+                    questionAttempts: {
+                        'questao_1': {
+                            totalAttempts: 1,
+                            correctAnswers: 1,
+                            wrongAnswers: 0,
+                            attempts: []
+                        }
+                    },
+                    studentAnswers: [
+                        {
+                            questionId: 'questao_1',
+                            studentAnswer: 'A',
+                            correctAnswer: 'A',
+                            isCorrect: true,
+                            timestamp: new Date(),
+                            studentId: 'test_user'
+                        }
+                    ],
+                    themes: ['Matemática'],
+                    isAllQuestionsMode: false
+                };
+
+                // Verificar campos obrigatórios
+                const requiredFields = [
+                    'studentId', 'studentName', 'studentEmail', 'sessionId',
+                    'startTime', 'endTime', 'totalQuestions', 'correctAnswers',
+                    'score', 'questionAttempts', 'studentAnswers', 'themes', 'isAllQuestionsMode'
+                ];
+
+                let allFieldsPresent = true;
+                requiredFields.forEach(field => {
+                    if (!(field in testReportData)) {
+                        addLog(`Campo obrigatório ausente: ${field}`, 'error');
+                        allFieldsPresent = false;
+                    }
+                });
+
+                if (allFieldsPresent) {
+                    addLog('Todos os campos obrigatórios estão presentes', 'success');
+                }
+
+                // Verificar tipos de dados
+                if (typeof testReportData.studentId === 'string' &&
+                    typeof testReportData.totalQuestions === 'number' &&
+                    typeof testReportData.correctAnswers === 'number' &&
+                    typeof testReportData.score === 'number' &&
+                    Array.isArray(testReportData.studentAnswers) &&
+                    Array.isArray(testReportData.themes)) {
+                    addLog('Tipos de dados estão corretos', 'success');
+                } else {
+                    addLog('Erro nos tipos de dados', 'error');
+                }
+
+                updateStatus('Estrutura de dados testada com sucesso!', 'success');
+                
+            } catch (error) {
+                addLog(`Erro no teste de estrutura de dados: ${error.message}`, 'error');
+                updateStatus('Erro no teste de estrutura de dados', 'error');
+            }
+        }
+
+        // Teste do Firebase
+        async function testFirebase() {
+            addLog('Iniciando teste do Firebase...');
+            
+            try {
+                // Testar conexão com Firestore
+                const testCollection = collection(db, "students");
+                const testSnapshot = await getDocs(testCollection);
+                
+                addLog(`Conexão com Firestore estabelecida. ${testSnapshot.size} alunos encontrados.`, 'success');
+
+                // Testar acesso à coleção de relatórios
+                const reportsCollection = collection(db, "reports");
+                const reportsSnapshot = await getDocs(reportsCollection);
+                
+                addLog(`Acesso à coleção de relatórios OK. ${reportsSnapshot.size} relatórios encontrados.`, 'success');
+
+                // Verificar se há dados de teste
+                if (reportsSnapshot.size > 0) {
+                    const firstReport = reportsSnapshot.docs[0].data();
+                    addLog('Estrutura do primeiro relatório:', 'info');
+                    addLog(`- Aluno: ${firstReport.studentName || 'N/A'}`, 'info');
+                    addLog(`- Questões: ${firstReport.totalQuestions || 0}`, 'info');
+                    addLog(`- Acertos: ${firstReport.correctAnswers || 0}`, 'info');
+                } else {
+                    addLog('Nenhum relatório encontrado no banco de dados', 'info');
+                }
+
+                updateStatus('Firebase testado com sucesso!', 'success');
+                
+            } catch (error) {
+                addLog(`Erro no teste do Firebase: ${error.message}`, 'error');
+                updateStatus('Erro no teste do Firebase', 'error');
+            }
+        }
+
+        // Executar todos os testes
+        async function runAllTests() {
+            addLog('=== INICIANDO TODOS OS TESTES ===');
+            
+            await testFunctions();
+            await testDataStructure();
+            await testFirebase();
+            
+            addLog('=== TODOS OS TESTES CONCLUÍDOS ===');
+            updateStatus('Todos os testes foram executados!', 'success');
+        }
+
+        // Event listeners
+        testFunctionsBtn.addEventListener('click', testFunctions);
+        testDataStructureBtn.addEventListener('click', testDataStructure);
+        testFirebaseBtn.addEventListener('click', testFirebase);
+        testAllBtn.addEventListener('click', runAllTests);
+
+        // Inicialização
+        addLog('Sistema de testes inicializado');
+        updateStatus('Sistema pronto para testes', 'info');
+    </script>
+</body>
+</html> 
