@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar Administrador - ENADE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Configurar Administrador</h1>
+            <p class="text-gray-600">Crie o primeiro administrador do sistema</p>
+        </div>
+
+        <form id="setup-form" class="space-y-6">
+            <div>
+                <label for="admin-name" class="block text-sm font-medium text-gray-700 mb-2">Nome do Administrador</label>
+                <input type="text" id="admin-name" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Nome completo">
+            </div>
+
+            <div>
+                <label for="admin-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="email" id="admin-email" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="admin@exemplo.com">
+            </div>
+
+            <div>
+                <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+                <input type="password" id="admin-password" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Senha forte (mínimo 6 caracteres)">
+            </div>
+
+            <div>
+                <label for="admin-password-confirm" class="block text-sm font-medium text-gray-700 mb-2">Confirmar Senha</label>
+                <input type="password" id="admin-password-confirm" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Confirme a senha">
+            </div>
+
+            <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Criar Administrador
+            </button>
+        </form>
+
+        <div id="setup-status" class="mt-4"></div>
+
+        <div class="mt-8 text-center">
+            <a href="admin-panel.html" class="text-sm text-gray-500 hover:text-gray-700 underline">
+                Voltar ao Painel Administrativo
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+            authDomain: "desafioenade2.firebaseapp.com",
+            projectId: "desafioenade2",
+            storageBucket: "desafioenade2.appspot.com",
+            messagingSenderId: "987973574127",
+            appId: "1:987973574127:web:4041110632500dbd482a1a",
+            measurementId: "G-FD8E45DWKR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const setupForm = document.getElementById('setup-form');
+        const setupStatus = document.getElementById('setup-status');
+
+        // Verificar se já existe um admin
+        async function checkExistingAdmin() {
+            try {
+                const adminSnapshot = await getDocs(collection(db, "admins"));
+                if (!adminSnapshot.empty) {
+                    showMessage('Já existe um administrador configurado. Use o painel administrativo para fazer login.', 'error');
+                    setupForm.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Erro ao verificar administradores:', error);
+            }
+        }
+
+        // Executar verificação ao carregar
+        checkExistingAdmin();
+
+        // Criar administrador
+        setupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('admin-name').value;
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const passwordConfirm = document.getElementById('admin-password-confirm').value;
+
+            // Validações
+            if (!name || !email || !password || !passwordConfirm) {
+                showMessage('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('A senha deve ter pelo menos 6 caracteres.', 'error');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                showMessage('As senhas não coincidem.', 'error');
+                return;
+            }
+
+            try {
+                const submitBtn = setupForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Criando...';
+                
+                // Criar usuário no Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const uid = userCredential.user.uid;
+
+                // Salvar dados do admin no Firestore
+                await addDoc(collection(db, "admins"), {
+                    uid: uid,
+                    name: name,
+                    email: email,
+                    role: 'admin',
+                    createdAt: new Date()
+                });
+
+                showMessage('Administrador criado com sucesso! Redirecionando para o painel administrativo...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'admin-panel.html';
+                }, 2000);
+                
+            } catch (error) {
+                let errorMessage = 'Erro ao criar administrador.';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Este email já está em uso.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email inválido.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'A senha é muito fraca.';
+                        break;
+                    default:
+                        errorMessage = `Erro: ${error.message}`;
+                }
+                
+                showMessage(errorMessage, 'error');
+            } finally {
+                const submitBtn = setupForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Criar Administrador';
+            }
+        });
+
+        // Mostrar mensagens
+        function showMessage(message, type = 'info') {
+            const colors = {
+                success: 'text-green-700 bg-green-100 border-green-400',
+                error: 'text-red-700 bg-red-100 border-red-400',
+                info: 'text-blue-700 bg-blue-100 border-blue-400'
+            };
+            
+            setupStatus.innerHTML = `
+                <div class="border px-4 py-3 rounded ${colors[type]}">
+                    ${message}
+                </div>
+            `;
+            
+            setTimeout(() => {
+                setupStatus.innerHTML = '';
+            }, 10000);
+        }
+    </script>
+</body>
+</html> 

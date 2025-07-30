@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Cache - ENADE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">Limpar Cache e Forçar Recarregamento</h1>
+        
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Problemas Identificados:</h2>
+            <ul class="list-disc list-inside text-red-600 mb-4">
+                <li>Erro: <code>pergunta[campo].trim is not a function</code></li>
+                <li>Aviso: CDN do Tailwind CSS em produção</li>
+            </ul>
+        </div>
+        
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Soluções Aplicadas:</h2>
+            <ul class="list-disc list-inside text-green-600 mb-4">
+                <li>✅ Validação corrigida para campos numéricos</li>
+                <li>✅ Modo "Todas as questões" implementado</li>
+                <li>✅ Pontuação diferenciada</li>
+                <li>⚠️ Aviso do Tailwind CSS (esperado)</li>
+            </ul>
+        </div>
+        
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Ações Recomendadas:</h2>
+            <div class="space-y-2">
+                <button onclick="limparCache()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    🔄 Limpar Cache do Navegador
+                </button>
+                <button onclick="recarregarPagina()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    🚀 Recarregar Página Principal
+                </button>
+                <button onclick="testarValidacao()" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                    🧪 Testar Validação
+                </button>
+            </div>
+        </div>
+        
+        <div id="resultado" class="mt-4 p-4 bg-gray-100 rounded"></div>
+    </div>
+
+    <script>
+        function limparCache() {
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                });
+            }
+            
+            // Forçar recarregamento sem cache
+            window.location.reload(true);
+        }
+        
+        function recarregarPagina() {
+            window.open('enade.html?v=' + Date.now(), '_blank');
+        }
+        
+        function testarValidacao() {
+            window.open('teste-validacao.html', '_blank');
+        }
+        
+        // Verificar se há problemas de cache
+        window.addEventListener('load', function() {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = `
+                <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+                    <strong>ℹ️ Informações:</strong>
+                    <ul class="list-disc list-inside mt-2">
+                        <li>Se você ainda vê o erro, tente limpar o cache do navegador</li>
+                        <li>Use Ctrl+F5 (ou Cmd+Shift+R no Mac) para forçar recarregamento</li>
+                        <li>Verifique se está usando a versão mais recente dos arquivos</li>
+                    </ul>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html> 

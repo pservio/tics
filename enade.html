@@ -474,33 +474,71 @@
 
         // --- Lógica de Autenticação Firebase ---
         let currentUserUid = null; // Variável para armazenar o UID do usuário logado
+        let currentStudentData = null; // Dados do aluno logado
 
         // Listener para mudanças no estado de autenticação
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Usuário está logado
-                currentUserUid = user.uid;
-                authStatusElement.textContent = 'Logado';
-                userUidElement.textContent = `UID: ${user.uid}`;
-                console.log('Usuário logado:', user.uid);
+                // Verificar se é um aluno válido
+                const isValidStudent = await checkIfValidStudent(user.uid);
+                if (isValidStudent) {
+                    currentUserUid = user.uid;
+                    await loadStudentData(user.uid);
+                    authStatusElement.textContent = 'Logado';
+                    userUidElement.textContent = `Aluno: ${currentStudentData?.name || 'N/A'}`;
+                    console.log('Aluno logado:', user.uid);
+                } else {
+                    // Redirecionar para login se não for aluno válido
+                    showModal('Acesso negado. Faça login como aluno para acessar o sistema.');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                }
             } else {
-                // Usuário está deslogado
+                // Usuário não está logado - redirecionar para login
                 currentUserUid = null;
-                authStatusElement.textContent = 'Deslogado';
-                userUidElement.textContent = 'UID: N/A';
-                console.log('Usuário deslogado. Tentando login anônimo...');
-                // Tenta fazer login anonimamente se não houver usuário
-                signInAnonymously(auth)
-                    .then(() => {
-                        console.log('Login anônimo bem-sucedido!');
-                        // onAuthStateChanged será chamado novamente com o usuário anônimo
-                    })
-                    .catch((error) => {
-                        console.error('Erro no login anônimo:', error);
-                        showModal(`Erro ao fazer login anônimo: ${error.message}`);
-                    });
+                currentStudentData = null;
+                authStatusElement.textContent = 'Não logado';
+                userUidElement.textContent = 'Aluno: N/A';
+                console.log('Usuário não logado. Redirecionando para login...');
+                showModal('Faça login para acessar o sistema.');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
             }
         });
+
+        // Verificar se é um aluno válido
+        async function checkIfValidStudent(uid) {
+            try {
+                const studentQuery = query(collection(db, "students"), where("uid", "==", uid));
+                const studentSnapshot = await getDocs(studentQuery);
+                
+                if (!studentSnapshot.empty) {
+                    const studentData = studentSnapshot.docs[0].data();
+                    return studentData.status === 'active';
+                }
+                return false;
+            } catch (error) {
+                console.error('Erro ao verificar aluno:', error);
+                return false;
+            }
+        }
+
+        // Carregar dados do aluno
+        async function loadStudentData(uid) {
+            try {
+                const studentQuery = query(collection(db, "students"), where("uid", "==", uid));
+                const studentSnapshot = await getDocs(studentQuery);
+                
+                if (!studentSnapshot.empty) {
+                    currentStudentData = studentSnapshot.docs[0].data();
+                    console.log('Dados do aluno carregados:', currentStudentData);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do aluno:', error);
+            }
+        }
 
         // Botão de Sair
         if (signOutButton) {
@@ -861,10 +899,13 @@
             stopTimer();
 
             // Salvar pontuação no Firestore
-            if (currentUserUid && selectedTeam) {
+            if (currentUserUid && selectedTeam && currentStudentData) {
                 try {
                     await addDoc(collection(db, "ranking"), {
                         userId: currentUserUid,
+                        studentName: currentStudentData.name,
+                        studentEmail: currentStudentData.email,
+                        studentYear: currentStudentData.year,
                         team: selectedTeam,
                         score: finalScore,
                         timestamp: new Date()
@@ -876,7 +917,7 @@
                     showModal(`Desafio Finalizado! Erro ao registrar sua pontuação: ${e.message}`);
                 }
             } else {
-                showModal("Desafio Finalizado! Não foi possível registrar a pontuação (usuário ou time não definidos).");
+                showModal("Desafio Finalizado! Não foi possível registrar a pontuação (dados do aluno não disponíveis).");
             }
         }
 
