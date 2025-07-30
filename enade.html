@@ -313,7 +313,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { perguntasLocais } from './perguntas-locais.js';
+        import { perguntasLocais } from './perguntas-locais.js?v=2';
 
         // ⚠️ ALERTA DE SEGURANÇA: Em produção, mova estas configurações para variáveis de ambiente
         const firebaseConfig = {
@@ -441,6 +441,7 @@
         let questions = [];
         let totalQuestions = 3; // Padrão
         let userAnswers = [];
+        let isAllQuestionsMode = false; // Novo: indica se está no modo "todas as questões"
 
         // Função para exibir o modal de mensagem
         function showModal(message) {
@@ -649,13 +650,29 @@
                     showModal('As perguntas ainda estão carregando. Aguarde um momento e tente novamente.');
                     return;
                 }
-                totalQuestions = parseInt(document.querySelector('input[name="challenge-size"]:checked').value);
+                const selectedValue = document.querySelector('input[name="challenge-size"]:checked').value;
                 const temasSelecionados = getSelectedThemes();
                 let perguntasFiltradas = filterQuestionsByThemes(allPerguntas, temasSelecionados);
-                if (perguntasFiltradas.length < totalQuestions) {
-                    showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
+                
+                if (selectedValue === 'all') {
+                    // Modo "Todas as questões"
+                    isAllQuestionsMode = true;
+                    totalQuestions = perguntasFiltradas.length;
+                    questions = perguntasFiltradas.sort(() => 0.5 - Math.random()); // Embaralha todas
+                    if (perguntasFiltradas.length === 0) {
+                        showModal('Não há perguntas disponíveis para os temas selecionados.');
+                        return;
+                    }
+                } else {
+                    // Modo normal (3 ou 6 questões)
+                    isAllQuestionsMode = false;
+                    totalQuestions = parseInt(selectedValue);
+                    if (perguntasFiltradas.length < totalQuestions) {
+                        showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
+                        totalQuestions = perguntasFiltradas.length;
+                    }
+                    questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
                 }
-                questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
                 currentScore = 0;
                 currentQuestionIndex = 0;
                 userAnswers = [];
@@ -788,8 +805,13 @@
                     correta: correctAnswer
                 };
                 if (isCorrect) {
-                    currentScore += 10;
-                    showModal('Resposta Correta! +10 pontos.');
+                    if (isAllQuestionsMode) {
+                        currentScore += 1; // 1 ponto por questão no modo "todas as questões"
+                        showModal('Resposta Correta! +1 ponto.');
+                    } else {
+                        currentScore += 10; // 10 pontos por questão no modo normal
+                        showModal('Resposta Correta! +10 pontos.');
+                    }
                 } else {
                     showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
                 }
@@ -811,9 +833,25 @@
         }
 
         async function endChallenge() {
+            let finalScore = currentScore;
+            
+            // Verificar se está no modo "todas as questões" e se acertou todas
+            if (isAllQuestionsMode) {
+                const correctAnswers = userAnswers.filter(answer => answer && answer.escolhida === answer.correta).length;
+                const totalQuestions = questions.length;
+                
+                if (correctAnswers === totalQuestions && totalQuestions > 0) {
+                    // Duplicar pontos se acertou todas as questões
+                    finalScore = currentScore * 2;
+                    showModal(`🎉 PARABÉNS! Você acertou todas as ${totalQuestions} questões! Pontos duplicados: ${currentScore} → ${finalScore}`);
+                } else {
+                    showModal(`Desafio Finalizado! Você acertou ${correctAnswers} de ${totalQuestions} questões. Pontuação: ${currentScore}`);
+                }
+            }
+            
             sectionQuestion.classList.add('hidden');
             sectionChallengeFinished.classList.remove('hidden');
-            finalScoreElement.textContent = currentScore;
+            finalScoreElement.textContent = finalScore;
             stopTimer();
 
             // Salvar pontuação no Firestore
@@ -822,11 +860,11 @@
                     await addDoc(collection(db, "ranking"), {
                         userId: currentUserUid,
                         team: selectedTeam,
-                        score: currentScore,
+                        score: finalScore,
                         timestamp: new Date()
                     });
                     console.log("Pontuação salva no Firestore!");
-                    showModal(`Desafio Finalizado! Sua pontuação de ${currentScore} foi registrada para o time ${selectedTeam}.`);
+                    showModal(`Desafio Finalizado! Sua pontuação de ${finalScore} foi registrada para o time ${selectedTeam}.`);
                 } catch (e) {
                     console.error("Erro ao adicionar documento: ", e);
                     showModal(`Desafio Finalizado! Erro ao registrar sua pontuação: ${e.message}`);
@@ -849,6 +887,7 @@
                 teamCards.forEach(c => c.classList.remove('selected'));
                 stopTimer();
                 timerElement.textContent = '';
+                isAllQuestionsMode = false; // Reset do modo de questões
             });
         }
 
@@ -1091,7 +1130,15 @@
             // Validação das perguntas
             const perguntasValidas = perguntas.filter(pergunta => {
                 const camposObrigatorios = ['id', 'enunciado', 'opcao_A', 'opcao_B', 'opcao_C', 'opcao_D', 'opcao_E', 'resposta_correta'];
-                const temTodosCampos = camposObrigatorios.every(campo => pergunta[campo] && pergunta[campo].trim() !== '');
+                const temTodosCampos = camposObrigatorios.every(campo => {
+                    const valor = pergunta[campo];
+                    // Para campos numéricos (como id), verifica se existe e é válido
+                    if (campo === 'id') {
+                        return valor !== undefined && valor !== null && !isNaN(valor);
+                    }
+                    // Para campos de texto, verifica se existe e não está vazio
+                    return valor && typeof valor === 'string' && valor.trim() !== '';
+                });
                 const respostaValida = ['A', 'B', 'C', 'D', 'E'].includes(pergunta.resposta_correta);
                 
                 if (!temTodosCampos) {
@@ -1119,11 +1166,21 @@
             const temasSelecionados = getSelectedThemes();
             const todasPerguntas = allPerguntas;
             const filtradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
+            const selectedValue = document.querySelector('input[name="challenge-size"]:checked')?.value;
+            
+            let infoText = '';
             if (temasSelecionados.length === 0) {
-                themeCountInfo.textContent = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
+                infoText = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
             } else {
-                themeCountInfo.textContent = `${filtradas.length} perguntas disponíveis para os temas selecionados`;
+                infoText = `${filtradas.length} perguntas disponíveis para os temas selecionados`;
             }
+            
+            // Adicionar informação sobre pontuação se "Todas as questões" estiver selecionado
+            if (selectedValue === 'all' && filtradas.length > 0) {
+                infoText += ` | Modo "Todas as questões": 1 ponto por acerto, duplicação se acertar todas!`;
+            }
+            
+            themeCountInfo.textContent = infoText;
         }
 
         // Após a definição de sectionRanking e das demais seções:
