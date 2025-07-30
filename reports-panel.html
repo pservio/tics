@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Desempenho - ENADE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 800px; margin: auto; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-button:hover { color: #000; }
+        .chart-container { position: relative; height: 400px; margin: 20px 0; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Relatórios de Desempenho - ENADE</h1>
+                <div class="flex gap-4">
+                    <a href="admin-panel-fixed.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+                        Voltar ao Painel
+                    </a>
+                    <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                        Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status do Firebase -->
+            <div id="firebase-status" class="mb-6 p-4 bg-blue-100 rounded-lg">
+                <h3 class="font-semibold text-blue-800 mb-2">Status do Firebase:</h3>
+                <div id="firebase-info" class="text-sm text-blue-700">Verificando...</div>
+            </div>
+
+            <!-- Login do Admin -->
+            <div id="admin-login" class="mb-8">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Login Administrativo</h2>
+                <div class="flex gap-4 items-end">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="admin-email" class="border border-gray-300 rounded-lg px-4 py-2 w-64" placeholder="admin@exemplo.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+                        <input type="password" id="admin-password" class="border border-gray-300 rounded-lg px-4 py-2 w-64" placeholder="Senha">
+                    </div>
+                    <button id="admin-login-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">
+                        Entrar
+                    </button>
+                </div>
+                <div id="login-status" class="mt-2 text-sm"></div>
+            </div>
+
+            <!-- Painel Principal (oculto até login) -->
+            <div id="reports-panel" class="hidden">
+                <!-- Filtros -->
+                <div class="bg-gray-50 p-6 rounded-lg mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Filtros</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
+                            <select id="report-type" class="border border-gray-300 rounded-lg px-4 py-2 w-full">
+                                <option value="questions">Relatório por Questão</option>
+                                <option value="students">Relatório por Aluno</option>
+                                <option value="overview">Visão Geral</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Aluno (opcional)</label>
+                            <select id="student-filter" class="border border-gray-300 rounded-lg px-4 py-2 w-full">
+                                <option value="">Todos os alunos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Período</label>
+                            <select id="period-filter" class="border border-gray-300 rounded-lg px-4 py-2 w-full">
+                                <option value="all">Todo o período</option>
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="30">Últimos 30 dias</option>
+                                <option value="90">Últimos 90 dias</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button id="generate-report-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resultados -->
+                <div id="report-results" class="hidden">
+                    <!-- Relatório por Questão -->
+                    <div id="questions-report" class="hidden">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">Relatório por Questão</h3>
+                        <div class="chart-container">
+                            <canvas id="questions-chart"></canvas>
+                        </div>
+                        <div class="overflow-x-auto mt-8">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Questão ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Tentativas</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acertos</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Erros</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taxa de Acerto</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="questions-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Relatório por Aluno -->
+                    <div id="students-report" class="hidden">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">Relatório por Aluno</h3>
+                        <div class="chart-container">
+                            <canvas id="students-chart"></canvas>
+                        </div>
+                        <div class="overflow-x-auto mt-8">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aluno</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sessões</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Questões</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acertos</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taxa de Acerto</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Visão Geral -->
+                    <div id="overview-report" class="hidden">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">Visão Geral</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-blue-100 p-6 rounded-lg">
+                                <h4 class="text-lg font-semibold text-blue-800">Total de Sessões</h4>
+                                <p id="total-sessions" class="text-3xl font-bold text-blue-600">0</p>
+                            </div>
+                            <div class="bg-green-100 p-6 rounded-lg">
+                                <h4 class="text-lg font-semibold text-green-800">Total de Alunos</h4>
+                                <p id="total-students" class="text-3xl font-bold text-green-600">0</p>
+                            </div>
+                            <div class="bg-yellow-100 p-6 rounded-lg">
+                                <h4 class="text-lg font-semibold text-yellow-800">Total de Questões</h4>
+                                <p id="total-questions" class="text-3xl font-bold text-yellow-600">0</p>
+                            </div>
+                            <div class="bg-purple-100 p-6 rounded-lg">
+                                <h4 class="text-lg font-semibold text-purple-800">Taxa Média de Acerto</h4>
+                                <p id="average-accuracy" class="text-3xl font-bold text-purple-600">0%</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="chart-container">
+                                <canvas id="overview-chart-1"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="overview-chart-2"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal">&times;</span>
+            <h3 id="modal-title" class="text-lg font-semibold mb-4"></h3>
+            <div id="modal-content" class="text-gray-600">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+            authDomain: "desafioenade2.firebaseapp.com",
+            projectId: "desafioenade2",
+            storageBucket: "desafioenade2.appspot.com",
+            messagingSenderId: "987973574127",
+            appId: "1:987973574127:web:4041110632500dbd482a1a",
+            measurementId: "G-FD8E45DWKR"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elementos DOM
+        const adminLogin = document.getElementById('admin-login');
+        const reportsPanel = document.getElementById('reports-panel');
+        const adminEmail = document.getElementById('admin-email');
+        const adminPassword = document.getElementById('admin-password');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const loginStatus = document.getElementById('login-status');
+        const logoutBtn = document.getElementById('logout-btn');
+        const reportType = document.getElementById('report-type');
+        const studentFilter = document.getElementById('student-filter');
+        const periodFilter = document.getElementById('period-filter');
+        const generateReportBtn = document.getElementById('generate-report-btn');
+        const reportResults = document.getElementById('report-results');
+        const questionsReport = document.getElementById('questions-report');
+        const studentsReport = document.getElementById('students-report');
+        const overviewReport = document.getElementById('overview-report');
+        const detailsModal = document.getElementById('details-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+
+        let currentAdmin = null;
+        let charts = {};
+
+        // Verificar se o usuário já está logado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                checkIfAdmin(user.uid);
+            } else {
+                showLoginForm();
+            }
+        });
+
+        // Login do admin
+        adminLoginBtn.addEventListener('click', async () => {
+            const email = adminEmail.value;
+            const password = adminPassword.value;
+
+            if (!email || !password) {
+                showMessage('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            try {
+                adminLoginBtn.disabled = true;
+                adminLoginBtn.textContent = 'Entrando...';
+                
+                await signInWithEmailAndPassword(auth, email, password);
+                showMessage('Login realizado com sucesso!', 'success');
+            } catch (error) {
+                showMessage(`Erro no login: ${error.message}`, 'error');
+            } finally {
+                adminLoginBtn.disabled = false;
+                adminLoginBtn.textContent = 'Entrar';
+            }
+        });
+
+        // Verificar se é admin
+        async function checkIfAdmin(uid) {
+            try {
+                const adminQuery = query(collection(db, "admins"), where("uid", "==", uid));
+                const adminSnapshot = await getDocs(adminQuery);
+                
+                if (!adminSnapshot.empty) {
+                    currentAdmin = uid;
+                    showReportsPanel();
+                    loadStudents();
+                } else {
+                    showMessage('Acesso negado. Apenas administradores podem acessar este painel.', 'error');
+                    await signOut(auth);
+                }
+            } catch (error) {
+                showMessage(`Erro ao verificar permissões: ${error.message}`, 'error');
+            }
+        }
+
+        // Mostrar formulário de login
+        function showLoginForm() {
+            adminLogin.classList.remove('hidden');
+            reportsPanel.classList.add('hidden');
+            currentAdmin = null;
+        }
+
+        // Mostrar painel de relatórios
+        function showReportsPanel() {
+            adminLogin.classList.add('hidden');
+            reportsPanel.classList.remove('hidden');
+        }
+
+        // Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showMessage('Logout realizado com sucesso!', 'success');
+            } catch (error) {
+                showMessage(`Erro no logout: ${error.message}`, 'error');
+            }
+        });
+
+        // Carregar lista de alunos
+        async function loadStudents() {
+            try {
+                const studentsSnapshot = await getDocs(collection(db, "students"));
+                studentFilter.innerHTML = '<option value="">Todos os alunos</option>';
+                
+                studentsSnapshot.forEach((doc) => {
+                    const student = doc.data();
+                    const option = document.createElement('option');
+                    option.value = student.uid;
+                    option.textContent = `${student.name} (${student.email})`;
+                    studentFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar alunos:', error);
+            }
+        }
+
+        // Gerar relatório
+        generateReportBtn.addEventListener('click', async () => {
+            const type = reportType.value;
+            const studentId = studentFilter.value;
+            const period = periodFilter.value;
+
+            try {
+                generateReportBtn.disabled = true;
+                generateReportBtn.textContent = 'Gerando...';
+
+                switch (type) {
+                    case 'questions':
+                        await generateQuestionsReport(studentId, period);
+                        break;
+                    case 'students':
+                        await generateStudentsReport(studentId, period);
+                        break;
+                    case 'overview':
+                        await generateOverviewReport(period);
+                        break;
+                }
+
+                reportResults.classList.remove('hidden');
+            } catch (error) {
+                showMessage(`Erro ao gerar relatório: ${error.message}`, 'error');
+            } finally {
+                generateReportBtn.disabled = false;
+                generateReportBtn.textContent = 'Gerar Relatório';
+            }
+        });
+
+        // Gerar relatório por questão
+        async function generateQuestionsReport(studentId, period) {
+            // Ocultar outros relatórios
+            studentsReport.classList.add('hidden');
+            overviewReport.classList.add('hidden');
+            questionsReport.classList.remove('hidden');
+
+            // Buscar dados dos relatórios
+            let q = collection(db, "reports");
+            if (studentId) {
+                q = query(q, where("studentId", "==", studentId));
+            }
+            if (period !== 'all') {
+                const daysAgo = new Date();
+                daysAgo.setDate(daysAgo.getDate() - parseInt(period));
+                q = query(q, where("startTime", ">=", daysAgo));
+            }
+
+            const reportsSnapshot = await getDocs(q);
+            const questionStats = {};
+
+            reportsSnapshot.forEach((doc) => {
+                const report = doc.data();
+                if (report.questionAttempts) {
+                    Object.keys(report.questionAttempts).forEach(questionId => {
+                        const attempts = report.questionAttempts[questionId];
+                        if (!questionStats[questionId]) {
+                            questionStats[questionId] = {
+                                totalAttempts: 0,
+                                correctAnswers: 0,
+                                wrongAnswers: 0
+                            };
+                        }
+                        questionStats[questionId].totalAttempts += attempts.totalAttempts;
+                        questionStats[questionId].correctAnswers += attempts.correctAnswers;
+                        questionStats[questionId].wrongAnswers += attempts.wrongAnswers;
+                    });
+                }
+            });
+
+            // Criar gráfico
+            createQuestionsChart(questionStats);
+
+            // Preencher tabela
+            const tableBody = document.getElementById('questions-table-body');
+            tableBody.innerHTML = '';
+
+            Object.keys(questionStats).forEach(questionId => {
+                const stats = questionStats[questionId];
+                const accuracy = stats.totalAttempts > 0 ? 
+                    ((stats.correctAnswers / stats.totalAttempts) * 100).toFixed(1) : 0;
+
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${questionId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.totalAttempts}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.correctAnswers}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.wrongAnswers}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${accuracy}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="showQuestionDetails('${questionId}')" class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Gerar relatório por aluno
+        async function generateStudentsReport(studentId, period) {
+            // Ocultar outros relatórios
+            questionsReport.classList.add('hidden');
+            overviewReport.classList.add('hidden');
+            studentsReport.classList.remove('hidden');
+
+            // Buscar dados dos relatórios
+            let q = collection(db, "reports");
+            if (studentId) {
+                q = query(q, where("studentId", "==", studentId));
+            }
+            if (period !== 'all') {
+                const daysAgo = new Date();
+                daysAgo.setDate(daysAgo.getDate() - parseInt(period));
+                q = query(q, where("startTime", ">=", daysAgo));
+            }
+
+            const reportsSnapshot = await getDocs(q);
+            const studentStats = {};
+
+            reportsSnapshot.forEach((doc) => {
+                const report = doc.data();
+                const studentId = report.studentId;
+                
+                if (!studentStats[studentId]) {
+                    studentStats[studentId] = {
+                        name: report.studentName,
+                        email: report.studentEmail,
+                        sessions: 0,
+                        totalQuestions: 0,
+                        correctAnswers: 0
+                    };
+                }
+                
+                studentStats[studentId].sessions++;
+                studentStats[studentId].totalQuestions += report.totalQuestions || 0;
+                studentStats[studentId].correctAnswers += report.correctAnswers || 0;
+            });
+
+            // Criar gráfico
+            createStudentsChart(studentStats);
+
+            // Preencher tabela
+            const tableBody = document.getElementById('students-table-body');
+            tableBody.innerHTML = '';
+
+            Object.keys(studentStats).forEach(studentId => {
+                const stats = studentStats[studentId];
+                const accuracy = stats.totalQuestions > 0 ? 
+                    ((stats.correctAnswers / stats.totalQuestions) * 100).toFixed(1) : 0;
+
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${stats.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.sessions}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.totalQuestions}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${stats.correctAnswers}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${accuracy}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="showStudentDetails('${studentId}')" class="text-blue-600 hover:text-blue-900">Detalhes</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Gerar relatório de visão geral
+        async function generateOverviewReport(period) {
+            // Ocultar outros relatórios
+            questionsReport.classList.add('hidden');
+            studentsReport.classList.add('hidden');
+            overviewReport.classList.remove('hidden');
+
+            // Buscar dados dos relatórios
+            let q = collection(db, "reports");
+            if (period !== 'all') {
+                const daysAgo = new Date();
+                daysAgo.setDate(daysAgo.getDate() - parseInt(period));
+                q = query(q, where("startTime", ">=", daysAgo));
+            }
+
+            const reportsSnapshot = await getDocs(q);
+            let totalSessions = 0;
+            let totalQuestions = 0;
+            let totalCorrectAnswers = 0;
+            const uniqueStudents = new Set();
+            const dailyStats = {};
+
+            reportsSnapshot.forEach((doc) => {
+                const report = doc.data();
+                totalSessions++;
+                totalQuestions += report.totalQuestions || 0;
+                totalCorrectAnswers += report.correctAnswers || 0;
+                uniqueStudents.add(report.studentId);
+
+                // Estatísticas diárias
+                const date = report.startTime.toDate().toISOString().split('T')[0];
+                if (!dailyStats[date]) {
+                    dailyStats[date] = { sessions: 0, questions: 0, correct: 0 };
+                }
+                dailyStats[date].sessions++;
+                dailyStats[date].questions += report.totalQuestions || 0;
+                dailyStats[date].correct += report.correctAnswers || 0;
+            });
+
+            const averageAccuracy = totalQuestions > 0 ? 
+                ((totalCorrectAnswers / totalQuestions) * 100).toFixed(1) : 0;
+
+            // Atualizar métricas
+            document.getElementById('total-sessions').textContent = totalSessions;
+            document.getElementById('total-students').textContent = uniqueStudents.size;
+            document.getElementById('total-questions').textContent = totalQuestions;
+            document.getElementById('average-accuracy').textContent = averageAccuracy + '%';
+
+            // Criar gráficos
+            createOverviewCharts(dailyStats, totalSessions, uniqueStudents.size);
+        }
+
+        // Criar gráfico de questões
+        function createQuestionsChart(questionStats) {
+            const ctx = document.getElementById('questions-chart').getContext('2d');
+            
+            if (charts.questions) {
+                charts.questions.destroy();
+            }
+
+            const labels = Object.keys(questionStats);
+            const correctData = labels.map(id => questionStats[id].correctAnswers);
+            const wrongData = labels.map(id => questionStats[id].wrongAnswers);
+
+            charts.questions = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Acertos',
+                        data: correctData,
+                        backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                        borderColor: 'rgba(34, 197, 94, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Erros',
+                        data: wrongData,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráfico de alunos
+        function createStudentsChart(studentStats) {
+            const ctx = document.getElementById('students-chart').getContext('2d');
+            
+            if (charts.students) {
+                charts.students.destroy();
+            }
+
+            const labels = Object.values(studentStats).map(s => s.name);
+            const accuracyData = Object.values(studentStats).map(s => 
+                s.totalQuestions > 0 ? ((s.correctAnswers / s.totalQuestions) * 100) : 0
+            );
+
+            charts.students = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: accuracyData,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráficos de visão geral
+        function createOverviewCharts(dailyStats, totalSessions, totalStudents) {
+            // Gráfico 1: Sessões por dia
+            const ctx1 = document.getElementById('overview-chart-1').getContext('2d');
+            if (charts.overview1) {
+                charts.overview1.destroy();
+            }
+
+            const dates = Object.keys(dailyStats).sort();
+            const sessionsData = dates.map(date => dailyStats[date].sessions);
+
+            charts.overview1 = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Sessões',
+                        data: sessionsData,
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico 2: Distribuição de alunos
+            const ctx2 = document.getElementById('overview-chart-2').getContext('2d');
+            if (charts.overview2) {
+                charts.overview2.destroy();
+            }
+
+            charts.overview2 = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: ['Sessões', 'Alunos Únicos'],
+                    datasets: [{
+                        data: [totalSessions, totalStudents],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Mostrar detalhes da questão
+        window.showQuestionDetails = async (questionId) => {
+            try {
+                const q = query(collection(db, "reports"));
+                const reportsSnapshot = await getDocs(q);
+                const questionDetails = [];
+
+                reportsSnapshot.forEach((doc) => {
+                    const report = doc.data();
+                    if (report.questionAttempts && report.questionAttempts[questionId]) {
+                        const attempts = report.questionAttempts[questionId];
+                        attempts.attempts.forEach(attempt => {
+                            questionDetails.push({
+                                studentName: report.studentName,
+                                studentAnswer: attempt.studentAnswer,
+                                isCorrect: attempt.isCorrect,
+                                timestamp: attempt.timestamp
+                            });
+                        });
+                    }
+                });
+
+                modalTitle.textContent = `Detalhes da Questão ${questionId}`;
+                modalContent.innerHTML = `
+                    <div class="max-h-96 overflow-y-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left">Aluno</th>
+                                    <th class="px-4 py-2 text-left">Resposta</th>
+                                    <th class="px-4 py-2 text-left">Resultado</th>
+                                    <th class="px-4 py-2 text-left">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${questionDetails.map(detail => `
+                                    <tr>
+                                        <td class="px-4 py-2">${detail.studentName}</td>
+                                        <td class="px-4 py-2">${detail.studentAnswer}</td>
+                                        <td class="px-4 py-2">
+                                            <span class="px-2 py-1 rounded text-xs ${detail.isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                                ${detail.isCorrect ? 'Correto' : 'Incorreto'}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-2">${detail.timestamp.toDate().toLocaleString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                detailsModal.style.display = 'flex';
+            } catch (error) {
+                showMessage(`Erro ao carregar detalhes: ${error.message}`, 'error');
+            }
+        };
+
+        // Mostrar detalhes do aluno
+        window.showStudentDetails = async (studentId) => {
+            try {
+                const q = query(collection(db, "reports"), where("studentId", "==", studentId));
+                const reportsSnapshot = await getDocs(q);
+                const studentDetails = [];
+
+                reportsSnapshot.forEach((doc) => {
+                    const report = doc.data();
+                    studentDetails.push({
+                        sessionId: report.sessionId,
+                        totalQuestions: report.totalQuestions,
+                        correctAnswers: report.correctAnswers,
+                        score: report.score,
+                        startTime: report.startTime,
+                        themes: report.themes
+                    });
+                });
+
+                modalTitle.textContent = `Detalhes do Aluno`;
+                modalContent.innerHTML = `
+                    <div class="max-h-96 overflow-y-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left">Sessão</th>
+                                    <th class="px-4 py-2 text-left">Questões</th>
+                                    <th class="px-4 py-2 text-left">Acertos</th>
+                                    <th class="px-4 py-2 text-left">Pontuação</th>
+                                    <th class="px-4 py-2 text-left">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${studentDetails.map(detail => `
+                                    <tr>
+                                        <td class="px-4 py-2">${detail.sessionId}</td>
+                                        <td class="px-4 py-2">${detail.totalQuestions}</td>
+                                        <td class="px-4 py-2">${detail.correctAnswers}</td>
+                                        <td class="px-4 py-2">${detail.score}</td>
+                                        <td class="px-4 py-2">${detail.startTime.toDate().toLocaleString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                detailsModal.style.display = 'flex';
+            } catch (error) {
+                showMessage(`Erro ao carregar detalhes: ${error.message}`, 'error');
+            }
+        };
+
+        // Fechar modal
+        closeModal.addEventListener('click', () => {
+            detailsModal.style.display = 'none';
+        });
+
+        // Fechar modal ao clicar fora
+        window.onclick = (event) => {
+            if (event.target === detailsModal) {
+                detailsModal.style.display = 'none';
+            }
+        };
+
+        // Mostrar mensagens
+        function showMessage(message, type = 'info') {
+            const colors = {
+                success: 'text-green-700 bg-green-100 border-green-400',
+                error: 'text-red-700 bg-red-100 border-red-400',
+                info: 'text-blue-700 bg-blue-100 border-blue-400'
+            };
+            
+            loginStatus.innerHTML = `
+                <div class="border px-4 py-3 rounded ${colors[type]}">
+                    ${message}
+                </div>
+            `;
+            
+            setTimeout(() => {
+                loginStatus.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 
