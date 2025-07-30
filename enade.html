@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>*Desafio ENADE - Artes Visuais</title>
-    <!-- Carrega o Tailwind CSS via CDN (para desenvolvimento, em produção usar build) -->
+    <!-- ⚠️ ALERTA DE PERFORMANCE: Em produção, use build local do Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -315,12 +315,12 @@
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { perguntasLocais } from './perguntas-locais.js';
 
-        // Configuração do Firebase
+        // ⚠️ ALERTA DE SEGURANÇA: Em produção, mova estas configurações para variáveis de ambiente
         const firebaseConfig = {
           apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
           authDomain: "desafioenade2.firebaseapp.com",
           projectId: "desafioenade2",
-          storageBucket: "desafioenade2.appspot.com", // corrigido aqui
+          storageBucket: "desafioenade2.appspot.com",
           messagingSenderId: "987973574127",
           appId: "1:987973574127:web:4041110632500dbd482a1a",
           measurementId: "G-FD8E45DWKR"
@@ -679,6 +679,11 @@
                     questionImageElement.src = question.imagem_url;
                     questionImageElement.style.display = 'block';
                     questionImageElement.setAttribute('alt', 'Imagem da Questão');
+                    // Tratamento de erro para imagens que falham ao carregar
+                    questionImageElement.onerror = function() {
+                        this.style.display = 'none';
+                        console.warn('Imagem não pôde ser carregada:', question.imagem_url);
+                    };
                 } else {
                     questionImageElement.style.display = 'none';
                 }
@@ -1025,7 +1030,7 @@
         if (document.getElementById('admin-login-btn')) {
             document.getElementById('admin-login-btn').onclick = function() {
                 const pass = document.getElementById('admin-password').value;
-                if (pass === 'admin123') { // Troque a senha depois!
+                if (pass === 'admin123') { // ⚠️ ALERTA DE SEGURANÇA: Troque esta senha em produção!
                     isAdmin = true;
                     document.getElementById('admin-login').classList.add('hidden');
                     document.getElementById('admin-panel').classList.remove('hidden');
@@ -1081,7 +1086,26 @@
         async function fetchPerguntas() {
             // Simule fetch de perguntas do Firebase ou arquivo externo
             // Aqui, apenas retorna perguntasLocais para compatibilidade
-            return perguntasLocais;
+            const perguntas = perguntasLocais;
+            
+            // Validação das perguntas
+            const perguntasValidas = perguntas.filter(pergunta => {
+                const camposObrigatorios = ['id', 'enunciado', 'opcao_A', 'opcao_B', 'opcao_C', 'opcao_D', 'opcao_E', 'resposta_correta'];
+                const temTodosCampos = camposObrigatorios.every(campo => pergunta[campo] && pergunta[campo].trim() !== '');
+                const respostaValida = ['A', 'B', 'C', 'D', 'E'].includes(pergunta.resposta_correta);
+                
+                if (!temTodosCampos) {
+                    console.warn(`Pergunta ${pergunta.id} está faltando campos obrigatórios`);
+                }
+                if (!respostaValida) {
+                    console.warn(`Pergunta ${pergunta.id} tem resposta inválida: ${pergunta.resposta_correta}`);
+                }
+                
+                return temTodosCampos && respostaValida;
+            });
+            
+            console.log(`Carregadas ${perguntasValidas.length} de ${perguntas.length} perguntas válidas`);
+            return perguntasValidas;
         }
         // --- Validação de dados ---
         // Exemplo: impedir pontuação negativa ou acima do máximo
