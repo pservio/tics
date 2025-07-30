@@ -810,6 +810,77 @@
             }
         }
 
+        // Variáveis globais para relatórios
+        let questionAttempts = {}; // Armazena tentativas por questão
+        let studentAnswers = []; // Armazena respostas do aluno
+
+        // Função para registrar tentativa de resposta
+        function recordQuestionAttempt(questionId, studentAnswer, isCorrect, studentId) {
+            const timestamp = new Date();
+            
+            // Registrar tentativa da questão
+            if (!questionAttempts[questionId]) {
+                questionAttempts[questionId] = {
+                    totalAttempts: 0,
+                    correctAnswers: 0,
+                    wrongAnswers: 0,
+                    attempts: []
+                };
+            }
+            
+            questionAttempts[questionId].totalAttempts++;
+            if (isCorrect) {
+                questionAttempts[questionId].correctAnswers++;
+            } else {
+                questionAttempts[questionId].wrongAnswers++;
+            }
+            
+            questionAttempts[questionId].attempts.push({
+                studentId: studentId,
+                studentAnswer: studentAnswer,
+                isCorrect: isCorrect,
+                timestamp: timestamp
+            });
+            
+            // Registrar resposta do aluno
+            studentAnswers.push({
+                questionId: questionId,
+                studentAnswer: studentAnswer,
+                correctAnswer: currentQuestion.resposta_correta,
+                isCorrect: isCorrect,
+                timestamp: timestamp,
+                studentId: studentId
+            });
+        }
+
+        // Função para salvar dados de relatório no Firestore
+        async function saveReportData() {
+            if (!currentStudentData) return;
+            
+            try {
+                const reportData = {
+                    studentId: currentStudentData.uid,
+                    studentName: currentStudentData.name,
+                    studentEmail: currentStudentData.email,
+                    sessionId: Date.now().toString(),
+                    startTime: new Date(),
+                    endTime: new Date(),
+                    totalQuestions: totalQuestions,
+                    correctAnswers: correctAnswers,
+                    score: score,
+                    questionAttempts: questionAttempts,
+                    studentAnswers: studentAnswers,
+                    themes: selectedThemes,
+                    isAllQuestionsMode: isAllQuestionsMode
+                };
+                
+                await addDoc(collection(db, "reports"), reportData);
+                console.log('Dados de relatório salvos com sucesso');
+            } catch (error) {
+                console.error('Erro ao salvar dados de relatório:', error);
+            }
+        }
+
         if (confirmAnswerButton) {
             confirmAnswerButton.addEventListener('click', () => {
                 // Feedback visual nas alternativas
@@ -822,6 +893,16 @@
                 }
                 const correctAnswer = questions[currentQuestionIndex].resposta_correta;
                 const isCorrect = selectedOption === correctAnswer;
+                
+                // Registrar tentativa para relatório
+                if (currentStudentData) {
+                    recordQuestionAttempt(
+                        questions[currentQuestionIndex].id, 
+                        selectedOption, 
+                        isCorrect, 
+                        currentStudentData.uid
+                    );
+                }
                 // Destacar alternativas
                 optionsContainer.querySelectorAll('label').forEach(label => {
                     const radio = label.querySelector('input[type="radio"]');
@@ -893,6 +974,11 @@
                 }
             }
             
+            // Salvar dados de relatório
+            if (currentStudentData) {
+                await saveReportData();
+            }
+            
             sectionQuestion.classList.add('hidden');
             sectionChallengeFinished.classList.remove('hidden');
             finalScoreElement.textContent = finalScore;
@@ -919,6 +1005,10 @@
             } else {
                 showModal("Desafio Finalizado! Não foi possível registrar a pontuação (dados do aluno não disponíveis).");
             }
+            
+            // Resetar variáveis de relatório
+            questionAttempts = {};
+            studentAnswers = [];
         }
 
         if (playAgainButton) {
