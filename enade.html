@@ -815,7 +815,7 @@
         let studentAnswers = []; // Armazena respostas do aluno
 
         // Função para registrar tentativa de resposta
-        function recordQuestionAttempt(questionId, studentAnswer, isCorrect, studentId) {
+        function recordQuestionAttempt(questionId, studentAnswer, isCorrect, studentId, correctAnswer) {
             const timestamp = new Date();
             
             // Registrar tentativa da questão
@@ -846,7 +846,7 @@
             studentAnswers.push({
                 questionId: questionId,
                 studentAnswer: studentAnswer,
-                correctAnswer: currentQuestion.resposta_correta,
+                correctAnswer: correctAnswer,
                 isCorrect: isCorrect,
                 timestamp: timestamp,
                 studentId: studentId
@@ -858,6 +858,9 @@
             if (!currentStudentData) return;
             
             try {
+                // Calcular acertos baseado nas respostas do usuário
+                const correctAnswers = userAnswers.filter(answer => answer && answer.escolhida === answer.correta).length;
+                
                 const reportData = {
                     studentId: currentStudentData.uid,
                     studentName: currentStudentData.name,
@@ -867,10 +870,10 @@
                     endTime: new Date(),
                     totalQuestions: totalQuestions,
                     correctAnswers: correctAnswers,
-                    score: score,
+                    score: currentScore,
                     questionAttempts: questionAttempts,
                     studentAnswers: studentAnswers,
-                    themes: selectedThemes,
+                    themes: getSelectedThemes(),
                     isAllQuestionsMode: isAllQuestionsMode
                 };
                 
@@ -900,7 +903,8 @@
                         questions[currentQuestionIndex].id, 
                         selectedOption, 
                         isCorrect, 
-                        currentStudentData.uid
+                        currentStudentData.uid,
+                        correctAnswer
                     );
                 }
                 // Destacar alternativas
