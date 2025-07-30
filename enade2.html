@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*Desafio ENADE - Artes Visuais</title>
+    <!-- ⚠️ ALERTA DE PERFORMANCE: Em produção, use build local do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        .team-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .team-card.selected {
+            border: 3px solid #3b82f6; /* Cor de destaque para seleção */
+            box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
+        }
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                border-radius: 0;
+                max-width: 100vw;
+                min-width: 0;
+            }
+            h1, h2 {
+                font-size: 1.2rem !important;
+            }
+            .team-card {
+                padding: 8px !important;
+            }
+            .flex, .grid {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            .rounded-lg, .rounded-xl {
+                border-radius: 8px !important;
+            }
+            .py-2, .py-3, .py-4, .py-6, .py-8, .py-10 {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .px-4, .px-6, .px-8, .px-10 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            .text-2xl, .text-3xl, .text-4xl, .text-xl, .text-lg {
+                font-size: 1rem !important;
+            }
+            .min-w-full, .w-1\/2, .w-full {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+            .mx-auto {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            .mb-6, .mb-8, .mb-4 {
+                margin-bottom: 0.5rem !important;
+            }
+        }
+        .fade {
+            opacity: 1;
+            transition: opacity 0.4s;
+        }
+        .fade.hide {
+            opacity: 0;
+        }
+        /* Modal Política de Privacidade */
+        #privacy-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        #privacy-modal .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; position: relative; }
+        #privacy-modal .close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        #privacy-modal .close-button:hover { color: #000; }
+        #auth-status-box {
+            background: none !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="container bg-white rounded-xl shadow-lg p-8 md:p-10" role="main" aria-label="Quiz ENADE Artes Visuais">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Desafio ENADE - Artes Visuais</h1>
+
+        <!-- Seção 1: Escolha do Time -->
+        <div id="section-team-selection" class="mb-8" role="region" aria-label="Escolha de Time">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">1. Escolha seu Time</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div id="team-2012-2017" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas 2012-2017" tabindex="0" aria-label="Selecionar time turmas 2012-2017" role="button">
+                    <img src="https://placehold.co/100x100/60A5FA/ffffff?text=2012-2017" alt="turmas 2012-2017" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas 2012-2017</span>
+                </div>
+                <div id="team-2018-2019" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas: 2018-2019" tabindex="0" aria-label="Selecionar time turmas: 2018-2019" role="button">
+                    <img src="https://placehold.co/100x100/F87171/ffffff?text=2018-2019" alt="turmas: 2018-2019" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas: 2018-2019</span>
+                </div>
+                <div id="team-2020-2024" class="team-card p-4 border-2 border-gray-200 rounded-lg flex flex-col items-center" data-team="turmas: 2020-2024" tabindex="0" aria-label="Selecionar time turmas: 2020-2024" role="button">
+                    <img src="https://placehold.co/100x100/4ADE80/ffffff?text=2020-2024" alt="turmas: 2020-2024" class="rounded-full mb-3">
+                    <span class="font-medium text-gray-700">turmas: 2020-2024</span>
+                </div>
+            </div>
+            <p id="selected-team-display" class="mt-4 text-lg font-semibold text-gray-600">Time Selecionado: Nenhum</p>
+        </div>
+
+        <!-- Seção 2: Escolha dos Temas -->
+        <div id="section-themes" class="mb-8" role="region" aria-label="Escolha de Temas">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">2. Escolha os Temas (Opcional)</h2>
+            <div class="flex flex-wrap justify-center gap-4"></div>
+        </div>
+
+        <!-- Seção 3: Escolha do Tamanho do Desafio -->
+        <div id="section-challenge-size" class="mb-8" role="region" aria-label="Escolha do Número de Questões">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">3. Quantas Questões?</h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="3" checked aria-label="Selecionar 3 questões">
+                    <span class="ml-2 text-gray-700">3 Questões</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="6" aria-label="Selecionar 6 questões">
+                    <span class="ml-2 text-gray-700">6 Questões</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="challenge-size" class="form-radio text-blue-600" value="all" aria-label="Selecionar todas as questões">
+                    <span class="ml-2 text-gray-700 font-semibold text-purple-600">Todas as Questões</span>
+                </label>
+            </div>
+        </div>
+
+        <button id="start-challenge-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" aria-label="Iniciar Desafio">
+            Iniciar Desafio
+        </button>
+
+        <!-- Seção de Questões (Exemplo Básico) -->
+        <div id="section-question" class="hidden mt-8" role="region" aria-label="Questão do Quiz">
+            <div class="flex justify-between items-center mb-2">
+                <div id="progress-bar" class="text-lg font-semibold text-blue-700"></div>
+                <div id="timer" class="text-lg font-semibold text-pink-700"></div>
+            </div>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Questão <span id="current-question-number">1</span></h2>
+            <p id="current-question-text" class="text-lg text-gray-800 mb-6">Esta é a pergunta de exemplo.</p>
+            <img id="question-image" src="https://placehold.co/400x250/E0E0E0/000000?text=Imagem+da+Questão" alt="Imagem da Questão" class="mx-auto rounded-lg shadow-md mb-6">
+            <!-- Opções de múltipla escolha são renderizadas dinamicamente -->
+            <div id="options-container" role="radiogroup" aria-label="Alternativas da Questão"></div>
+            <div id="explanation-container" class="hidden mt-4 p-4 rounded-lg bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 text-base" aria-live="polite"></div>
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="confirm-answer-button" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50" aria-label="Confirmar resposta">Confirmar Resposta</button>
+                <button id="next-question-button" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Próxima questão">Próxima Questão</button>
+            </div>
+            <p class="mt-4 text-xl font-bold text-gray-800">Pontuação: <span id="current-score">0</span></p>
+        </div>
+
+        <!-- Seção de Desafio Finalizado -->
+        <div id="section-challenge-finished" class="hidden mt-8">
+            <h2 class="text-3xl font-bold text-green-600 mb-4">Desafio Finalizado!</h2>
+            <p class="text-xl text-gray-700 mb-6">Parabéns! Sua pontuação final é: <span id="final-score" class="font-bold">0</span></p>
+            <div class="flex justify-center gap-4">
+                <button id="play-again-button" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-700 focus:ring-opacity-50" aria-label="Jogar Novamente">Jogar Novamente</button>
+                <button id="review-button" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50" aria-label="Revisar Respostas">Revisar Respostas</button>
+                <button id="view-ranking-button" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50" aria-label="Ver Ranking">Ver Ranking</button>
+            </div>
+        </div>
+
+        <!-- Seção de Revisão -->
+        <div id="section-review" class="hidden mt-8 text-left">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Revisão das Respostas</h2>
+            <div id="review-list"></div>
+            <button id="review-back-button" class="mt-6 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Voltar para início">Voltar</button>
+        </div>
+
+        <!-- Seção de Ranking -->
+        <div id="section-ranking" class="hidden mt-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Ranking de Times</h2>
+            <div class="flex justify-center gap-4 mb-4">
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="all">Todos</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas 2012-2017">turmas 2012-2017</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas: 2018-2019">turmas: 2018-2019</button>
+                <button class="filter-ranking-button bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg" data-filter="turmas: 2020-2024">turmas: 2020-2024</button>
+            </div>
+            <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 text-left text-gray-600 font-semibold">Time</th>
+                        <th class="py-2 px-4 text-left text-gray-600 font-semibold">Pontuação</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-table-body">
+                    <!-- Linhas do ranking serão inseridas aqui por JS -->
+                </tbody>
+            </table>
+            <div id="ranking-empty-message" class="text-gray-500 mt-4 hidden">Nenhum resultado encontrado para este filtro.</div>
+            <button id="back-to-home-button" class="mt-6 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-opacity-50" aria-label="Voltar para início">Voltar</button>
+        </div>
+
+        <!-- Modal de Mensagem (para substituir alert()) -->
+        <div id="message-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-modal-button">&times;</span>
+                <p id="modal-message" class="text-lg text-gray-800"></p>
+                <button id="modal-ok-button" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">OK</button>
+            </div>
+        </div>
+        <footer class="mt-10 text-center text-gray-500 text-sm flex flex-col items-center gap-2">
+            <div id="auth-status-box" class="flex flex-col items-center gap-1">
+                <span id="auth-status" class="text-gray-500 text-xs">Carregando...</span>
+                <span id="user-uid" class="text-gray-400 text-xs">UID: N/A</span>
+                <button id="sign-out-button" aria-label="Sair da conta"
+                    class="mt-1 bg-gray-200 hover:bg-gray-300 text-gray-600 text-xs px-2 py-1 rounded transition duration-200 shadow-none border border-gray-300">
+                    Sair
+                </button>
+            </div>
+            <a href="#" id="privacy-link" class="underline hover:text-blue-700">Política de Privacidade</a>
+            <a href="#" id="footer-ranking-link" class="underline hover:text-blue-700 mt-2">Ver Ranking</a>
+        </footer>
+    </div>
+    <!-- Modal Política de Privacidade -->
+    <div id="privacy-modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-privacy-modal">&times;</span>
+            <h2 class="text-xl font-bold mb-2">Política de Privacidade</h2>
+            <p class="text-gray-700 text-sm mb-2">Este site utiliza Firebase para autenticação e ranking. Nenhum dado pessoal sensível é coletado. O ranking armazena apenas time, pontuação e um identificador anônimo. Cookies podem ser usados para melhorar a experiência. Ao usar o site, você concorda com esta política.</p>
+            <p class="text-gray-700 text-xs">Para dúvidas, entre em contato com o desenvolvedor.</p>
+        </div>
+    </div>
+    <!-- Área Administrativa -->
+    <div id="admin-section" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-lg w-full relative">
+            <button id="close-admin" class="absolute top-2 right-4 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold mb-4">Área Administrativa</h2>
+            <div id="admin-login" class="mb-4">
+                <input type="password" id="admin-password" placeholder="Senha de admin" class="border rounded px-3 py-2 mr-2">
+                <button id="admin-login-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Entrar</button>
+            </div>
+            <div id="admin-panel" class="hidden">
+                <form id="admin-form" class="mb-4">
+                    <input type="text" id="admin-enunciado" placeholder="Enunciado" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-tema" placeholder="Temas (separados por vírgula)" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-imagem" placeholder="URL da Imagem (opcional)" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoA" placeholder="Opção A" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoB" placeholder="Opção B" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoC" placeholder="Opção C" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoD" placeholder="Opção D" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-opcaoE" placeholder="Opção E" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-resposta" placeholder="Resposta Correta (A-E)" maxlength="1" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="admin-explicacao" placeholder="Explicação (opcional)" class="border rounded px-2 py-1 w-full mb-2">
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Salvar Pergunta</button>
+                </form>
+                <div id="admin-questions-list" class="max-h-60 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { perguntasLocais } from './perguntas-locais.js?v=2';
+
+        // ⚠️ ALERTA DE SEGURANÇA: Em produção, mova estas configurações para variáveis de ambiente
+        const firebaseConfig = {
+          apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+          authDomain: "desafioenade2.firebaseapp.com",
+          projectId: "desafioenade2",
+          storageBucket: "desafioenade2.appspot.com",
+          messagingSenderId: "987973574127",
+          appId: "1:987973574127:web:4041110632500dbd482a1a",
+          measurementId: "G-FD8E45DWKR"
+        };
+
+        // Inicialização do Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elementos UI para o status de autenticação
+        const authStatusElement = document.getElementById('auth-status');
+        const userUidElement = document.getElementById('user-uid');
+        const signOutButton = document.getElementById('sign-out-button');
+
+        // Referências aos elementos do jogo
+        const teamCards = document.querySelectorAll('.team-card');
+        const selectedTeamDisplay = document.getElementById('selected-team-display');
+        const startChallengeButton = document.getElementById('start-challenge-button');
+        const sectionTeamSelection = document.getElementById('section-team-selection');
+        const sectionQuestion = document.getElementById('section-question');
+        const sectionChallengeFinished = document.getElementById('section-challenge-finished');
+        const sectionRanking = document.getElementById('section-ranking');
+        const confirmAnswerButton = document.getElementById('confirm-answer-button');
+        const nextQuestionButton = document.getElementById('next-question-button');
+        const playAgainButton = document.getElementById('play-again-button');
+        const viewRankingButton = document.getElementById('view-ranking-button');
+        const backToHomeButton = document.getElementById('back-to-home-button');
+        const rankingTableBody = document.getElementById('ranking-table-body');
+        const filterRankingButtons = document.querySelectorAll('.filter-ranking-button');
+        const currentScoreElement = document.getElementById('current-score');
+        const finalScoreElement = document.getElementById('final-score');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const currentQuestionTextElement = document.getElementById('current-question-text');
+        const questionImageElement = document.getElementById('question-image');
+        // Elementos para múltipla escolha
+        let optionsContainer = document.getElementById('options-container');
+        if (!optionsContainer) {
+            optionsContainer = document.createElement('div');
+            optionsContainer.id = 'options-container';
+            optionsContainer.className = 'flex flex-col items-start gap-2 mb-4';
+            currentQuestionTextElement.insertAdjacentElement('afterend', optionsContainer);
+        }
+        const sectionThemes = document.getElementById('section-themes');
+        const themesContainer = sectionThemes.querySelector('.flex.flex-wrap');
+
+        // Adicione um elemento para mostrar a contagem de perguntas filtradas
+        let themeCountInfo = document.createElement('div');
+        themeCountInfo.id = 'theme-count-info';
+        themeCountInfo.className = 'mt-2 text-sm text-blue-700 font-semibold';
+        themesContainer.parentElement.appendChild(themeCountInfo);
+
+        // Carregar temas dinamicamente a partir das perguntas
+        function getUniqueThemes(perguntas) {
+            const temasSet = new Set();
+            perguntas.forEach(q => {
+                if (Array.isArray(q.tema)) {
+                    q.tema.forEach(t => temasSet.add(t));
+                } else if (q.tema) {
+                    temasSet.add(q.tema);
+                }
+            });
+            return Array.from(temasSet).sort();
+        }
+
+        let allPerguntas = [];
+        (async function() {
+            allPerguntas = await fetchPerguntas();
+            renderThemesCheckboxes();
+            updateThemeCountInfo();
+        })();
+
+        function renderThemesCheckboxes() {
+            const temas = getUniqueThemes(allPerguntas);
+            themesContainer.innerHTML = '';
+            temas.forEach(tema => {
+                const label = document.createElement('label');
+                label.className = 'inline-flex items-center';
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'form-checkbox text-blue-600 rounded';
+                checkbox.value = tema;
+                const span = document.createElement('span');
+                span.className = 'ml-2 text-gray-700';
+                span.textContent = tema;
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                themesContainer.appendChild(label);
+                checkbox.addEventListener('change', () => { updateThemeCountInfo(); });
+            });
+            updateThemeCountInfo();
+        }
+
+        // Atualiza os checkboxes de temas para feedback visual
+        function updateThemeCheckboxFeedback() {
+            const themeCheckboxes = document.querySelectorAll('#section-themes input[type="checkbox"]');
+            themeCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        checkbox.parentElement.classList.add('bg-blue-200', 'ring', 'ring-blue-700');
+                    } else {
+                        checkbox.parentElement.classList.remove('bg-blue-200', 'ring', 'ring-blue-700');
+                    }
+                });
+            });
+        }
+        updateThemeCheckboxFeedback();
+
+        // Modal de Mensagem
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const modalOkButton = document.getElementById('modal-ok-button');
+
+        let selectedTeam = null;
+        let currentScore = 0;
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let totalQuestions = 3; // Padrão
+        let userAnswers = [];
+        let isAllQuestionsMode = false; // Novo: indica se está no modo "todas as questões"
+
+        // Função para exibir o modal de mensagem
+        function showModal(message) {
+            modalMessage.textContent = message;
+            messageModal.style.display = 'flex'; // Usa flex para centralizar
+        }
+
+        // Event listeners para o modal
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', () => {
+                messageModal.style.display = 'none';
+            });
+        }
+        if (modalOkButton) {
+            modalOkButton.addEventListener('click', () => {
+                messageModal.style.display = 'none';
+            });
+        }
+        if (messageModal) {
+            window.addEventListener('click', (event) => {
+                if (event.target == messageModal) {
+                    messageModal.style.display = 'none';
+                }
+            });
+        }
+
+        // --- Lógica de Autenticação Firebase ---
+        let currentUserUid = null; // Variável para armazenar o UID do usuário logado
+        let currentStudentData = null; // Dados do aluno logado
+
+        // Listener para mudanças no estado de autenticação
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Verificar se é um aluno válido
+                const isValidStudent = await checkIfValidStudent(user.uid);
+                if (isValidStudent) {
+                    currentUserUid = user.uid;
+                    await loadStudentData(user.uid);
+                    authStatusElement.textContent = 'Logado';
+                    userUidElement.textContent = `Aluno: ${currentStudentData?.name || 'N/A'}`;
+                    console.log('Aluno logado:', user.uid);
+                } else {
+                    // Redirecionar para login se não for aluno válido
+                    showModal('Acesso negado. Faça login como aluno para acessar o sistema.');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                }
+            } else {
+                // Usuário não está logado - redirecionar para login
+                currentUserUid = null;
+                currentStudentData = null;
+                authStatusElement.textContent = 'Não logado';
+                userUidElement.textContent = 'Aluno: N/A';
+                console.log('Usuário não logado. Redirecionando para login...');
+                showModal('Faça login para acessar o sistema.');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            }
+        });
+
+        // Verificar se é um aluno válido
+        async function checkIfValidStudent(uid) {
+            try {
+                const studentQuery = query(collection(db, "students"), where("uid", "==", uid));
+                const studentSnapshot = await getDocs(studentQuery);
+                
+                if (!studentSnapshot.empty) {
+                    const studentData = studentSnapshot.docs[0].data();
+                    return studentData.status === 'active';
+                }
+                return false;
+            } catch (error) {
+                console.error('Erro ao verificar aluno:', error);
+                return false;
+            }
+        }
+
+        // Carregar dados do aluno
+        async function loadStudentData(uid) {
+            try {
+                const studentQuery = query(collection(db, "students"), where("uid", "==", uid));
+                const studentSnapshot = await getDocs(studentQuery);
+                
+                if (!studentSnapshot.empty) {
+                    currentStudentData = studentSnapshot.docs[0].data();
+                    console.log('Dados do aluno carregados:', currentStudentData);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do aluno:', error);
+            }
+        }
+
+        // Botão de Sair
+        if (signOutButton) {
+            signOutButton.addEventListener('click', () => {
+                signOut(auth)
+                    .then(() => {
+                        console.log('Usuário saiu com sucesso.');
+                        showModal('Você saiu do jogo.');
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao sair:', error);
+                        showModal(`Erro ao sair: ${error.message}`);
+                    });
+            });
+        }
+
+        // --- Lógica do Jogo (Mantida do seu site original, com pequenas adaptações) ---
+
+        // Seleção de Time
+        teamCards.forEach(card => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `Selecionar time ${card.dataset.team}`);
+            card.setAttribute('role', 'button');
+            card.addEventListener('click', () => {
+                teamCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedTeam = card.dataset.team;
+                selectedTeamDisplay.textContent = `Time Selecionado: ${selectedTeam}`;
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    card.click();
+                }
+            });
+        });
+
+        // Feedback visual para radio de número de questões
+        const challengeSizeRadios = document.querySelectorAll('input[name="challenge-size"]');
+        challengeSizeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                challengeSizeRadios.forEach(r => r.parentElement.classList.remove('ring', 'ring-blue-400'));
+                if (radio.checked) {
+                    radio.parentElement.classList.add('ring', 'ring-blue-400');
+                }
+                // Atualizar informações sobre temas quando mudar o modo
+                updateThemeCountInfo();
+            });
+            // Inicializa visual
+            if (radio.checked) {
+                radio.parentElement.classList.add('ring', 'ring-blue-400');
+            }
+        });
+
+        // Feedback visual para temas
+        const themeCheckboxes = document.querySelectorAll('#section-themes input[type="checkbox"]');
+        themeCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.classList.add('bg-blue-200', 'ring', 'ring-blue-700');
+                } else {
+                    checkbox.parentElement.classList.remove('bg-blue-200', 'ring', 'ring-blue-700');
+                }
+            });
+        });
+
+        // Ajuste status de autenticação para mostrar "Carregando..." apenas enquanto necessário
+        let authLoading = true;
+        function setAuthStatus(loading, user) {
+            if (loading) {
+                authStatusElement.textContent = 'Carregando...';
+                userUidElement.textContent = 'UID: N/A';
+            } else if (user) {
+                authStatusElement.textContent = 'Logado';
+                userUidElement.textContent = `UID: ${user.uid}`;
+            } else {
+                authStatusElement.textContent = 'Deslogado';
+                userUidElement.textContent = 'UID: N/A';
+            }
+        }
+        setAuthStatus(true, null);
+        onAuthStateChanged(auth, (user) => {
+            authLoading = false;
+            setAuthStatus(false, user);
+            if (user) {
+                currentUserUid = user.uid;
+            } else {
+                currentUserUid = null;
+                // Tenta login anônimo se não houver usuário
+                signInAnonymously(auth)
+                    .then(() => {
+                        // onAuthStateChanged será chamado novamente
+                    })
+                    .catch((error) => {
+                        console.error('Erro no login anônimo:', error);
+                        showModal(`Erro ao fazer login anônimo: ${error.message}`);
+                    });
+            }
+        });
+
+        // Timer (cronômetro)
+        let timerInterval = null;
+        let timerSeconds = 0;
+        const timerElement = document.getElementById('timer');
+        function startTimer() {
+            timerSeconds = 0;
+            timerElement.textContent = '00:00';
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const min = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                const sec = String(timerSeconds % 60).padStart(2, '0');
+                timerElement.textContent = `${min}:${sec}`;
+            }, 1000);
+        }
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        // Filtro de perguntas por tema
+        function getSelectedThemes() {
+            const themeCheckboxes = document.querySelectorAll('#section-themes input[type="checkbox"]');
+            return Array.from(themeCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        }
+        function filterQuestionsByThemes(perguntas, temasSelecionados) {
+            if (!temasSelecionados || temasSelecionados.length === 0) return perguntas;
+            return perguntas.filter(q => {
+                if (Array.isArray(q.tema)) {
+                    return q.tema.some(t => temasSelecionados.includes(t));
+                } else if (q.tema) {
+                    return temasSelecionados.includes(q.tema);
+                }
+                return false;
+            });
+        }
+
+        // Iniciar Desafio
+        if (startChallengeButton) {
+            startChallengeButton.addEventListener('click', async () => {
+                if (!selectedTeam) {
+                    showModal('Por favor, selecione um time antes de iniciar o desafio.');
+                    return;
+                }
+                if (authLoading) {
+                    showModal('Aguarde, o sistema de autenticação está carregando. Tente novamente em instantes.');
+                    return;
+                }
+                if (!currentUserUid) {
+                    showModal('Não foi possível autenticar. Recarregue a página.');
+                    return;
+                }
+                if (!allPerguntas || allPerguntas.length === 0) {
+                    showModal('As perguntas ainda estão carregando. Aguarde um momento e tente novamente.');
+                    return;
+                }
+                const selectedValue = document.querySelector('input[name="challenge-size"]:checked').value;
+                const temasSelecionados = getSelectedThemes();
+                let perguntasFiltradas = filterQuestionsByThemes(allPerguntas, temasSelecionados);
+                
+                if (selectedValue === 'all') {
+                    // Modo "Todas as questões"
+                    isAllQuestionsMode = true;
+                    totalQuestions = perguntasFiltradas.length;
+                    questions = perguntasFiltradas.sort(() => 0.5 - Math.random()); // Embaralha todas
+                    if (perguntasFiltradas.length === 0) {
+                        showModal('Não há perguntas disponíveis para os temas selecionados.');
+                        return;
+                    }
+                } else {
+                    // Modo normal (3 ou 6 questões)
+                    isAllQuestionsMode = false;
+                    totalQuestions = parseInt(selectedValue);
+                    if (perguntasFiltradas.length < totalQuestions) {
+                        showModal('Não há perguntas suficientes para os temas selecionados. Serão usadas todas as disponíveis.');
+                        totalQuestions = perguntasFiltradas.length;
+                    }
+                    questions = perguntasFiltradas.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
+                }
+                currentScore = 0;
+                currentQuestionIndex = 0;
+                userAnswers = [];
+                updateQuestionDisplay();
+                sectionTeamSelection.classList.add('hidden');
+                document.getElementById('section-themes').classList.add('hidden');
+                document.getElementById('section-challenge-size').classList.add('hidden');
+                startChallengeButton.classList.add('hidden');
+                sectionQuestion.classList.remove('hidden');
+                currentScoreElement.textContent = currentScore;
+                startTimer();
+            });
+        }
+
+        function updateQuestionDisplay() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+                currentQuestionTextElement.innerHTML = question.enunciado;
+                if (question.imagem_url && question.imagem_url.trim() !== "") {
+                    questionImageElement.src = question.imagem_url;
+                    questionImageElement.style.display = 'block';
+                    questionImageElement.setAttribute('alt', 'Imagem da Questão');
+                    // Tratamento de erro para imagens que falham ao carregar
+                    questionImageElement.onerror = function() {
+                        this.style.display = 'none';
+                        console.warn('Imagem não pôde ser carregada:', question.imagem_url);
+                    };
+                } else {
+                    questionImageElement.style.display = 'none';
+                }
+                currentScoreElement.textContent = currentScore;
+                if (confirmAnswerButton) {
+                    confirmAnswerButton.classList.remove('hidden');
+                }
+                if (nextQuestionButton) {
+                    nextQuestionButton.classList.remove('hidden');
+                }
+                // Barra de progresso
+                const progressBar = document.getElementById('progress-bar');
+                progressBar.textContent = `Questão ${currentQuestionIndex + 1} de ${questions.length}`;
+                // Renderiza opções múltipla escolha
+                optionsContainer.innerHTML = '';
+                const opcoes = [
+                    {letra: 'A', texto: question.opcao_A},
+                    {letra: 'B', texto: question.opcao_B},
+                    {letra: 'C', texto: question.opcao_C},
+                    {letra: 'D', texto: question.opcao_D},
+                    {letra: 'E', texto: question.opcao_E}
+                ];
+                let selectedOption = null;
+                opcoes.forEach(op => {
+                    if (!op.texto) return;
+                    const label = document.createElement('label');
+                    label.className = 'flex items-center gap-2 cursor-pointer bg-white border border-gray-700 rounded-lg px-4 py-2 hover:bg-blue-100 transition';
+                    label.setAttribute('tabindex', '0');
+                    label.setAttribute('role', 'radio');
+                    label.setAttribute('aria-checked', 'false');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'option';
+                    radio.value = op.letra;
+                    radio.className = 'form-radio text-blue-700';
+                    radio.setAttribute('aria-label', `Alternativa ${op.letra}`);
+                    radio.addEventListener('change', () => {
+                        selectedOption = op.letra;
+                        // Atualiza aria-checked
+                        optionsContainer.querySelectorAll('label').forEach(lab => lab.setAttribute('aria-checked', 'false'));
+                        label.setAttribute('aria-checked', 'true');
+                    });
+                    label.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change'));
+                        }
+                    });
+                    label.appendChild(radio);
+                    const span = document.createElement('span');
+                    span.innerHTML = `<b>${op.letra}.</b> ${op.texto}`;
+                    label.appendChild(span);
+                    optionsContainer.appendChild(label);
+                });
+                // Salva referência para feedback visual
+                optionsContainer.selectedOption = () => selectedOption;
+                // Esconde explicação ao trocar de questão
+                const explanationContainer = document.getElementById('explanation-container');
+                explanationContainer.classList.add('hidden');
+                explanationContainer.textContent = '';
+            } else {
+                endChallenge();
+            }
+        }
+
+        if (confirmAnswerButton) {
+            confirmAnswerButton.addEventListener('click', () => {
+                // Feedback visual nas alternativas
+                const radios = optionsContainer.querySelectorAll('input[type="radio"]');
+                let selectedOption = null;
+                radios.forEach(radio => { if (radio.checked) selectedOption = radio.value; });
+                if (!selectedOption) {
+                    showModal('Selecione uma alternativa antes de confirmar.');
+                    return;
+                }
+                const correctAnswer = questions[currentQuestionIndex].resposta_correta;
+                const isCorrect = selectedOption === correctAnswer;
+                // Destacar alternativas
+                optionsContainer.querySelectorAll('label').forEach(label => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    label.classList.remove('bg-green-200', 'bg-red-200', 'border-green-700', 'border-red-700');
+                    if (radio.value === correctAnswer) {
+                        label.classList.add('bg-green-200', 'border-green-700');
+                    }
+                    if (radio.checked && radio.value !== correctAnswer) {
+                        label.classList.add('bg-red-200', 'border-red-700');
+                    }
+                });
+                // Mostrar explicação se houver
+                const explanationContainer = document.getElementById('explanation-container');
+                const question = questions[currentQuestionIndex];
+                if (question.explicacao) {
+                    explanationContainer.textContent = question.explicacao;
+                    explanationContainer.classList.remove('hidden');
+                } else {
+                    explanationContainer.classList.add('hidden');
+                    explanationContainer.textContent = '';
+                }
+                // Salva resposta do usuário para revisão
+                userAnswers[currentQuestionIndex] = {
+                    escolhida: selectedOption,
+                    correta: correctAnswer
+                };
+                if (isCorrect) {
+                    if (isAllQuestionsMode) {
+                        currentScore += 1; // 1 ponto por questão no modo "todas as questões"
+                        showModal('Resposta Correta! +1 ponto.');
+                    } else {
+                        currentScore += 10; // 10 pontos por questão no modo normal
+                        showModal('Resposta Correta! +10 pontos.');
+                    }
+                } else {
+                    showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
+                }
+                currentScoreElement.textContent = currentScore;
+                if (confirmAnswerButton) {
+                    confirmAnswerButton.classList.add('hidden');
+                }
+                if (nextQuestionButton) {
+                    nextQuestionButton.classList.remove('hidden');
+                }
+            });
+        }
+        if (document.getElementById('answer-input')) {
+            document.getElementById('answer-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    confirmAnswerButton.click();
+                }
+            });
+        }
+
+        async function endChallenge() {
+            let finalScore = currentScore;
+            
+            // Verificar se está no modo "todas as questões" e se acertou todas
+            if (isAllQuestionsMode) {
+                const correctAnswers = userAnswers.filter(answer => answer && answer.escolhida === answer.correta).length;
+                const totalQuestions = questions.length;
+                
+                if (correctAnswers === totalQuestions && totalQuestions > 0) {
+                    // Duplicar pontos se acertou todas as questões
+                    finalScore = currentScore * 2;
+                    showModal(`🎉 PARABÉNS! Você acertou todas as ${totalQuestions} questões! Pontos duplicados: ${currentScore} → ${finalScore}`);
+                } else {
+                    showModal(`Desafio Finalizado! Você acertou ${correctAnswers} de ${totalQuestions} questões. Pontuação: ${currentScore}`);
+                }
+            }
+            
+            sectionQuestion.classList.add('hidden');
+            sectionChallengeFinished.classList.remove('hidden');
+            finalScoreElement.textContent = finalScore;
+            stopTimer();
+
+            // Salvar pontuação no Firestore
+            if (currentUserUid && selectedTeam && currentStudentData) {
+                try {
+                    await addDoc(collection(db, "ranking"), {
+                        userId: currentUserUid,
+                        studentName: currentStudentData.name,
+                        studentEmail: currentStudentData.email,
+                        studentYear: currentStudentData.year,
+                        team: selectedTeam,
+                        score: finalScore,
+                        timestamp: new Date()
+                    });
+                    console.log("Pontuação salva no Firestore!");
+                    showModal(`Desafio Finalizado! Sua pontuação de ${finalScore} foi registrada para o time ${selectedTeam}.`);
+                } catch (e) {
+                    console.error("Erro ao adicionar documento: ", e);
+                    showModal(`Desafio Finalizado! Erro ao registrar sua pontuação: ${e.message}`);
+                }
+            } else {
+                showModal("Desafio Finalizado! Não foi possível registrar a pontuação (dados do aluno não disponíveis).");
+            }
+        }
+
+        if (playAgainButton) {
+            playAgainButton.addEventListener('click', () => {
+                // Reinicia o jogo
+                sectionChallengeFinished.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+                selectedTeam = null;
+                selectedTeamDisplay.textContent = 'Time Selecionado: Nenhum';
+                teamCards.forEach(c => c.classList.remove('selected'));
+                stopTimer();
+                timerElement.textContent = '';
+                isAllQuestionsMode = false; // Reset do modo de questões
+            });
+        }
+
+        if (viewRankingButton) {
+            viewRankingButton.addEventListener('click', async () => {
+                sectionChallengeFinished.classList.add('hidden');
+                sectionRanking.classList.remove('hidden');
+                await loadRanking();
+            });
+        }
+
+        if (backToHomeButton) {
+            backToHomeButton.addEventListener('click', () => {
+                sectionRanking.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+            });
+        }
+
+        if (nextQuestionButton) {
+            nextQuestionButton.addEventListener('click', () => {
+                currentQuestionIndex++;
+                updateQuestionDisplay();
+            });
+        }
+
+        async function loadRanking(filter = 'all') {
+            rankingTableBody.innerHTML = '';
+            document.getElementById('ranking-empty-message').classList.add('hidden');
+            rankingTableBody.insertAdjacentHTML('beforebegin', '<div id="ranking-loading" class="text-gray-500 mb-2">Carregando ranking...</div>');
+            let q;
+            if (filter === 'all') {
+                q = collection(db, "ranking");
+            } else {
+                q = query(collection(db, "ranking"), where("team", "==", filter));
+            }
+            try {
+                const querySnapshot = await getDocs(q);
+                let rankingData = [];
+                querySnapshot.forEach((doc) => {
+                    rankingData.push(doc.data());
+                });
+                // Ordena por pontuação (maior para menor)
+                rankingData.sort((a, b) => b.score - a.score);
+                if (rankingData.length === 0) {
+                    document.getElementById('ranking-empty-message').classList.remove('hidden');
+                }
+                // Agrupar e somar por time
+                const teamScores = {};
+                rankingData.forEach(item => {
+                    if (!teamScores[item.team]) {
+                        teamScores[item.team] = 0;
+                    }
+                    teamScores[item.team] += item.score;
+                });
+                // Transformar em array para ordenar
+                const teamScoresArray = Object.entries(teamScores).map(([team, score]) => ({ team, score }));
+                // Ordenar do maior para o menor
+                teamScoresArray.sort((a, b) => b.score - a.score);
+                if (teamScoresArray.length === 0) {
+                    document.getElementById('ranking-empty-message').classList.remove('hidden');
+                }
+                teamScoresArray.forEach(item => {
+                    const row = rankingTableBody.insertRow();
+                    row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-50');
+                    const teamCell = row.insertCell();
+                    teamCell.classList.add('py-2', 'px-4', 'text-gray-700');
+                    teamCell.textContent = item.team;
+                    const scoreCell = row.insertCell();
+                    scoreCell.classList.add('py-2', 'px-4', 'text-gray-700');
+                    scoreCell.textContent = item.score;
+                });
+            } catch (e) {
+                console.error("Erro ao carregar ranking: ", e);
+                showModal(`Erro ao carregar ranking: ${e.message}`);
+            } finally {
+                const loadingDiv = document.getElementById('ranking-loading');
+                if (loadingDiv) loadingDiv.remove();
+            }
+        }
+
+        filterRankingButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const filter = button.dataset.filter;
+                filterRankingButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+                button.classList.add('bg-blue-500', 'text-white');
+                await loadRanking(filter);
+            });
+        });
+
+        // Inicializa o ranking ao carregar a página (opcional)
+        // loadRanking(); // Pode chamar aqui se quiser que o ranking seja carregado na inicialização
+
+        // Modo revisão
+        const sectionReview = document.getElementById('section-review');
+        const reviewList = document.getElementById('review-list');
+        const reviewButton = document.getElementById('review-button');
+        const reviewBackButton = document.getElementById('review-back-button');
+        if (reviewButton) {
+            reviewButton.addEventListener('click', () => {
+                sectionChallengeFinished.classList.add('hidden');
+                sectionReview.classList.remove('hidden');
+                renderReview();
+            });
+        }
+        if (reviewBackButton) {
+            reviewBackButton.addEventListener('click', () => {
+                sectionReview.classList.add('hidden');
+                sectionTeamSelection.classList.remove('hidden');
+                document.getElementById('section-themes').classList.remove('hidden');
+                document.getElementById('section-challenge-size').classList.remove('hidden');
+                startChallengeButton.classList.remove('hidden');
+            });
+        }
+        function renderReview() {
+            reviewList.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const user = userAnswers[idx] || {};
+                const correta = user.correta;
+                const escolhida = user.escolhida;
+                const bloco = document.createElement('div');
+                bloco.className = 'mb-6 p-4 rounded-lg border shadow-sm bg-white';
+                bloco.innerHTML = `
+                    <div class="mb-2 font-semibold text-blue-800">Questão ${idx + 1}</div>
+                    <div class="mb-2 text-gray-800">${q.enunciado}</div>
+                    ${q.imagem_url ? `<img src="${q.imagem_url}" alt="Imagem da Questão" class="my-2 mx-auto rounded shadow max-w-full" style="max-width:300px;">` : ''}
+                    <div class="mb-2">
+                        ${['A','B','C','D','E'].map(letra => {
+                            if (!q['opcao_' + letra]) return '';
+                            let style = '';
+                            if (letra === correta) style += 'bg-green-200 border-green-700';
+                            if (letra === escolhida && letra !== correta) style += ' bg-red-200 border-red-700';
+                            return `<div class="my-1 px-2 py-1 rounded border ${style}"><b>${letra}.</b> ${q['opcao_' + letra]}</div>`;
+                        }).join('')}
+                    </div>
+                    <div class="mb-2"><b>Sua resposta:</b> ${escolhida || '<span class="text-gray-400">Não respondida</span>'}</div>
+                    <div class="mb-2"><b>Correta:</b> ${correta}</div>
+                    ${q.explicacao ? `<div class="mt-2 p-3 rounded bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900"><b>Explicação:</b> ${q.explicacao}</div>` : ''}
+                `;
+                reviewList.appendChild(bloco);
+            });
+        }
+        // --- Animações suaves ---
+        function fadeOutIn(element, callback) {
+            element.classList.add('fade');
+            element.classList.add('hide');
+            setTimeout(() => {
+                if (callback) callback();
+                element.classList.remove('hide');
+            }, 400);
+        }
+        // Use fadeOutIn(sectionQuestion, updateQuestionDisplay) ao trocar de questão.
+        // --- Política de Privacidade ---
+        if (document.getElementById('privacy-link')) {
+            document.getElementById('privacy-link').onclick = function(e) {
+                e.preventDefault();
+                document.getElementById('privacy-modal').style.display = 'flex';
+            };
+        }
+        if (document.getElementById('close-privacy-modal')) {
+            document.getElementById('close-privacy-modal').onclick = function() {
+                document.getElementById('privacy-modal').style.display = 'none';
+            };
+        }
+        // --- Área Administrativa ---
+        let isAdmin = false;
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 'A') {
+                document.getElementById('admin-section').classList.remove('hidden');
+            }
+        });
+        if (document.getElementById('close-admin')) {
+            document.getElementById('close-admin').onclick = function() {
+                document.getElementById('admin-section').classList.add('hidden');
+            };
+        }
+        if (document.getElementById('admin-login-btn')) {
+            document.getElementById('admin-login-btn').onclick = function() {
+                const pass = document.getElementById('admin-password').value;
+                if (pass === 'admin123') { // ⚠️ ALERTA DE SEGURANÇA: Troque esta senha em produção!
+                    isAdmin = true;
+                    document.getElementById('admin-login').classList.add('hidden');
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    loadAdminQuestions();
+                } else {
+                    alert('Senha incorreta!');
+                }
+            };
+        }
+        // CRUD de perguntas (exemplo usando Firebase)
+        async function loadAdminQuestions() {
+            const qSnap = await getDocs(collection(db, "perguntas"));
+            const list = document.getElementById('admin-questions-list');
+            list.innerHTML = '';
+            qSnap.forEach(doc => {
+                const q = doc.data();
+                const div = document.createElement('div');
+                div.className = 'border p-2 mb-2 rounded';
+                div.innerHTML = `<b>${q.enunciado}</b> <button data-id="${doc.id}" class="text-red-600 delete-q">Excluir</button>`;
+                list.appendChild(div);
+            });
+            list.querySelectorAll('.delete-q').forEach(btn => {
+                btn.onclick = async function() {
+                    await deleteDoc(doc(db, "perguntas", btn.dataset.id));
+                    loadAdminQuestions();
+                };
+            });
+        }
+        if (document.getElementById('admin-form')) {
+            document.getElementById('admin-form').onsubmit = async function(e) {
+                e.preventDefault();
+                if (!isAdmin) return;
+                const enunciado = document.getElementById('admin-enunciado').value;
+                const tema = document.getElementById('admin-tema').value.split(',').map(t=>t.trim());
+                const imagem_url = document.getElementById('admin-imagem').value;
+                const opcao_A = document.getElementById('admin-opcaoA').value;
+                const opcao_B = document.getElementById('admin-opcaoB').value;
+                const opcao_C = document.getElementById('admin-opcaoC').value;
+                const opcao_D = document.getElementById('admin-opcaoD').value;
+                const opcao_E = document.getElementById('admin-opcaoE').value;
+                const resposta_correta = document.getElementById('admin-resposta').value.toUpperCase();
+                const explicacao = document.getElementById('admin-explicacao').value;
+                if (!enunciado || !tema.length || !opcao_A || !opcao_B || !opcao_C || !opcao_D || !opcao_E || !resposta_correta.match(/^[A-E]$/)) {
+                    alert('Preencha todos os campos obrigatórios corretamente!');
+                    return;
+                }
+                await addDoc(collection(db, "perguntas"), { enunciado, tema, imagem_url, opcao_A, opcao_B, opcao_C, opcao_D, opcao_E, resposta_correta, explicacao });
+                loadAdminQuestions();
+                document.getElementById('admin-form').reset();
+            };
+        }
+        // --- Carregamento assíncrono de perguntas (simulado) ---
+        async function fetchPerguntas() {
+            // Simule fetch de perguntas do Firebase ou arquivo externo
+            // Aqui, apenas retorna perguntasLocais para compatibilidade
+            const perguntas = perguntasLocais;
+            
+            // Validação das perguntas
+            const perguntasValidas = perguntas.filter(pergunta => {
+                const camposObrigatorios = ['id', 'enunciado', 'opcao_A', 'opcao_B', 'opcao_C', 'opcao_D', 'opcao_E', 'resposta_correta'];
+                const temTodosCampos = camposObrigatorios.every(campo => {
+                    const valor = pergunta[campo];
+                    // Para campos numéricos (como id), verifica se existe e é válido
+                    if (campo === 'id') {
+                        return valor !== undefined && valor !== null && !isNaN(valor);
+                    }
+                    // Para campos de texto, verifica se existe e não está vazio
+                    return valor && typeof valor === 'string' && valor.trim() !== '';
+                });
+                const respostaValida = ['A', 'B', 'C', 'D', 'E'].includes(pergunta.resposta_correta);
+                
+                if (!temTodosCampos) {
+                    console.warn(`Pergunta ${pergunta.id} está faltando campos obrigatórios`);
+                }
+                if (!respostaValida) {
+                    console.warn(`Pergunta ${pergunta.id} tem resposta inválida: ${pergunta.resposta_correta}`);
+                }
+                
+                return temTodosCampos && respostaValida;
+            });
+            
+            console.log(`Carregadas ${perguntasValidas.length} de ${perguntas.length} perguntas válidas`);
+            return perguntasValidas;
+        }
+        // --- Validação de dados ---
+        // Exemplo: impedir pontuação negativa ou acima do máximo
+        function validarPontuacao(p) {
+            if (typeof p !== 'number' || p < 0) return 0;
+            if (p > (questions.length * 10)) return questions.length * 10;
+            return p;
+        }
+
+        async function updateThemeCountInfo() {
+            const temasSelecionados = getSelectedThemes();
+            const todasPerguntas = allPerguntas;
+            const filtradas = filterQuestionsByThemes(todasPerguntas, temasSelecionados);
+            const selectedValue = document.querySelector('input[name="challenge-size"]:checked')?.value;
+            
+            let infoText = '';
+            if (temasSelecionados.length === 0) {
+                infoText = `${todasPerguntas.length} perguntas disponíveis (todos os temas)`;
+            } else {
+                infoText = `${filtradas.length} perguntas disponíveis para os temas selecionados`;
+            }
+            
+            // Adicionar informação sobre pontuação se "Todas as questões" estiver selecionado
+            if (selectedValue === 'all' && filtradas.length > 0) {
+                infoText += ` | Modo "Todas as questões": 1 ponto por acerto, duplicação se acertar todas!`;
+            }
+            
+            themeCountInfo.textContent = infoText;
+        }
+
+        // Após a definição de sectionRanking e das demais seções:
+        const footerRankingLink = document.getElementById('footer-ranking-link');
+        if (footerRankingLink) {
+            footerRankingLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                sectionTeamSelection.classList.add('hidden');
+                document.getElementById('section-themes').classList.add('hidden');
+                document.getElementById('section-challenge-size').classList.add('hidden');
+                startChallengeButton.classList.add('hidden');
+                sectionRanking.classList.remove('hidden');
+                await loadRanking();
+            });
+        }
+
+    </script>
+</body>
+</html>
