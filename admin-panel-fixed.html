@@ -272,14 +272,34 @@
             }
         });
 
-        // Verificar se é admin
-        async function checkIfAdmin(uid) {
+        // Adicione esta função de debug temporária
+        async function debugAdminCheck(uid) {
             try {
-                debugLog(`Verificando se ${uid} é admin...`);
+                debugLog(`🔍 Debug - Procurando admin com UID: ${uid}`);
+                
                 const adminQuery = query(collection(db, "admins"), where("uid", "==", uid));
                 const adminSnapshot = await getDocs(adminQuery);
                 
-                if (!adminSnapshot.empty) {
+                debugLog(`🔍 Debug - Documentos encontrados: ${adminSnapshot.size}`);
+                
+                adminSnapshot.forEach(doc => {
+                    debugLog(`🔍 Debug - Documento admin: ${doc.id} - ${JSON.stringify(doc.data())}`);
+                });
+                
+                return !adminSnapshot.empty;
+            } catch (error) {
+                debugLog(`🔍 Debug - Erro ao verificar admin: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        // Modifique a função checkIfAdmin para usar debug
+        async function checkIfAdmin(uid) {
+            try {
+                debugLog(`Verificando se ${uid} é admin...`);
+                const isAdmin = await debugAdminCheck(uid);
+                
+                if (isAdmin) {
                     debugLog('Usuário é admin, mostrando painel', 'success');
                     currentAdmin = uid;
                     showAdminPanel();
