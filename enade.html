@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1Desafio ENADE - Artes Visuais</title>
+    <title>Desafio ENADE - Artes Visuais</title>
     <!-- ⚠️ ALERTA DE PERFORMANCE: Em produção, use build local do Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -934,13 +934,8 @@
                     correta: correctAnswer
                 };
                 if (isCorrect) {
-                    if (isAllQuestionsMode) {
-                        currentScore += 1; // 1 ponto por questão no modo "todas as questões"
-                        showModal('Resposta Correta! +1 ponto.');
-                    } else {
-                        currentScore += 10; // 10 pontos por questão no modo normal
-                        showModal('Resposta Correta! +10 pontos.');
-                    }
+                    currentScore += 1; // Sempre 1 ponto por acerto
+                    showModal('Resposta Correta! +1 ponto.');
                 } else {
                     showModal(`Resposta Incorreta. Resposta correta: ${correctAnswer}`);
                 }
@@ -964,18 +959,16 @@
         async function endChallenge() {
             let finalScore = currentScore;
             
-            // Verificar se está no modo "todas as questões" e se acertou todas
-            if (isAllQuestionsMode) {
-                const correctAnswers = userAnswers.filter(answer => answer && answer.escolhida === answer.correta).length;
-                const totalQuestions = questions.length;
-                
-                if (correctAnswers === totalQuestions && totalQuestions > 0) {
-                    // Duplicar pontos se acertou todas as questões
-                    finalScore = currentScore * 2;
-                    showModal(`🎉 PARABÉNS! Você acertou todas as ${totalQuestions} questões! Pontos duplicados: ${currentScore} → ${finalScore}`);
-                } else {
-                    showModal(`Desafio Finalizado! Você acertou ${correctAnswers} de ${totalQuestions} questões. Pontuação: ${currentScore}`);
-                }
+            // Verificar se acertou todas as questões
+            const correctAnswers = userAnswers.filter(answer => answer && answer.escolhida === answer.correta).length;
+            const totalQuestions = questions.length;
+            
+            if (correctAnswers === totalQuestions && totalQuestions > 0) {
+                // Duplicar pontos se acertou todas as questões
+                finalScore = currentScore * 2;
+                showModal(`🎉 PARABÉNS! Você acertou todas as ${totalQuestions} questões! Pontos duplicados: ${currentScore} → ${finalScore}`);
+            } else {
+                showModal(`Desafio Finalizado! Você acertou ${correctAnswers} de ${totalQuestions} questões. Pontuação: ${currentScore}`);
             }
             
             // Salvar dados de relatório
