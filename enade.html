@@ -317,7 +317,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { perguntasLocais } from './perguntas-locais.js?v=2';
 
         // ⚠️ ALERTA DE SEGURANÇA: Em produção, mova estas configurações para variáveis de ambiente
         const firebaseConfig = {
@@ -1290,36 +1289,8 @@
         }
         // --- Carregamento assíncrono de perguntas (simulado) ---
         async function fetchPerguntas() {
-            // Simule fetch de perguntas do Firebase ou arquivo externo
-            // Aqui, apenas retorna perguntasLocais para compatibilidade
-            const perguntas = perguntasLocais;
-            
-            // Validação das perguntas
-            const perguntasValidas = perguntas.filter(pergunta => {
-                const camposObrigatorios = ['id', 'enunciado', 'opcao_A', 'opcao_B', 'opcao_C', 'opcao_D', 'opcao_E', 'resposta_correta'];
-                const temTodosCampos = camposObrigatorios.every(campo => {
-                    const valor = pergunta[campo];
-                    // Para campos numéricos (como id), verifica se existe e é válido
-                    if (campo === 'id') {
-                        return valor !== undefined && valor !== null && !isNaN(valor);
-                    }
-                    // Para campos de texto, verifica se existe e não está vazio
-                    return valor && typeof valor === 'string' && valor.trim() !== '';
-                });
-                const respostaValida = ['A', 'B', 'C', 'D', 'E'].includes(pergunta.resposta_correta);
-                
-                if (!temTodosCampos) {
-                    console.warn(`Pergunta ${pergunta.id} está faltando campos obrigatórios`);
-                }
-                if (!respostaValida) {
-                    console.warn(`Pergunta ${pergunta.id} tem resposta inválida: ${pergunta.resposta_correta}`);
-                }
-                
-                return temTodosCampos && respostaValida;
-            });
-            
-            console.log(`Carregadas ${perguntasValidas.length} de ${perguntas.length} perguntas válidas`);
-            return perguntasValidas;
+            const qSnap = await getDocs(collection(db, "perguntas"));
+            return qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         }
         // --- Validação de dados ---
         // Exemplo: impedir pontuação negativa ou acima do máximo
