@@ -50,7 +50,7 @@
     </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, getDocs, updateDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Configuração do Firebase
@@ -69,6 +69,9 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Configurar persistência local para manter sessão
+        setPersistence(auth, browserLocalPersistence);
+
         // Elementos DOM
         const adminLogin = document.getElementById('admin-login');
         const editorPanel = document.getElementById('editor-panel');
@@ -85,8 +88,16 @@
         firebaseInfo.innerHTML = `<div class="text-green-600">✅ Firebase conectado</div><div class="text-xs mt-1">Project ID: ${firebaseConfig.projectId}</div>`;
 
         // Verificar se o usuário já está logado
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // Renovar token automaticamente para evitar expiração
+                try {
+                    await user.getIdToken(true);
+                    console.log('Token renovado automaticamente');
+                } catch (error) {
+                    console.error('Erro ao renovar token:', error);
+                }
+                
                 checkIfAdmin(user.uid);
             } else {
                 showLoginForm();
