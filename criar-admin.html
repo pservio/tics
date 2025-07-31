@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Admin</title>
+</head>
+<body>
+    <h1>Criando Admin...</h1>
+    <div id="status"></div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVQ83EIzNpL5ppuxTH1TSUOd0T2G-9KcQ",
+            authDomain: "desafioenade2.firebaseapp.com",
+            projectId: "desafioenade2",
+            storageBucket: "desafioenade2.appspot.com",
+            messagingSenderId: "987973574127",
+            appId: "1:987973574127:web:4041110632500dbd482a1a",
+            measurementId: "G-FD8E45DWKR"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        async function criarAdmin() {
+            try {
+                const adminData = {
+                    uid: "DHDh9y07JVcc3wJGBAHj45bj5L33",
+                    email: "pservio@gmail.com",
+                    role: "admin",
+                    createdAt: new Date()
+                };
+                
+                const docRef = await addDoc(collection(db, "admins"), adminData);
+                document.getElementById('status').innerHTML = `
+                    <div style="color: green; padding: 10px; border: 1px solid green;">
+                        ✅ Admin criado com sucesso!<br>
+                        Document ID: ${docRef.id}<br>
+                        UID: ${adminData.uid}
+                    </div>
+                `;
+                console.log("Admin criado:", docRef.id);
+            } catch (error) {
+                document.getElementById('status').innerHTML = `
+                    <div style="color: red; padding: 10px; border: 1px solid red;">
+                        ❌ Erro ao criar admin: ${error.message}
+                    </div>
+                `;
+                console.error("Erro:", error);
+            }
+        }
+        
+        criarAdmin();
+    </script>
+</body>
+</html>
