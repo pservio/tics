@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio ENADE - Artes Visuais</title>
+    <title>*Desafio ENADE - Artes Visuais</title>
     <!-- ⚠️ ALERTA DE PERFORMANCE: Em produção, use build local do Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -316,7 +316,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { perguntasLocais } from './perguntas-locais.js?v=2';
 
         // ⚠️ ALERTA DE SEGURANÇA: Em produção, mova estas configurações para variáveis de ambiente
@@ -1218,17 +1218,50 @@
             const qSnap = await getDocs(collection(db, "perguntas"));
             const list = document.getElementById('admin-questions-list');
             list.innerHTML = '';
-            qSnap.forEach(doc => {
-                const q = doc.data();
+            qSnap.forEach(docSnap => {
+                const q = docSnap.data();
                 const div = document.createElement('div');
                 div.className = 'border p-2 mb-2 rounded';
-                div.innerHTML = `<b>${q.enunciado}</b> <button data-id="${doc.id}" class="text-red-600 delete-q">Excluir</button>`;
+                div.innerHTML = `
+                  <b>${q.enunciado}</b>
+                  <span class="text-xs text-gray-500 ml-2">[Temas: ${(q.tema || []).join(', ')}]</span>
+                  <button data-id="${docSnap.id}" class="text-blue-600 edit-q ml-2">Editar</button>
+                  <button data-id="${docSnap.id}" class="text-red-600 delete-q ml-2">Excluir</button>
+                  <div class="edit-form hidden mt-2"></div>
+                `;
                 list.appendChild(div);
             });
+            // Exclusão
             list.querySelectorAll('.delete-q').forEach(btn => {
                 btn.onclick = async function() {
                     await deleteDoc(doc(db, "perguntas", btn.dataset.id));
                     loadAdminQuestions();
+                };
+            });
+            // Edição de temas
+            list.querySelectorAll('.edit-q').forEach(btn => {
+                btn.onclick = function() {
+                    const div = btn.parentElement;
+                    const editForm = div.querySelector('.edit-form');
+                    // Busca os temas atuais do span
+                    const temasSpan = div.querySelector('span');
+                    const temasAtuais = temasSpan ? temasSpan.textContent.replace(/\[Temas: |\]/g, '') : '';
+                    editForm.innerHTML = `
+                      <input type="text" class="edit-tema-input border rounded px-2 py-1 w-2/3" value="${temasAtuais}" placeholder="Temas separados por vírgula">
+                      <button class="save-edit-tema bg-green-600 text-white px-2 py-1 rounded ml-2">Salvar</button>
+                      <button class="cancel-edit-tema bg-gray-400 text-white px-2 py-1 rounded ml-2">Cancelar</button>
+                    `;
+                    editForm.classList.remove('hidden');
+                    // Evento salvar
+                    editForm.querySelector('.save-edit-tema').onclick = async function() {
+                        const novoTema = editForm.querySelector('.edit-tema-input').value.split(',').map(t=>t.trim()).filter(Boolean);
+                        await updateDoc(doc(db, "perguntas", btn.dataset.id), { tema: novoTema });
+                        loadAdminQuestions();
+                    };
+                    // Evento cancelar
+                    editForm.querySelector('.cancel-edit-tema').onclick = function() {
+                        editForm.classList.add('hidden');
+                    };
                 };
             });
         }
