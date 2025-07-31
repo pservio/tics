@@ -2,13 +2,31 @@
 <html>
 <head>
     <title>Criar Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        input, button { padding: 8px; margin: 5px; }
+    </style>
 </head>
 <body>
-    <h1>Criando Admin...</h1>
+    <h1>Criar Admin</h1>
+    
+    <!-- Formulário de Login -->
+    <div id="login-form">
+        <h3>Faça login primeiro:</h3>
+        <input type="email" id="email" placeholder="Email" value="pservio@gmail.com"><br>
+        <input type="password" id="password" placeholder="Senha"><br>
+        <button onclick="fazerLogin()">Fazer Login</button>
+    </div>
+    
     <div id="status"></div>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
@@ -22,8 +40,32 @@
         };
         
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
         
+        // Função para fazer login
+        window.fazerLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                mostrarStatus('Por favor, preencha email e senha.', 'error');
+                return;
+            }
+            
+            try {
+                mostrarStatus('Fazendo login...', 'info');
+                await signInWithEmailAndPassword(auth, email, password);
+                mostrarStatus('Login realizado com sucesso! Criando admin...', 'success');
+                
+                // Após login, criar o admin
+                setTimeout(criarAdmin, 1000);
+            } catch (error) {
+                mostrarStatus(`Erro no login: ${error.message}`, 'error');
+            }
+        };
+        
+        // Função para criar admin
         async function criarAdmin() {
             try {
                 const adminData = {
@@ -34,25 +76,38 @@
                 };
                 
                 const docRef = await addDoc(collection(db, "admins"), adminData);
-                document.getElementById('status').innerHTML = `
-                    <div style="color: green; padding: 10px; border: 1px solid green;">
-                        ✅ Admin criado com sucesso!<br>
-                        Document ID: ${docRef.id}<br>
-                        UID: ${adminData.uid}
-                    </div>
-                `;
+                mostrarStatus(`
+                    ✅ Admin criado com sucesso!<br>
+                    Document ID: ${docRef.id}<br>
+                    UID: ${adminData.uid}<br>
+                    Email: ${adminData.email}
+                `, 'success');
+                
                 console.log("Admin criado:", docRef.id);
+                
+                // Esconder formulário de login
+                document.getElementById('login-form').style.display = 'none';
+                
             } catch (error) {
-                document.getElementById('status').innerHTML = `
-                    <div style="color: red; padding: 10px; border: 1px solid red;">
-                        ❌ Erro ao criar admin: ${error.message}
-                    </div>
-                `;
+                mostrarStatus(`❌ Erro ao criar admin: ${error.message}`, 'error');
                 console.error("Erro:", error);
             }
         }
         
-        criarAdmin();
+        // Função para mostrar status
+        function mostrarStatus(mensagem, tipo) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${tipo}">${mensagem}</div>`;
+        }
+        
+        // Verificar se já está logado
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                mostrarStatus(`Já logado como: ${user.email}`, 'info');
+                document.getElementById('login-form').style.display = 'none';
+                criarAdmin();
+            }
+        });
     </script>
 </body>
 </html>
