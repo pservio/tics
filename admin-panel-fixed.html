@@ -153,7 +153,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Configuração do Firebase
@@ -187,6 +187,9 @@
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
+            
+            // Configurar persistência local para manter sessão
+            setPersistence(auth, browserLocalPersistence);
             
             debugLog('Firebase inicializado com sucesso', 'success');
             
@@ -222,9 +225,18 @@
         let currentAdmin = null;
 
         // Verificar se o usuário já está logado
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 debugLog(`Usuário autenticado: ${user.email}`);
+                
+                // Renovar token automaticamente para evitar expiração
+                try {
+                    await user.getIdToken(true);
+                    debugLog('Token renovado automaticamente', 'success');
+                } catch (error) {
+                    debugLog(`Erro ao renovar token: ${error.message}`, 'error');
+                }
+                
                 // Verificar se é admin
                 checkIfAdmin(user.uid);
             } else {
