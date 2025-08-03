@@ -326,11 +326,39 @@
                     html += `<img src="${q.imagem_url}" alt="Imagem da Pergunta" class="rounded mb-4 max-h-64 object-contain border">`;
                 }
                 
-                // Alternativas
+                // Alternativas - com debug e suporte a diferentes formatos
+                console.log('Dados da pergunta:', q);
+                let alternativas = [];
+                
+                // Tentar diferentes formatos de alternativas
                 if (q.alternativas && Array.isArray(q.alternativas)) {
+                    alternativas = q.alternativas;
+                } else if (q.alternativa_a || q.alternativa_b || q.alternativa_c || q.alternativa_d || q.alternativa_e) {
+                    // Formato com campos separados
+                    if (q.alternativa_a) alternativas.push(q.alternativa_a);
+                    if (q.alternativa_b) alternativas.push(q.alternativa_b);
+                    if (q.alternativa_c) alternativas.push(q.alternativa_c);
+                    if (q.alternativa_d) alternativas.push(q.alternativa_d);
+                    if (q.alternativa_e) alternativas.push(q.alternativa_e);
+                } else if (q.opcoes && Array.isArray(q.opcoes)) {
+                    alternativas = q.opcoes;
+                } else if (q.opcao_a || q.opcao_b || q.opcao_c || q.opcao_d || q.opcao_e) {
+                    // Formato com opções separadas
+                    if (q.opcao_a) alternativas.push(q.opcao_a);
+                    if (q.opcao_b) alternativas.push(q.opcao_b);
+                    if (q.opcao_c) alternativas.push(q.opcao_c);
+                    if (q.opcao_d) alternativas.push(q.opcao_d);
+                    if (q.opcao_e) alternativas.push(q.opcao_e);
+                }
+                
+                console.log('Alternativas encontradas:', alternativas);
+                
+                if (alternativas.length > 0) {
                     html += '<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">Alternativas:</h4>';
-                    q.alternativas.forEach((alt, index) => {
-                        const isCorrect = q.resposta_correta === index;
+                    alternativas.forEach((alt, index) => {
+                        const isCorrect = q.resposta_correta === index || 
+                                        q.resposta_correta === String.fromCharCode(65 + index) ||
+                                        q.resposta_correta === String.fromCharCode(97 + index);
                         html += `
                             <div class="alternative ${isCorrect ? 'correct' : ''}">
                                 <span class="font-medium">${String.fromCharCode(65 + index)})</span> 
@@ -340,6 +368,8 @@
                         `;
                     });
                     html += '</div>';
+                } else {
+                    html += '<div class="mb-4 text-yellow-600">⚠️ Nenhuma alternativa encontrada para esta pergunta</div>';
                 }
                 
                 // Temas
@@ -349,6 +379,14 @@
                         <input type="text" value="${(q.tema || []).join(', ')}" class="tema-input border rounded px-3 py-2 w-full mt-2" placeholder="Temas separados por vírgula">
                     </div>
                     <button class="save-tema-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Salvar Temas</button>
+                `;
+                
+                // Debug - mostrar estrutura dos dados (remover depois de identificar o problema)
+                html += `
+                    <details class="mt-4 p-3 bg-gray-100 rounded">
+                        <summary class="cursor-pointer font-medium text-gray-700">🔍 Ver estrutura dos dados (Debug)</summary>
+                        <pre class="mt-2 text-xs text-gray-600 overflow-auto">${JSON.stringify(q, null, 2)}</pre>
+                    </details>
                 `;
                 
                 div.innerHTML = html;
