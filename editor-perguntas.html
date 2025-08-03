@@ -342,8 +342,15 @@
                     if (q.alternativa_e) alternativas.push(q.alternativa_e);
                 } else if (q.opcoes && Array.isArray(q.opcoes)) {
                     alternativas = q.opcoes;
+                } else if (q.opcao_A || q.opcao_B || q.opcao_C || q.opcao_D || q.opcao_E) {
+                    // Formato com opções separadas (maiúsculas)
+                    if (q.opcao_A) alternativas.push(q.opcao_A);
+                    if (q.opcao_B) alternativas.push(q.opcao_B);
+                    if (q.opcao_C) alternativas.push(q.opcao_C);
+                    if (q.opcao_D) alternativas.push(q.opcao_D);
+                    if (q.opcao_E) alternativas.push(q.opcao_E);
                 } else if (q.opcao_a || q.opcao_b || q.opcao_c || q.opcao_d || q.opcao_e) {
-                    // Formato com opções separadas
+                    // Formato com opções separadas (minúsculas)
                     if (q.opcao_a) alternativas.push(q.opcao_a);
                     if (q.opcao_b) alternativas.push(q.opcao_b);
                     if (q.opcao_c) alternativas.push(q.opcao_c);
@@ -381,13 +388,7 @@
                     <button class="save-tema-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Salvar Temas</button>
                 `;
                 
-                // Debug - mostrar estrutura dos dados (remover depois de identificar o problema)
-                html += `
-                    <details class="mt-4 p-3 bg-gray-100 rounded">
-                        <summary class="cursor-pointer font-medium text-gray-700">🔍 Ver estrutura dos dados (Debug)</summary>
-                        <pre class="mt-2 text-xs text-gray-600 overflow-auto">${JSON.stringify(q, null, 2)}</pre>
-                    </details>
-                `;
+
                 
                 div.innerHTML = html;
                 
