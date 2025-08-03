@@ -12,6 +12,35 @@
         .modal-content { background: #fff; padding: 30px; border-radius: 10px; max-width: 500px; margin: auto; position: relative; }
         .close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close-button:hover { color: #000; }
+        .filter-tag {
+            display: inline-block;
+            background: #e5e7eb;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            padding: 4px 12px;
+            margin: 2px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tag:hover {
+            background: #d1d5db;
+        }
+        .filter-tag.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .alternative {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 6px;
+            border-left: 4px solid #e5e7eb;
+        }
+        .alternative.correct {
+            border-left-color: #10b981;
+            background-color: #f0fdf4;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -44,7 +73,21 @@
                     <h2 class="text-2xl font-semibold text-gray-700">Perguntas Cadastradas</h2>
                     <a href="admin-panel-fixed.html" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">Voltar ao Painel</a>
                 </div>
-                <div id="questions-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                
+                <!-- Sistema de Filtros -->
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Temas</h3>
+                    <div class="flex flex-wrap gap-2 mb-3" id="available-themes">
+                        <span class="text-gray-600 text-sm">Carregando temas...</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-gray-700">Filtros ativos:</span>
+                        <div id="active-filters" class="flex flex-wrap gap-2"></div>
+                        <button id="clear-filters" class="text-sm text-red-600 hover:text-red-800 font-medium">Limpar filtros</button>
+                    </div>
+                </div>
+                
+                <div id="questions-list" class="space-y-6"></div>
             </div>
         </div>
     </div>
@@ -81,8 +124,14 @@
         const loginStatus = document.getElementById('login-status');
         const firebaseInfo = document.getElementById('firebase-info');
         const questionsList = document.getElementById('questions-list');
+        const availableThemes = document.getElementById('available-themes');
+        const activeFilters = document.getElementById('active-filters');
+        const clearFiltersBtn = document.getElementById('clear-filters');
 
         let currentAdmin = null;
+        let allQuestions = [];
+        let allThemes = new Set();
+        let activeFilterThemes = new Set();
 
         // Atualizar status do Firebase
         firebaseInfo.innerHTML = `<div class="text-green-600">✅ Firebase conectado</div><div class="text-xs mt-1">Project ID: ${firebaseConfig.projectId}</div>`;
@@ -152,7 +201,7 @@
 
         // Mostrar painel de edição
         function showEditorPanel() {
-            adminLogin.classList.add('hidden');
+            adminLogin.classList.remove('hidden');
             editorPanel.classList.remove('hidden');
         }
 
@@ -172,32 +221,153 @@
             questionsList.innerHTML = '<div class="text-gray-500">Carregando perguntas...</div>';
             try {
                 const qSnap = await getDocs(collection(db, "perguntas"));
-                questionsList.innerHTML = '';
+                allQuestions = [];
+                allThemes.clear();
+                
                 qSnap.forEach(docSnap => {
                     const q = docSnap.data();
-                    const div = document.createElement('div');
-                    div.className = 'border p-4 rounded-lg shadow-sm bg-white flex flex-col gap-2';
-                    div.innerHTML = `
-                        <div class="font-semibold text-blue-800 mb-1">ID: ${docSnap.id}</div>
-                        <div class="text-lg font-bold text-gray-800 mb-1">${q.enunciado}</div>
-                        ${q.imagem_url ? `<img src="${q.imagem_url}" alt="Imagem da Pergunta" class="rounded mb-2 max-h-48 object-contain border">` : ''}
-                        <div class="mb-2">
-                            <span class="font-semibold">Temas:</span>
-                            <input type="text" value="${(q.tema || []).join(', ')}" class="tema-input border rounded px-2 py-1 w-full mt-1" placeholder="Temas separados por vírgula">
-                        </div>
-                        <button class="save-tema-btn bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded self-end">Salvar Temas</button>
-                    `;
-                    // Salvar temas
-                    div.querySelector('.save-tema-btn').onclick = async function() {
-                        const novoTema = div.querySelector('.tema-input').value.split(',').map(t=>t.trim()).filter(Boolean);
-                        await updateDoc(doc(db, "perguntas", docSnap.id), { tema: novoTema });
-                        showMessage('Temas atualizados!', 'success');
+                    const questionData = {
+                        id: docSnap.id,
+                        ...q
                     };
-                    questionsList.appendChild(div);
+                    allQuestions.push(questionData);
+                    
+                    // Coletar todos os temas
+                    if (q.tema && Array.isArray(q.tema)) {
+                        q.tema.forEach(tema => {
+                            if (tema.trim()) {
+                                allThemes.add(tema.trim());
+                            }
+                        });
+                    }
                 });
+                
+                renderThemeFilters();
+                renderQuestions();
             } catch (error) {
                 questionsList.innerHTML = `<div class="text-red-600">Erro ao carregar perguntas: ${error.message}</div>`;
             }
+        }
+
+        // Renderizar filtros de temas
+        function renderThemeFilters() {
+            availableThemes.innerHTML = '';
+            Array.from(allThemes).sort().forEach(tema => {
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag';
+                tag.textContent = tema;
+                tag.onclick = () => toggleThemeFilter(tema);
+                availableThemes.appendChild(tag);
+            });
+        }
+
+        // Alternar filtro de tema
+        function toggleThemeFilter(tema) {
+            if (activeFilterThemes.has(tema)) {
+                activeFilterThemes.delete(tema);
+            } else {
+                activeFilterThemes.add(tema);
+            }
+            renderActiveFilters();
+            renderQuestions();
+        }
+
+        // Renderizar filtros ativos
+        function renderActiveFilters() {
+            activeFilters.innerHTML = '';
+            Array.from(activeFilterThemes).forEach(tema => {
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag active';
+                tag.textContent = tema;
+                tag.onclick = () => toggleThemeFilter(tema);
+                activeFilters.appendChild(tag);
+            });
+        }
+
+        // Limpar filtros
+        clearFiltersBtn.onclick = () => {
+            activeFilterThemes.clear();
+            renderActiveFilters();
+            renderQuestions();
+        };
+
+        // Renderizar perguntas
+        function renderQuestions() {
+            questionsList.innerHTML = '';
+            
+            // Filtrar perguntas
+            let filteredQuestions = allQuestions;
+            if (activeFilterThemes.size > 0) {
+                filteredQuestions = allQuestions.filter(q => {
+                    if (!q.tema || !Array.isArray(q.tema)) return false;
+                    return Array.from(activeFilterThemes).some(tema => 
+                        q.tema.some(qTema => qTema.trim().toLowerCase() === tema.toLowerCase())
+                    );
+                });
+            }
+            
+            if (filteredQuestions.length === 0) {
+                questionsList.innerHTML = '<div class="text-gray-500 text-center py-8">Nenhuma pergunta encontrada com os filtros selecionados.</div>';
+                return;
+            }
+            
+            filteredQuestions.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'border p-6 rounded-lg shadow-sm bg-white';
+                
+                // Enunciado
+                let html = `
+                    <div class="font-semibold text-blue-800 mb-2">ID: ${q.id}</div>
+                    <div class="text-lg font-bold text-gray-800 mb-4">${q.enunciado}</div>
+                `;
+                
+                // Imagem se existir
+                if (q.imagem_url) {
+                    html += `<img src="${q.imagem_url}" alt="Imagem da Pergunta" class="rounded mb-4 max-h-64 object-contain border">`;
+                }
+                
+                // Alternativas
+                if (q.alternativas && Array.isArray(q.alternativas)) {
+                    html += '<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">Alternativas:</h4>';
+                    q.alternativas.forEach((alt, index) => {
+                        const isCorrect = q.resposta_correta === index;
+                        html += `
+                            <div class="alternative ${isCorrect ? 'correct' : ''}">
+                                <span class="font-medium">${String.fromCharCode(65 + index)})</span> 
+                                ${alt}
+                                ${isCorrect ? '<span class="text-green-600 font-semibold ml-2">✓ Correta</span>' : ''}
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+                
+                // Temas
+                html += `
+                    <div class="mb-4">
+                        <span class="font-semibold text-gray-700">Temas:</span>
+                        <input type="text" value="${(q.tema || []).join(', ')}" class="tema-input border rounded px-3 py-2 w-full mt-2" placeholder="Temas separados por vírgula">
+                    </div>
+                    <button class="save-tema-btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Salvar Temas</button>
+                `;
+                
+                div.innerHTML = html;
+                
+                // Evento para salvar temas
+                div.querySelector('.save-tema-btn').onclick = async function() {
+                    const novoTema = div.querySelector('.tema-input').value.split(',').map(t=>t.trim()).filter(Boolean);
+                    try {
+                        await updateDoc(doc(db, "perguntas", q.id), { tema: novoTema });
+                        showMessage('Temas atualizados!', 'success');
+                        // Recarregar perguntas para atualizar os filtros
+                        loadQuestions();
+                    } catch (error) {
+                        showMessage(`Erro ao atualizar temas: ${error.message}`, 'error');
+                    }
+                };
+                
+                questionsList.appendChild(div);
+            });
         }
     </script>
 </body>
