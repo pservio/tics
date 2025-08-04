@@ -65,6 +65,19 @@
                 <!-- Formulário de Cadastro -->
                 <div class="bg-gray-50 p-6 rounded-lg mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">Cadastrar Novo Aluno</h3>
+                    
+                    <!-- Verificação de Usuários Órfãos -->
+                    <div class="mb-4 p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="text-sm font-medium text-yellow-800 mb-2">🔍 Verificar usuários órfãos no Firebase Auth</h4>
+                        <div class="flex gap-2">
+                            <input type="email" id="orphan-email" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Digite o email para verificar">
+                            <button type="button" id="check-orphan-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg text-sm">
+                                Verificar
+                            </button>
+                        </div>
+                        <div id="orphan-result" class="mt-2 text-sm"></div>
+                    </div>
+                    
                     <form id="student-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
@@ -217,6 +230,9 @@
         const modalConfirm = document.getElementById('modal-confirm');
         const modalCancel = document.getElementById('modal-cancel');
         const closeModal = document.getElementById('close-modal');
+        const orphanEmail = document.getElementById('orphan-email');
+        const checkOrphanBtn = document.getElementById('check-orphan-btn');
+        const orphanResult = document.getElementById('orphan-result');
 
         let currentAdmin = null;
 
@@ -465,6 +481,18 @@
 
                 debugLog(`Encontrados ${studentsSnapshot.size} alunos`);
                 
+                if (studentsSnapshot.size === 0) {
+                    debugLog('Nenhum aluno encontrado no Firestore', 'error');
+                    studentsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                Nenhum aluno cadastrado. Verifique se há usuários órfãos no Firebase Auth.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
                 studentsSnapshot.forEach((doc) => {
                     const student = doc.data();
                     const row = document.createElement('tr');
@@ -562,6 +590,80 @@
                 confirmModal.style.display = 'none';
             }
         };
+
+        // Verificar usuários órfãos no Firebase Auth
+        checkOrphanBtn.addEventListener('click', async () => {
+            const email = orphanEmail.value.trim();
+            if (!email) {
+                orphanResult.innerHTML = '<div class="text-red-600">Digite um email para verificar.</div>';
+                return;
+            }
+
+            try {
+                debugLog(`Verificando usuário órfão: ${email}`);
+                orphanResult.innerHTML = '<div class="text-blue-600">Verificando...</div>';
+                
+                // Verificar se existe no Firestore
+                const studentQuery = query(collection(db, "students"), where("email", "==", email));
+                const studentSnapshot = await getDocs(studentQuery);
+                
+                let resultHTML = '';
+                
+                if (!studentSnapshot.empty) {
+                    const student = studentSnapshot.docs[0].data();
+                    resultHTML = `
+                        <div class="text-green-600 font-medium">✅ Usuário encontrado no Firestore</div>
+                        <div class="text-gray-700 mt-1">
+                            <strong>Nome:</strong> ${student.name}<br>
+                            <strong>Email:</strong> ${student.email}<br>
+                            <strong>Ano:</strong> ${student.year}<br>
+                            <strong>Status:</strong> ${student.status === 'active' ? 'Ativo' : 'Inativo'}<br>
+                            <strong>UID:</strong> ${student.uid}
+                        </div>
+                    `;
+                } else {
+                    resultHTML = `
+                        <div class="text-red-600 font-medium">⚠️ Usuário NÃO encontrado no Firestore</div>
+                        <div class="text-gray-700 mt-1">
+                            Este email pode estar no Firebase Auth mas não no Firestore.<br>
+                            <button onclick="recoverOrphanUser('${email}')" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+                                Tentar Recuperar
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                orphanResult.innerHTML = resultHTML;
+                debugLog(`Verificação concluída para: ${email}`, 'success');
+            } catch (error) {
+                debugLog(`Erro ao verificar usuário órfão: ${error.message}`, 'error');
+                orphanResult.innerHTML = `<div class="text-red-600">Erro ao verificar: ${error.message}</div>`;
+            }
+        });
+
+        // Recuperar usuário órfão
+        window.recoverOrphanUser = async (email) => {
+            try {
+                debugLog(`Tentando recuperar usuário órfão: ${email}`);
+                
+                // Aqui você pode implementar a lógica para recuperar o usuário
+                // Por exemplo, criar um registro no Firestore com dados básicos
+                
+                showMessage(`Funcionalidade de recuperação será implementada. Email: ${email}`, 'info');
+                
+            } catch (error) {
+                debugLog(`Erro ao recuperar usuário órfão: ${error.message}`, 'error');
+                showMessage(`Erro ao recuperar usuário: ${error.message}`, 'error');
+            }
+        };
+
+        // Buscar ao pressionar Enter no campo de verificação
+        orphanEmail.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                checkOrphanBtn.click();
+            }
+        });
 
         debugLog('Sistema inicializado e pronto', 'success');
     </script>
