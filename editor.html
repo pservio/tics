@@ -50,10 +50,10 @@
         };
         
         // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
+        let app;
+        let db;
+        let auth;
+        
         // Variáveis de estado
         let questions = [];
         let selectedQuestion = null;
@@ -285,8 +285,14 @@
         };
 
         // Autenticação e listener do Firestore
-        window.onload = () => {
-            auth.signInAnonymously().then(() => {
+        const initializeAndRun = async () => {
+            try {
+                // Initialize Firebase
+                app = firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                auth = firebase.auth();
+
+                await auth.signInAnonymously();
                 db.collection('perguntas').onSnapshot(snapshot => {
                     questions = snapshot.docs.map(doc => ({
                         id: doc.id,
@@ -304,11 +310,13 @@
                     console.error("Error fetching questions:", error);
                     showMessage('Erro ao buscar as questões.', 'error');
                 });
-            }).catch(error => {
-                console.error("Error during anonymous sign-in:", error);
+            } catch (error) {
+                console.error("Error during initialization:", error);
                 showMessage('Erro na autenticação.', 'error');
-            });
+            }
         };
+
+        window.onload = initializeAndRun;
     </script>
 </body>
 </html>
