@@ -292,8 +292,8 @@
                 app = firebase.initializeApp(firebaseConfig);
                 db = app.firestore();
                 auth = app.auth();
-
-                await auth.signInAnonymously();
+                
+                // Removida a chamada de autenticação anônima para evitar o erro 'auth/admin-restricted-operation'
                 db.collection('perguntas').onSnapshot(snapshot => {
                     questions = snapshot.docs.map(doc => ({
                         id: doc.id,
@@ -313,7 +313,7 @@
                 });
             } catch (error) {
                 console.error("Error during initialization:", error);
-                showMessage('Erro na autenticação.', 'error');
+                showMessage('Erro na inicialização. Verifique sua configuração.', 'error');
             }
         };
 
