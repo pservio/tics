@@ -93,7 +93,8 @@
             'núcleo 1 (formação geral)': 0,
             'núcleo 2 (conteúdos específicos)': 0,
             'Núcleo 3 (Extensão)': 0,
-            'Núcleo 4 (Estágio)': 0
+            'Núcleo 4 (Estágio)': 0,
+            'OUTROS': 0
           });
           const [newDisciplineDayOfWeek, setNewDisciplineDayOfWeek] = React.useState('');
           const [newDisciplineStartTime, setNewDisciplineStartTime] = React.useState('');
@@ -131,7 +132,8 @@
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': totalHours,
               'Núcleo 3 (Extensão)': 0,
-              'Núcleo 4 (Estágio)': 0
+              'Núcleo 4 (Estágio)': 0,
+              'OUTROS': 0
             };
             console.log('Resetting distribution for', workload, 'to:', newDistribution);
             setNewDisciplineNucleoDistribution(newDistribution);
@@ -305,7 +307,8 @@
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': 0,
               'Núcleo 3 (Extensão)': 0,
-              'Núcleo 4 (Estágio)': 0
+              'Núcleo 4 (Estágio)': 0,
+              'OUTROS': 0
             });
             setNewDisciplineDayOfWeek('');
             setNewDisciplineStartTime('');
@@ -323,7 +326,8 @@
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': 0,
               'Núcleo 3 (Extensão)': 0,
-              'Núcleo 4 (Estágio)': 0
+              'Núcleo 4 (Estágio)': 0,
+              'OUTROS': 0
             });
             setNewDisciplineDayOfWeek(discipline.dayOfWeek);
             setNewDisciplineStartTime(discipline.timeSlots[0] || '');
@@ -342,7 +346,8 @@
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': 0,
               'Núcleo 3 (Extensão)': 0,
-              'Núcleo 4 (Estágio)': 0
+              'Núcleo 4 (Estágio)': 0,
+              'OUTROS': 0
             });
             setNewDisciplineDayOfWeek('');
             setNewDisciplineStartTime('');
@@ -666,6 +671,7 @@
 
           // Calculate workload statistics
           const calculateWorkloadStats = () => {
+            // Total workload includes ALL disciplines (including OUTROS category)
             const totalWorkload = disciplines.reduce((total, d) => {
               const hours = parseInt(d.workload.replace('h', ''));
               return total + hours;
@@ -675,7 +681,8 @@
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': 0,
               'Núcleo 3 (Extensão)': 0,
-              'Núcleo 4 (Estágio)': 0
+              'Núcleo 4 (Estágio)': 0,
+              'OUTROS': 0
             };
 
             disciplines.forEach(d => {
@@ -699,9 +706,15 @@
             const targets = {
               'núcleo 1 (formação geral)': 900,
               'núcleo 2 (conteúdos específicos)': 1600,
-              'Núcleo 3 (Extensão)': Math.round(totalWorkload * 0.10), // 10% of total
-              'Núcleo 4 (Estágio)': 400
+              'Núcleo 3 (Extensão)': Math.round(totalWorkload * 0.10), // 10% of total (inclui OUTROS no total)
+              'Núcleo 4 (Estágio)': 400,
+              'OUTROS': 0 // Sem meta específica, mas conta para o total
             };
+
+            // Debug: Log para verificar se OUTROS está sendo contabilizado
+            console.log('Total workload (includes OUTROS):', totalWorkload);
+            console.log('Núcleo 3 target (10% of total):', targets['Núcleo 3 (Extensão)']);
+            console.log('Workload by nucleo:', workloadByNucleo);
 
             // Check if targets are met
             const targetStatus = {};
@@ -784,6 +797,8 @@
                 return 'bg-yellow-200 text-yellow-800 border-yellow-500';
               case 'Núcleo 4 (Estágio)':
                 return 'bg-red-200 text-red-800 border-red-500';
+              case 'OUTROS':
+                return 'bg-gray-300 text-white border-gray-700';
               default:
                 return 'bg-gray-200 text-gray-800 border-gray-400';
             }
@@ -800,6 +815,8 @@
                 return { fill: '#FEF08A', border: '#F59E0B', text: '#78350F' }; // yellow-300 / amber-500 / amber-900
               case 'Núcleo 4 (Estágio)':
                 return { fill: '#FCA5A5', border: '#F87171', text: '#7F1D1D' }; // red-300 / red-400 / red-900
+              case 'OUTROS':
+                return { fill: '#D1D5DB', border: '#374151', text: '#FFFFFF' }; // gray-300 / gray-700 / white
               default:
                 return { fill: '#E5E7EB', border: '#9CA3AF', text: '#111827' }; // gray-200 / gray-400 / gray-900
             }
