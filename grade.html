@@ -852,8 +852,8 @@
               // Paradas duras: repete o percentual para evitar transição
               segments.push(`${fill} ${start}% ${end}%`);
             }
-            // Usa linear-gradient com 90deg (horizontal)
-            return `linear-gradient(90deg, ${segments.join(', ')})`;
+            // Usa linear-gradient com 180deg (vertical: topo → base)
+            return `linear-gradient(180deg, ${segments.join(', ')})`;
           }
 
           // Retorna estilo inline para caixas de disciplina com background proporcional e borda do núcleo dominante
