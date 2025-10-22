@@ -89,7 +89,12 @@
           const [newDisciplineWorkload, setNewDisciplineWorkload] = React.useState('');
           const [newDisciplineSemester, setNewDisciplineSemester] = React.useState('');
           const [newDisciplinePrerequisites, setNewDisciplinePrerequisites] = React.useState('');
-          const [newDisciplineNucleo, setNewDisciplineNucleo] = React.useState('');
+          const [newDisciplineNucleoDistribution, setNewDisciplineNucleoDistribution] = React.useState({
+            'núcleo 1 (formação geral)': 0,
+            'núcleo 2 (conteúdos específicos)': 0,
+            'Núcleo 3 (Extensão)': 0,
+            'Núcleo 4 (Estágio)': 0
+          });
           const [newDisciplineDayOfWeek, setNewDisciplineDayOfWeek] = React.useState('');
           const [newDisciplineStartTime, setNewDisciplineStartTime] = React.useState('');
           // State for the discipline currently being edited
@@ -114,7 +119,21 @@
           ];
 
           // Define workload options
-          const workloadOptions = ['30h', '60h', '90h'];
+          const workloadOptions = ['30h', '60h', '90h', '120h', '150h', '180h'];
+
+          // Define nucleo distribution options (múltiplos de 15h)
+          const nucleoDistributionOptions = [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
+
+          // Function to reset nucleo distribution when workload changes
+          const resetNucleoDistribution = (workload) => {
+            const totalHours = parseInt(workload.replace('h', ''));
+            setNewDisciplineNucleoDistribution({
+              'núcleo 1 (formação geral)': 0,
+              'núcleo 2 (conteúdos específicos)': totalHours,
+              'Núcleo 3 (Extensão)': 0,
+              'Núcleo 4 (Estágio)': 0
+            });
+          };
 
           // Define semester options (apenas de 1º a 9º Semestre, sem Semestre Extra)
           const semesterOptions = Array.from({ length: 9 }, (_, i) => `${i + 1}º Semestre`);
@@ -192,8 +211,22 @@
             e.preventDefault();
 
             // Basic validation for required fields
-            if (!newDisciplineName.trim() || !newDisciplineWorkload.trim() || !newDisciplineSemester.trim() || !newDisciplineNucleo.trim() || !newDisciplineDayOfWeek.trim() || !newDisciplineStartTime.trim()) {
-              setErrorMessage('Por favor, preencha todos os campos obrigatórios (Nome, Carga Horária, Semestre, Núcleo, Dia da Semana, Horário de Início).');
+            if (!newDisciplineName.trim() || !newDisciplineWorkload.trim() || !newDisciplineSemester.trim() || !newDisciplineDayOfWeek.trim() || !newDisciplineStartTime.trim()) {
+              setErrorMessage('Por favor, preencha todos os campos obrigatórios (Nome, Carga Horária, Semestre, Dia da Semana, Horário de Início).');
+              return;
+            }
+
+            // Validate nucleo distribution
+            const totalDistributed = Object.values(newDisciplineNucleoDistribution).reduce((sum, hours) => sum + hours, 0);
+            const totalWorkload = parseInt(newDisciplineWorkload.replace('h', ''));
+            
+            if (totalDistributed !== totalWorkload) {
+              setErrorMessage(`A distribuição de carga horária deve somar ${totalWorkload}h. Atualmente soma ${totalDistributed}h.`);
+              return;
+            }
+
+            if (totalDistributed === 0) {
+              setErrorMessage('Pelo menos um núcleo deve ter carga horária maior que zero.');
               return;
             }
 
@@ -231,7 +264,7 @@
               workload: newDisciplineWorkload.trim(),
               semester: newDisciplineSemester.trim(),
               prerequisites: prerequisitesArray,
-              nucleo: newDisciplineNucleo.trim(),
+              nucleoDistribution: { ...newDisciplineNucleoDistribution },
               dayOfWeek: newDisciplineDayOfWeek.trim(),
               timeSlots: calculatedTimeSlots,
             };
@@ -266,7 +299,12 @@
             setNewDisciplineWorkload('');
             setNewDisciplineSemester('');
             setNewDisciplinePrerequisites('');
-            setNewDisciplineNucleo('');
+            setNewDisciplineNucleoDistribution({
+              'núcleo 1 (formação geral)': 0,
+              'núcleo 2 (conteúdos específicos)': 0,
+              'Núcleo 3 (Extensão)': 0,
+              'Núcleo 4 (Estágio)': 0
+            });
             setNewDisciplineDayOfWeek('');
             setNewDisciplineStartTime('');
             setErrorMessage('');
@@ -279,7 +317,12 @@
             setNewDisciplineWorkload(discipline.workload);
             setNewDisciplineSemester(discipline.semester);
             setNewDisciplinePrerequisites(discipline.prerequisites.join(', '));
-            setNewDisciplineNucleo(discipline.nucleo);
+            setNewDisciplineNucleoDistribution(discipline.nucleoDistribution || {
+              'núcleo 1 (formação geral)': 0,
+              'núcleo 2 (conteúdos específicos)': 0,
+              'Núcleo 3 (Extensão)': 0,
+              'Núcleo 4 (Estágio)': 0
+            });
             setNewDisciplineDayOfWeek(discipline.dayOfWeek);
             setNewDisciplineStartTime(discipline.timeSlots[0] || '');
             setErrorMessage('');
@@ -293,7 +336,12 @@
             setNewDisciplineWorkload('');
             setNewDisciplineSemester('');
             setNewDisciplinePrerequisites('');
-            setNewDisciplineNucleo('');
+            setNewDisciplineNucleoDistribution({
+              'núcleo 1 (formação geral)': 0,
+              'núcleo 2 (conteúdos específicos)': 0,
+              'Núcleo 3 (Extensão)': 0,
+              'Núcleo 4 (Estágio)': 0
+            });
             setNewDisciplineDayOfWeek('');
             setNewDisciplineStartTime('');
             setErrorMessage('');
@@ -478,9 +526,15 @@
                             <td class="discipline-cell">
                               ${assignedDisciplinesByDay[day]
                                 .filter(d => d.timeSlots.includes(slot.time))
-                                .map(discipline => 
-                                  `<div><strong>${discipline.name}</strong><div class="discipline-info">${discipline.workload} | ${discipline.nucleo}</div></div>`
-                                ).join('')}
+                                .map(discipline => {
+                                  const nucleoInfo = discipline.nucleoDistribution 
+                                    ? Object.entries(discipline.nucleoDistribution)
+                                        .filter(([_, hours]) => hours > 0)
+                                        .map(([nucleo, hours]) => `${nucleo}: ${hours}h`)
+                                        .join(' • ')
+                                    : discipline.nucleo;
+                                  return `<div><strong>${discipline.name}</strong><div class="discipline-info">${discipline.workload} | ${nucleoInfo}</div></div>`;
+                                }).join('')}
                             </td>
                           `).join('')}
                         </tr>
@@ -495,9 +549,14 @@
             pdfContent += `
               <h2>Disciplinas por Núcleo</h2>
               ${Object.keys(workloadStats.workloadByNucleo).map(nucleo => {
-                const nucleoDiscs = assignedDisciplines.filter(d => d.nucleo === nucleo);
+                const nucleoDiscs = assignedDisciplines.filter(d => 
+                  d.nucleoDistribution ? d.nucleoDistribution[nucleo] > 0 : d.nucleo === nucleo
+                );
                 if (nucleoDiscs.length === 0) return '';
-                return `<div style="margin-bottom: 12px;"><strong>${nucleo}</strong><ul style="margin: 0 0 0 18px; padding: 0;">${nucleoDiscs.map(d => `<li>${d.name} - ${d.workload}</li>`).join('')}</ul></div>`;
+                return `<div style="margin-bottom: 12px;"><strong>${nucleo}</strong><ul style="margin: 0 0 0 18px; padding: 0;">${nucleoDiscs.map(d => {
+                  const hours = d.nucleoDistribution ? d.nucleoDistribution[nucleo] : d.workload;
+                  return `<li>${d.name} - ${hours}h</li>`;
+                }).join('')}</ul></div>`;
               }).join('')}
             `;
 
@@ -618,9 +677,19 @@
             };
 
             disciplines.forEach(d => {
-              const hours = parseInt(d.workload.replace('h', ''));
-              if (workloadByNucleo.hasOwnProperty(d.nucleo)) {
-                workloadByNucleo[d.nucleo] += hours;
+              // Check if discipline has new nucleoDistribution format
+              if (d.nucleoDistribution) {
+                Object.keys(d.nucleoDistribution).forEach(nucleo => {
+                  if (workloadByNucleo.hasOwnProperty(nucleo)) {
+                    workloadByNucleo[nucleo] += d.nucleoDistribution[nucleo];
+                  }
+                });
+              } else if (d.nucleo) {
+                // Fallback for old format
+                const hours = parseInt(d.workload.replace('h', ''));
+                if (workloadByNucleo.hasOwnProperty(d.nucleo)) {
+                  workloadByNucleo[d.nucleo] += hours;
+                }
               }
             });
 
@@ -718,6 +787,22 @@
             }
           }
 
+          // Função para obter cor baseada na distribuição de núcleos
+          function getDisciplineColor(discipline) {
+            if (discipline.nucleoDistribution) {
+              // Find the nucleo with the highest distribution
+              const maxNucleo = Object.entries(discipline.nucleoDistribution)
+                .reduce((max, [nucleo, hours]) => 
+                  hours > discipline.nucleoDistribution[max] ? nucleo : max
+                );
+              return getNucleoColor(maxNucleo);
+            } else if (discipline.nucleo) {
+              // Fallback for old format
+              return getNucleoColor(discipline.nucleo);
+            }
+            return 'bg-gray-200 text-gray-800 border-gray-400';
+          }
+
           // Supondo que cada disciplina tenha: { dia, semestre, ... }
           function existeConflito(dia, semestre, listaDisciplinas) {
             return listaDisciplinas.some(d => d.dia === dia && d.semestre === semestre);
@@ -763,7 +848,12 @@
                     <select
                       id="workload"
                       value={newDisciplineWorkload}
-                      onChange={(e) => setNewDisciplineWorkload(e.target.value)}
+                      onChange={(e) => {
+                        setNewDisciplineWorkload(e.target.value);
+                        if (e.target.value) {
+                          resetNucleoDistribution(e.target.value);
+                        }
+                      }}
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     >
                       <option value="">Selecione a carga horária</option>
@@ -797,20 +887,39 @@
                       placeholder="Ex: Álgebra Linear, Cálculo I"
                     />
                   </div>
-                  <div>
-                    <label htmlFor="nucleo" className="block text-sm font-medium text-gray-700">Núcleo:</label>
-                    <select
-                      id="nucleo"
-                      value={newDisciplineNucleo}
-                      onChange={(e) => setNewDisciplineNucleo(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    >
-                      <option value="">Selecione um núcleo</option>
-                      <option value="núcleo 1 (formação geral)">núcleo 1 (formação geral)</option>
-                      <option value="núcleo 2 (conteúdos específicos)">núcleo 2 (conteúdos específicos)</option>
-                      <option value="Núcleo 3 (Extensão)">Núcleo 3 (Extensão)</option>
-                      <option value="Núcleo 4 (Estágio)">Núcleo 4 (Estágio)</option>
-                    </select>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Distribuição de Carga Horária por Núcleo:</label>
+                    <div className="grid grid-cols-2 gap-4">
+                      {Object.keys(newDisciplineNucleoDistribution).map(nucleo => (
+                        <div key={nucleo}>
+                          <label htmlFor={`nucleo-${nucleo}`} className="block text-xs font-medium text-gray-600 mb-1">
+                            {nucleo}:
+                          </label>
+                          <select
+                            id={`nucleo-${nucleo}`}
+                            value={newDisciplineNucleoDistribution[nucleo]}
+                            onChange={(e) => {
+                              const newDistribution = { ...newDisciplineNucleoDistribution };
+                              newDistribution[nucleo] = parseInt(e.target.value);
+                              setNewDisciplineNucleoDistribution(newDistribution);
+                            }}
+                            className="mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs"
+                          >
+                            {nucleoDistributionOptions.map(hours => (
+                              <option key={hours} value={hours}>{hours}h</option>
+                            ))}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 p-2 bg-gray-50 rounded text-xs">
+                      <strong>Total distribuído:</strong> {Object.values(newDisciplineNucleoDistribution).reduce((sum, hours) => sum + hours, 0)}h
+                      {newDisciplineWorkload && (
+                        <span className={`ml-2 ${Object.values(newDisciplineNucleoDistribution).reduce((sum, hours) => sum + hours, 0) === parseInt(newDisciplineWorkload.replace('h', '')) ? 'text-green-600' : 'text-red-600'}`}>
+                          {Object.values(newDisciplineNucleoDistribution).reduce((sum, hours) => sum + hours, 0) === parseInt(newDisciplineWorkload.replace('h', '')) ? '✓' : '✗'}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label htmlFor="dayOfWeek" className="block text-sm font-medium text-gray-700">Dia da Semana:</label>
@@ -889,13 +998,23 @@
                           draggable="true"
                           onDragStart={e => handleDragStart(e, discipline.id)}
                           onDragEnd={handleDragEnd}
-                          className={`rounded-md p-3 border-l-4 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getNucleoColor(discipline.nucleo)} bg-white relative`}
+                          className={`rounded-md p-3 border-l-4 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getDisciplineColor(discipline)} bg-white relative`}
                           style={{ minHeight: '60px' }}
                         >
                           <div className="flex justify-between items-start">
                             <div>
                               <div className="font-semibold text-base">{discipline.name}</div>
-                              <div className="text-xs text-gray-600">{discipline.workload} • {discipline.nucleo}</div>
+                              <div className="text-xs text-gray-600">{discipline.workload}</div>
+                              {discipline.nucleoDistribution ? (
+                                <div className="text-xs text-gray-500 mt-1">
+                                  {Object.entries(discipline.nucleoDistribution)
+                                    .filter(([_, hours]) => hours > 0)
+                                    .map(([nucleo, hours]) => `${nucleo}: ${hours}h`)
+                                    .join(' • ')}
+                                </div>
+                              ) : (
+                                <div className="text-xs text-gray-500">{discipline.nucleo}</div>
+                              )}
                               <div className="text-xs text-gray-500">{discipline.semester}</div>
                               {discipline.prerequisites.length > 0 && (
                                 <div className="text-xs text-gray-400 mt-1">Pré-requisitos: {discipline.prerequisites.join(', ')}</div>
@@ -969,13 +1088,23 @@
                                     <h4 className="font-semibold text-md text-gray-700 mb-2">{day}</h4>
                                     <div className="space-y-2">
                                       {dayDisciplines.map(discipline => (
-                                        <div key={discipline.id} className={`rounded-md p-2 border-l-4 mb-2 ${getNucleoColor(discipline.nucleo)}`}>
+                                        <div key={discipline.id} className={`rounded-md p-2 border-l-4 mb-2 ${getDisciplineColor(discipline)}`}>
                                           <div className="flex justify-between items-start">
                                             <div>
                                               <h5 className="font-semibold text-sm">{discipline.name}</h5>
                                               <p className="text-xs">
-                                                {discipline.workload} • {discipline.nucleo}
+                                                {discipline.workload}
                                               </p>
+                                              {discipline.nucleoDistribution ? (
+                                                <p className="text-xs text-gray-600">
+                                                  {Object.entries(discipline.nucleoDistribution)
+                                                    .filter(([_, hours]) => hours > 0)
+                                                    .map(([nucleo, hours]) => `${nucleo}: ${hours}h`)
+                                                    .join(' • ')}
+                                                </p>
+                                              ) : (
+                                                <p className="text-xs text-gray-600">{discipline.nucleo}</p>
+                                              )}
                                               <p className="text-xs mt-1">
                                                 Horários: {discipline.timeSlots.join(', ')}
                                               </p>
@@ -1037,7 +1166,7 @@
                                                 draggable="true"
                                                 onDragStart={(e) => handleDragStart(e, discipline.id)}
                                                 onDragEnd={handleDragEnd}
-                                                className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getNucleoColor(discipline.nucleo)}`}
+                                                className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getDisciplineColor(discipline)}`}
                                                 style={{
                                                   height: `${heightInPixels}px`,
                                                   top: '4px',
