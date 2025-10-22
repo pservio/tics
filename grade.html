@@ -127,12 +127,14 @@
           // Function to reset nucleo distribution when workload changes
           const resetNucleoDistribution = (workload) => {
             const totalHours = parseInt(workload.replace('h', ''));
-            setNewDisciplineNucleoDistribution({
+            const newDistribution = {
               'núcleo 1 (formação geral)': 0,
               'núcleo 2 (conteúdos específicos)': totalHours,
               'Núcleo 3 (Extensão)': 0,
               'Núcleo 4 (Estágio)': 0
-            });
+            };
+            console.log('Resetting distribution for', workload, 'to:', newDistribution);
+            setNewDisciplineNucleoDistribution(newDistribution);
           };
 
           // Define semester options (apenas de 1º a 9º Semestre, sem Semestre Extra)
@@ -787,20 +789,94 @@
             }
           }
 
+          // Mapa de cores HEX (fundo e borda) para cada núcleo (flat, sem gradiente)
+          function getNucleoHexColors(nucleo) {
+            switch (nucleo) {
+              case 'núcleo 1 (formação geral)':
+                return { fill: '#BFDBFE', border: '#60A5FA', text: '#1E3A8A' }; // blue-200 / blue-400 / blue-900
+              case 'núcleo 2 (conteúdos específicos)':
+                return { fill: '#BBF7D0', border: '#34D399', text: '#065F46' }; // green-200 / green-400 / green-800
+              case 'Núcleo 3 (Extensão)':
+                return { fill: '#FEF08A', border: '#F59E0B', text: '#78350F' }; // yellow-300 / amber-500 / amber-900
+              case 'Núcleo 4 (Estágio)':
+                return { fill: '#FCA5A5', border: '#F87171', text: '#7F1D1D' }; // red-300 / red-400 / red-900
+              default:
+                return { fill: '#E5E7EB', border: '#9CA3AF', text: '#111827' }; // gray-200 / gray-400 / gray-900
+            }
+          }
+
           // Função para obter cor baseada na distribuição de núcleos
           function getDisciplineColor(discipline) {
             if (discipline.nucleoDistribution) {
               // Find the nucleo with the highest distribution
-              const maxNucleo = Object.entries(discipline.nucleoDistribution)
-                .reduce((max, [nucleo, hours]) => 
-                  hours > discipline.nucleoDistribution[max] ? nucleo : max
-                );
+              const entries = Object.entries(discipline.nucleoDistribution);
+              if (entries.length === 0) return 'bg-gray-200 text-gray-800 border-gray-400';
+              
+              const maxNucleo = entries.reduce((max, [nucleo, hours]) => 
+                hours > discipline.nucleoDistribution[max] ? nucleo : max
+              );
+              
+              // Debug log
+              console.log('Discipline:', discipline.name, 'Distribution:', discipline.nucleoDistribution, 'Max nucleo:', maxNucleo);
+              
               return getNucleoColor(maxNucleo);
             } else if (discipline.nucleo) {
               // Fallback for old format
               return getNucleoColor(discipline.nucleo);
             }
             return 'bg-gray-200 text-gray-800 border-gray-400';
+          }
+
+          // Constrói um background proporcional (faixas) conforme distribuição por núcleo
+          function buildNucleoStripedBackground(discipline) {
+            if (!discipline || !discipline.nucleoDistribution) {
+              return null;
+            }
+            const distEntries = Object.entries(discipline.nucleoDistribution)
+              .filter(([, hours]) => hours > 0);
+            if (distEntries.length === 0) return null;
+
+            const total = distEntries.reduce((sum, [, hours]) => sum + hours, 0);
+            if (total === 0) return null;
+
+            // Ordena por horas desc para estabilidade visual
+            const sorted = distEntries.sort((a, b) => b[1] - a[1]);
+            let acc = 0;
+            const segments = [];
+            for (let i = 0; i < sorted.length; i++) {
+              const [nucleo, hours] = sorted[i];
+              const start = Math.round((acc / total) * 100);
+              acc += hours;
+              const end = Math.round((acc / total) * 100);
+              const { fill } = getNucleoHexColors(nucleo);
+              // Paradas duras: repete o percentual para evitar transição
+              segments.push(`${fill} ${start}% ${end}%`);
+            }
+            // Usa linear-gradient com 90deg (horizontal)
+            return `linear-gradient(90deg, ${segments.join(', ')})`;
+          }
+
+          // Retorna estilo inline para caixas de disciplina com background proporcional e borda do núcleo dominante
+          function getDisciplineBoxStyle(discipline) {
+            // Fallback simples
+            if (!discipline) return {};
+
+            // Se não houver distribuição, usa a cor única
+            if (!discipline.nucleoDistribution) {
+              if (discipline.nucleo) {
+                const { fill, border } = getNucleoHexColors(discipline.nucleo);
+                return { background: fill, borderColor: border };
+              }
+              return {};
+            }
+
+            const bg = buildNucleoStripedBackground(discipline);
+            // Borda: do maior núcleo
+            const entries = Object.entries(discipline.nucleoDistribution).filter(([, h]) => h > 0);
+            if (entries.length === 0) return {};
+            const [dominantNucleo] = entries.sort((a, b) => b[1] - a[1])[0];
+            const { border } = getNucleoHexColors(dominantNucleo);
+            return { backgroundImage: bg, borderColor: border };
           }
 
           // Supondo que cada disciplina tenha: { dia, semestre, ... }
@@ -998,8 +1074,8 @@
                           draggable="true"
                           onDragStart={e => handleDragStart(e, discipline.id)}
                           onDragEnd={handleDragEnd}
-                          className={`rounded-md p-3 border-l-4 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getDisciplineColor(discipline)} bg-white relative`}
-                          style={{ minHeight: '60px' }}
+                          className={`rounded-md p-3 border-l-4 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 bg-white relative`}
+                          style={{ minHeight: '60px', ...getDisciplineBoxStyle(discipline), borderLeftWidth: '4px' }}
                         >
                           <div className="flex justify-between items-start">
                             <div>
@@ -1088,7 +1164,7 @@
                                     <h4 className="font-semibold text-md text-gray-700 mb-2">{day}</h4>
                                     <div className="space-y-2">
                                       {dayDisciplines.map(discipline => (
-                                        <div key={discipline.id} className={`rounded-md p-2 border-l-4 mb-2 ${getDisciplineColor(discipline)}`}>
+                                        <div key={discipline.id} className={`rounded-md p-2 border-l-4 mb-2`} style={{ ...getDisciplineBoxStyle(discipline), borderLeftWidth: '4px' }}>
                                           <div className="flex justify-between items-start">
                                             <div>
                                               <h5 className="font-semibold text-sm">{discipline.name}</h5>
@@ -1166,11 +1242,13 @@
                                                 draggable="true"
                                                 onDragStart={(e) => handleDragStart(e, discipline.id)}
                                                 onDragEnd={handleDragEnd}
-                                                className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150 ${getDisciplineColor(discipline)}`}
+                                                className={`rounded-md p-1 text-xs w-full text-center mb-1 shadow-sm discipline-box cursor-move hover:opacity-90 transition-colors duration-150`}
                                                 style={{
                                                   height: `${heightInPixels}px`,
                                                   top: '4px',
                                                   zIndex: 10,
+                                                  ...getDisciplineBoxStyle(discipline),
+                                                  borderLeftWidth: '4px'
                                                 }}
                                               >
                                                 <span className="font-bold">{discipline.name}</span>
