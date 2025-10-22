@@ -117,10 +117,16 @@
             { id: 'd', time: '10:00-10:50', label: '4º Horário - 10:00-10:50' },
             { id: 'e', time: '10:50-11:40', label: '5º Horário - 10:50-11:40' },
             { id: 'f', time: '11:40-12:30', label: '6º Horário - 11:40-12:30' },
+            { id: 'g', time: '13:30-14:20', label: '7º Horário - 13:30-14:20' },
+            { id: 'h', time: '14:20-15:10', label: '8º Horário - 14:20-15:10' },
+            { id: 'i', time: '15:10-16:00', label: '9º Horário - 15:10-16:00' },
+            { id: 'j', time: '16:00-16:50', label: '10º Horário - 16:00-16:50' },
+            { id: 'k', time: '16:50-17:40', label: '11º Horário - 16:50-17:40' },
+            { id: 'l', time: '17:40-18:30', label: '12º Horário - 17:40-18:30' },
           ];
 
           // Define workload options
-          const workloadOptions = ['30h', '60h', '90h', '120h', '150h', '180h'];
+          const workloadOptions = ['30h', '60h', '75h', '90h', '120h', '150h', '180h'];
 
           // Define nucleo distribution options (múltiplos de 15h)
           const nucleoDistributionOptions = [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
@@ -157,8 +163,20 @@
               case '60h':
                 slotsNeeded = 4;
                 break;
+              case '75h':
+                slotsNeeded = 5;
+                break;
               case '90h':
                 slotsNeeded = 6;
+                break;
+              case '120h':
+                slotsNeeded = 8;
+                break;
+              case '150h':
+                slotsNeeded = 10;
+                break;
+              case '180h':
+                slotsNeeded = 12;
                 break;
               default:
                 return [];
@@ -186,8 +204,20 @@
               case '60h':
                 maxSlots = 4;
                 break;
+              case '75h':
+                maxSlots = 5;
+                break;
               case '90h':
                 maxSlots = 6;
+                break;
+              case '120h':
+                maxSlots = 8;
+                break;
+              case '150h':
+                maxSlots = 10;
+                break;
+              case '180h':
+                maxSlots = 12;
                 break;
               default:
                 return timeSlotOptions;
