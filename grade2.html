@@ -565,12 +565,19 @@
 
           // Função auxiliar para obter cor de fundo da disciplina no PDF
           const getDisciplinePDFStyle = (discipline) => {
-            if (!discipline) return 'background-color: #E5E7EB;';
+            // Propriedades CSS para garantir que cores sejam impressas
+            const printColorAdjust = '-webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;';
+            
+            if (!discipline) {
+              return `background-color: #E5E7EB !important; ${printColorAdjust}`;
+            }
             
             // Se tiver distribuição de núcleos, usar a cor do núcleo dominante
             if (discipline.nucleoDistribution) {
               const entries = Object.entries(discipline.nucleoDistribution).filter(([, h]) => h > 0);
-              if (entries.length === 0) return 'background-color: #E5E7EB;';
+              if (entries.length === 0) {
+                return `background-color: #E5E7EB !important; ${printColorAdjust}`;
+              }
               
               // Encontrar o núcleo dominante
               const sorted = entries.sort((a, b) => b[1] - a[1]);
@@ -592,17 +599,17 @@
                   segments.push(`${nucleoFill} ${start}% ${end}%`);
                 }
                 
-                return `background: linear-gradient(180deg, ${segments.join(', ')});`;
+                return `background: linear-gradient(180deg, ${segments.join(', ')}) !important; background-color: ${fill} !important; ${printColorAdjust}`;
               }
               
-              return `background-color: ${fill};`;
+              return `background-color: ${fill} !important; ${printColorAdjust}`;
             } else if (discipline.nucleo) {
               // Fallback para formato antigo
               const { fill } = getNucleoHexColors(discipline.nucleo);
-              return `background-color: ${fill};`;
+              return `background-color: ${fill} !important; ${printColorAdjust}`;
             }
             
-            return 'background-color: #E5E7EB;';
+            return `background-color: #E5E7EB !important; ${printColorAdjust}`;
           };
 
           // Function to export timetable to PDF (basic HTML to PDF)
@@ -632,11 +639,27 @@
               <head>
                 <title>Grade Curricular Completa</title>
                 <style>
+                  * {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                    color-adjust: exact !important;
+                  }
                   body { font-family: Arial, sans-serif; margin: 20px; }
                   table { border-collapse: collapse; width: 100%; margin-top: 20px; page-break-inside: avoid; }
                   th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-                  th { background-color: #f2f2f2; font-weight: bold; }
-                  .discipline-cell { font-size: 12px; min-height: 60px; vertical-align: top; }
+                  th { 
+                    background-color: #f2f2f2 !important; 
+                    font-weight: bold;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                  }
+                  .discipline-cell { 
+                    font-size: 12px; 
+                    min-height: 60px; 
+                    vertical-align: top;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                  }
                   .discipline-box { 
                     padding: 6px; 
                     margin: 2px 0; 
@@ -644,18 +667,55 @@
                     border-left: 4px solid;
                     color: #111827;
                     font-weight: 500;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                    color-adjust: exact !important;
                   }
                   h1 { text-align: center; color: #333; }
                   h2 { text-align: center; color: #666; margin-top: 30px; }
                   .discipline-info { font-size: 10px; margin-top: 4px; color: #374151; }
                   .page-break { page-break-before: always; }
+                  .nucleo-section {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                    color-adjust: exact !important;
+                  }
                   @media print {
-                    .discipline-box { break-inside: avoid; }
+                    * {
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                      color-adjust: exact !important;
+                    }
+                    body {
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                      color-adjust: exact !important;
+                    }
+                    .discipline-box { 
+                      break-inside: avoid;
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                      color-adjust: exact !important;
+                    }
+                    .discipline-cell {
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                      color-adjust: exact !important;
+                    }
+                    th {
+                      background-color: #f2f2f2 !important;
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                      color-adjust: exact !important;
+                    }
                   }
                 </style>
               </head>
               <body>
                 <h1>Grade Curricular Completa</h1>
+                <div style="text-align: center; margin-bottom: 10px; padding: 8px; background-color: #E3F2FD; border-radius: 4px; font-size: 11px; color: #1565C0;">
+                  <strong>⚠️ IMPORTANTE:</strong> Para imprimir com cores, habilite a opção "Imprimir imagens de fundo" ou "Background graphics" nas configurações de impressão do navegador.
+                </div>
             `;
 
             // Generate table for each semester
@@ -714,7 +774,7 @@
                                         .join(' • ')
                                     : discipline.nucleo || 'Sem núcleo';
                                   
-                                  return `<div class="discipline-box" style="${style} border-left-color: ${borderColor};">
+                                  return `<div class="discipline-box" style="${style} border-left-color: ${borderColor} !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
                                     <strong>${discipline.name}</strong>
                                     <div class="discipline-info">${discipline.workload} | ${nucleoInfo}</div>
                                   </div>`;
@@ -738,7 +798,7 @@
                 );
                 if (nucleoDiscs.length === 0) return '';
                 const { fill } = getNucleoHexColors(nucleo);
-                return `<div style="margin-bottom: 12px; padding: 8px; background-color: ${fill}; border-radius: 4px;">
+                return `<div class="nucleo-section" style="margin-bottom: 12px; padding: 8px; background-color: ${fill} !important; border-radius: 4px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important;">
                   <strong>${nucleo}</strong>
                   <ul style="margin: 4px 0 0 18px; padding: 0;">
                     ${nucleoDiscs.map(d => {
@@ -757,8 +817,13 @@
 
             printWindow.document.write(pdfContent);
             printWindow.document.close();
-            printWindow.print();
-            setSuccessMessage('Grade curricular completa exportada para impressão!');
+            
+            // Aguardar um pouco para garantir que o conteúdo foi carregado antes de imprimir
+            setTimeout(() => {
+              printWindow.print();
+            }, 250);
+            
+            setSuccessMessage('Grade curricular exportada! Na janela de impressão, verifique se a opção "Imprimir imagens de fundo" ou "Background graphics" está habilitada para ver as cores.');
           };
 
           // Function to clear all data
